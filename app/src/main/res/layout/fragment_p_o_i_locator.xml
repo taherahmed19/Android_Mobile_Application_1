@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Refactor.searchAutocomplete.poiLocator.POILocatorFragment"
+    android:background="#FFF">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bottom_border"
+                >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10sp"
+                    android:paddingLeft="10sp"
+                    android:paddingRight="10sp"
+                    android:paddingBottom="10sp"
+                    >
+
+                    <TextView
+                        android:id="@+id/POILocatorCloseButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_arrow_down"
+                        android:layout_alignParentLeft="true"
+                        android:background="@android:color/transparent"
+                        android:padding="0dp"
+                        android:layout_centerVertical="true"
+                        android:text="Cancel"
+                        android:textSize="20sp"
+                        android:textColor="#33DDFF"
+
+                        >
+                    </TextView>
+
+                    <!--<ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_submit"
+                        android:layout_alignParentRight="true"
+                        android:background="@android:color/transparent"
+                        >
+                                    </ImageButton>-->
+
+                    <Button
+                        android:id="@+id/poiLocatorSubmit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/button_border"
+                        android:text="Submit"
+                        android:textColor="#FFF"
+                        android:layout_centerVertical="true"
+                        >
+
+                    </Button>
+
+
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:background="@drawable/bottom_border">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10sp"
+                    android:paddingRight="10sp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/routing_poi_locator_icon_restaurant"
+                        android:src="@drawable/ic_routing_poi_locator_restaurant">
+                    </ImageView>
+
+                    <TextView
+                        android:id="@+id/poiRestaurantText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Restaurant"
+                        android:textSize="18sp"
+                        android:layout_marginLeft="15sp">
+                    </TextView>
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/poiRestaurant"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent">
+                </Button>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:background="@drawable/bottom_border"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10sp"
+                    android:paddingRight="10sp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/routing_poi_locator_icon_cinema"
+                        android:src="@drawable/ic_routing_poi_locator_theatre">
+                    </ImageView>
+
+                    <TextView
+                        android:id="@+id/poiCinemaText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cinema"
+                        android:textSize="18sp"
+                        android:layout_marginLeft="15sp">
+                    </TextView>
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/poiCinema"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent">
+                </Button>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:background="@drawable/bottom_border"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10sp"
+                    android:paddingRight="10sp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/routing_poi_locator_icon_park"
+                        android:src="@drawable/ic_routing_poi_locator_park">
+                    </ImageView>
+
+                    <TextView
+                        android:id="@+id/poiParkText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Park"
+                        android:textSize="18sp"
+                        android:layout_marginLeft="15sp">
+                    </TextView>
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/poiPark"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent">
+                </Button>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:background="@drawable/bottom_border"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10sp"
+                    android:paddingRight="10sp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/routing_poi_locator_icon_airport"
+                        android:src="@drawable/ic_routing_poi_locator_airport">
+                    </ImageView>
+
+                    <TextView
+                        android:id="@+id/poiAirportText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Airport"
+                        android:textSize="18sp"
+                        android:layout_marginLeft="15sp">
+                    </TextView>
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/poiAirport"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent">
+                </Button>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:background="@drawable/bottom_border">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10sp"
+                    android:paddingRight="10sp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/routing_poi_locator_icon_leisure"
+                        android:src="@drawable/ic_routing_poi_locator_leisure">
+                    </ImageView>
+
+                    <TextView
+                        android:id="@+id/poiLeisureCentreText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Leisure Centre"
+                        android:textSize="18sp"
+                        android:layout_marginLeft="15sp">
+                    </TextView>
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/poiLeisureCentre"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent">
+                </Button>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

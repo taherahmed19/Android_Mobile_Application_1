@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/fragment_confirm"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000"
+        android:alpha="0.8"
+        >
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="350sp"
+        android:layout_height="280sp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/form_dialog"
+        android:padding="30sp"
+        android:alpha="1">
+
+    <LinearLayout
+        android:layout_width="350sp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:alpha="1">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check"
+            android:layout_gravity="center_horizontal"
+            >
+        </ImageView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_text"
+            android:textColor="#000"
+            android:textSize="23sp"
+            android:layout_marginBottom="10sp"
+            android:layout_gravity="center_horizontal"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sub_text"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="15sp"
+            android:textSize="16sp"/>
+
+        <Button
+            android:id="@+id/confirmBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/button_border_2"
+            android:textAllCaps="true"
+            android:text="@string/ok"
+            android:textColor="#FFF"
+            android:textSize="18sp"
+            >
+
+        </Button>
+
+    </LinearLayout>
+    </RelativeLayout>
+
+
+</RelativeLayout>

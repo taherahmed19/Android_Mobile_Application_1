@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homepage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.MainActivity.MainActivity">
+
+<!--    <fragment-->
+<!--        android:name="com.example.myapplication.Fragments.MainFragment.MainFragment"-->
+<!--        android:id="@+id/mainFragment"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"/>-->
+
+    <fragment
+        android:name="com.example.myapplication.Fragments.MainMapFragment.MainMapFragment"
+        android:id="@+id/mainFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/bottom_navigation"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="#FFF"-->
+<!--        app:menu="@menu/bottom_navigation_menu"-->
+<!--        app:labelVisibilityMode="labeled"-->
+<!--        app:itemIconTint="@color/bottom_nav_selector"-->
+<!--        app:itemTextColor="@color/bottom_nav_selector"-->
+<!--        android:fitsSystemWindows="true"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        />-->
+</RelativeLayout>

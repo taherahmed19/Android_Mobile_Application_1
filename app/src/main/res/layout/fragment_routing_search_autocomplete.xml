@@ -1,0 +1,71 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Refactor.RoutingSearchAutocompleteFragment"
+    android:background="#FFF"
+    android:id="@+id/searchAutocompleteContainer"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/searchAutocompleteSubContainer2">
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@drawable/bottom_border"-->
+<!--            android:paddingLeft="20sp"-->
+<!--            android:paddingRight="20sp"-->
+<!--            android:paddingBottom="10sp"-->
+<!--            android:paddingTop="10sp"-->
+<!--            android:orientation="horizontal">-->
+
+<!--            <ImageView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:src="@drawable/ic_routing_search_auto_place"-->
+<!--                android:background="@drawable/routing_search_auto_place_background"-->
+<!--                android:layout_gravity="center_vertical">-->
+<!--            </ImageView>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:paddingLeft="15sp"-->
+<!--                android:paddingRight="15sp"-->
+<!--                android:orientation="vertical"-->
+<!--                android:gravity="center"-->
+<!--                >-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="London"-->
+<!--                    android:layout_gravity="center_vertical"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:textStyle="bold">-->
+<!--                </TextView>-->
+
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="London"-->
+<!--                    android:layout_gravity="center_vertical"-->
+<!--                    android:textSize="16sp">-->
+
+<!--                </TextView>-->
+
+<!--            </LinearLayout>-->
+
+<!--        </LinearLayout>-->
+
+
+
+    </LinearLayout>
+
+</ScrollView>

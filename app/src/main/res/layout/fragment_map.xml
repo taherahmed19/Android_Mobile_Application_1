@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF"
+    android:orientation="vertical"
+    android:layout_marginBottom="55sp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/mapFeedSearchPointer">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/feedMapContainer"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:visibility="gone">
+
+                <fragment
+                    xmlns:map="http://schemas.android.com/apk/res-auto"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:id="@+id/mapFragment"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ProgressBar
+                    android:id="@+id/feedLoadingSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true">
+                </ProgressBar>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_alignParentRight="true"
+                android:layout_margin="20sp">
+
+                <ImageButton
+                    android:id="@+id/newPost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add"
+                    android:background="@drawable/map_search_button"
+                    android:layout_marginBottom="20sp">
+                </ImageButton>
+
+                <ImageButton
+                    android:id="@+id/filterButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_filter"
+                    android:background="@drawable/map_search_button">
+                </ImageButton>
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/viewSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_alignParentLeft="true"
+                android:textColor="#000"
+                android:textStyle="bold"
+                android:src="@drawable/ic_map_switch"
+                android:background="@drawable/map_search_button"
+                android:layout_margin="20sp"/>
+
+            <ImageButton
+                android:id="@+id/mapSearchButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="20sp"
+                android:src="@drawable/ic_routing_search"
+                android:background="@drawable/map_search_button">
+            </ImageButton>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/mapModalContainer">
+
+        </RelativeLayout>
+
+    </FrameLayout>
+
+</RelativeLayout>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    android:orientation="vertical"
+    android:id="@+id/userAlerts"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFF"
+        android:orientation="vertical"
+        >
+
+<!--        <fragment-->
+<!--            android:name="com.example.myapplication.Fragments.HeaderFragment.HeaderFragment"-->
+<!--            android:id="@+id/test"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"/>-->
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/userFeedFormPointer">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFFFF"
+                android:orientation="vertical"
+                android:paddingTop="0dp"
+                >
+
+
+<!--                <RelativeLayout-->
+<!--                    android:id="@+id/feedNav"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:padding="10sp"-->
+<!--                    android:background="@drawable/bottom_border">-->
+
+<!--                    <ImageButton-->
+<!--                        android:id="@+id/newPost"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:src="@drawable/ic_add"-->
+<!--                        android:background="#FFF"-->
+<!--                        android:layout_alignParentLeft="true">-->
+<!--                    </ImageButton>-->
+<!--                    &lt;!&ndash; <TextView-->
+<!--                         android:layout_width="wrap_content"-->
+<!--                         android:layout_height="wrap_content"-->
+<!--                         android:text="User Feed"-->
+<!--                         android:textSize="18sp"-->
+<!--                         android:layout_centerHorizontal="true"-->
+<!--                         android:layout_centerVertical="true"-->
+<!--                         android:textColor="#000"/>&ndash;&gt;-->
+
+<!--                    <ImageButton-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:src="@drawable/ic_filter"-->
+<!--                        android:background="#FFF"-->
+<!--                        android:layout_alignParentRight="true">-->
+<!--                    </ImageButton>-->
+
+<!--                </RelativeLayout>-->
+                <FrameLayout
+                    android:layout_height="match_parent" android:layout_width="match_parent"
+                    android:id="@+id/test1"
+                    >
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ProgressBar
+                            android:id="@+id/feedLoadingSpinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true">
+                        </ProgressBar>
+
+                    </RelativeLayout>
+
+
+                    <ScrollView
+                        android:id="@+id/userFeedScroll"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none"
+                        android:overScrollMode="never">
+
+                        <LinearLayout
+                            android:id="@+id/feedContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+
+
+
+
+<!--                            <fragment-->
+<!--                                android:name="com.example.myapplication.Fragments.UserAlertInputFragment.UserAlertInputFragment"-->
+<!--                                android:id="@+id/UserAlertInput2"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"/>-->
+<!--                            <fragment-->
+<!--                                android:name="com.example.myapplication.Fragments.UserAlertInputFragment.UserAlertInputFragment"-->
+<!--                                android:id="@+id/UserAlertInput3"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"/>-->
+<!--                            <fragment-->
+<!--                                android:name="com.example.myapplication.Fragments.UserAlertInputFragment.UserAlertInputFragment"-->
+<!--                                android:id="@+id/UserAlertInput4"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"/>-->
+
+<!--                            <fragment-->
+<!--                                android:name="com.example.myapplication.Fragments.UserAlertInputFragment.UserAlertInputFragment"-->
+<!--                                android:id="@+id/UserAlertInput5"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"/>-->
+<!--                            <fragment-->
+<!--                                android:name="com.example.myapplication.Fragments.UserAlertInputFragment.UserAlertInputFragment"-->
+<!--                                android:id="@+id/UserAlertInput6"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"/>-->
+<!--                            <fragment-->
+<!--                                android:name="com.example.myapplication.Fragments.UserAlertInputFragment.UserAlertInputFragment"-->
+<!--                                android:id="@+id/UserAlertInput7"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"/>-->
+
+                        </LinearLayout>
+
+                    </ScrollView>
+                </FrameLayout>
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Refactor.RoutingSearchFragment">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="15sp"
+            android:paddingRight="15sp"
+            android:paddingLeft="15sp"
+            android:paddingBottom="10sp"
+            android:background="@drawable/routing_search_bottom_border">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10sp">
+
+                <ImageButton
+                    android:id="@+id/routingSearchClose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_routing_search_close"
+                    android:background="@android:color/transparent">
+                </ImageButton>
+
+                <ImageButton
+                    android:id="@+id/routingSearchSubmit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_routing_search_submit"
+                    android:background="@android:color/transparent">
+                </ImageButton>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="10sp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    >
+
+                    <ImageView
+                        android:layout_width="10sp"
+                        android:layout_height="10sp"
+                        android:src="@drawable/routing_search_circle"
+                        android:layout_gravity="center">
+                    </ImageView>
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="50sp"
+                        android:background="#C6C4C4"
+                        />
+
+                    <ImageView
+                        android:layout_width="10sp"
+                        android:layout_height="10sp"
+                        android:src="@drawable/routing_search_square"
+                        android:layout_gravity="center">
+
+                    </ImageView>
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="50sp"
+                    android:paddingRight="50sp"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/routingSearchFrom"
+                        android:layout_width="match_parent"
+                        android:layout_height="40sp"
+                        android:background="@drawable/map_search_input_border"
+                        android:layout_marginBottom="7sp"
+                        android:hint="@string/routing_search_from"
+                        android:paddingLeft="10sp"
+                        android:inputType="textNoSuggestions"
+                        >
+                    </EditText>
+
+                    <EditText
+                        android:id="@+id/routingSearchWhere"
+                        android:layout_width="match_parent"
+                        android:layout_height="40sp"
+                        android:background="@drawable/routing_search_input_border_alternate"
+                        android:hint="@string/routing_search_where_to"
+                        android:paddingLeft="10sp"
+                        android:inputType="textNoSuggestions"
+                        >
+
+                    </EditText>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/routingSearchAutoPointer">
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

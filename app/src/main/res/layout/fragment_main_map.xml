@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    android:orientation="vertical"
+    android:id="@+id/userAlerts"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFF"
+        android:orientation="vertical"
+        >
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/userFeedFormPointer">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFFFFF"
+            android:orientation="vertical"
+            android:paddingTop="0dp"
+            >
+
+            <fragment
+                android:name="com.example.myapplication.Fragments.HeaderFragment.HeaderFragment"
+                android:id="@+id/test"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+            <com.example.myapplication.Adapters.LockableViewPager.LockableViewPager
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/viewPager">
+            </com.example.myapplication.Adapters.LockableViewPager.LockableViewPager>
+        </LinearLayout>
+
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

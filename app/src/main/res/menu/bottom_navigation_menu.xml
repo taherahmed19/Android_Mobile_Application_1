@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homepage_fragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_home_nav"
+        android:title="@string/bottom_nav_item_1"/>
+    <item
+        android:id="@+id/map_fragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_language"
+        android:title="@string/bottom_nav_item_2"/>
+    <item
+        android:id="@+id/weather_fragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_connection"
+        android:title="@string/bottom_nav_item_3"/>
+    <item
+        android:id="@+id/travel_fragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_location"
+        android:title="@string/bottom_nav_item_4"/>
+</menu>

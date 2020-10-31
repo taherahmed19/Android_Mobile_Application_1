@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/markerModal"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:background="#FFF"
+            android:paddingTop="25sp"
+            android:paddingBottom="25sp"
+            android:paddingLeft="20sp"
+            android:paddingRight="20sp"
+            android:alpha="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:alpha="1">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="200sp"
+                    android:layout_marginBottom="10sp"
+                    android:src="@drawable/sunset_beach">
+                </ImageView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Environment"
+                    android:textSize="23sp"
+                    android:textColor="#000"
+                    android:layout_marginBottom="10sp"
+                    android:id="@+id/modalCategory"
+                    >
+                </TextView>
+
+                <ScrollView
+                    android:id="@+id/userFeedScroll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:overScrollMode="never">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sub_text"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="16sp"
+                        android:id="@+id/modalDescription"/>
+                </ScrollView>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/modalCloseButton"
+                android:padding="5sp"
+                android:layout_marginBottom="-5sp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_close"
+                    android:background="@android:color/transparent"
+
+                    android:text="Close"
+                    android:textColor="#33DDFF"
+                    android:textStyle="bold">
+                </TextView>
+            </LinearLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
