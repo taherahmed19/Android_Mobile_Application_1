@@ -7,16 +7,8 @@
     <string name="OPEN_CAGE_API_KEY">f6a961747ae5471bac2c27b9c5ed38fa</string>
     <string name="ROUTING_API_KEY">U1L13ff4eUGcXgZ0JIA76A9V7qd2iTf0</string>
     <string name="AQICN_API_KEY">9c42a328c1ee521c61648560c965c1b6c22ab231</string>
-    <string-array name="planets_array">
-        <item>Mercury</item>
-        <item>Venus</item>
-        <item>Earth</item>
-        <item>Mars</item>
-        <item>Jupiter</item>
-        <item>Saturn</item>
-        <item>Uranus</item>
-        <item>Neptune</item>
-    </string-array>
+
+    <string name="default_constant">DEFAULT</string>
 
     <!--Submit Fragment Strings -->
     <string name="main_text">New post submitted!</string>
@@ -77,8 +69,5 @@
     <string name="map_feed_search_error_body_1"><u>Search field is empty</u></string>
     <string name="map_feed_search_error_title_2"><u>Search Error</u></string>
     <string name="map_feed_search_error_body_2"><u>Could not find location searched.</u></string>
-
-
-
 
 </resources>

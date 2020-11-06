@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
+import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
 import com.example.myapplication.R;
@@ -23,6 +24,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -60,8 +62,9 @@ public class MapHandler implements OnMapReadyCallback {
         FilteredRegion filteredRegion = filterSettings.getFilteredRegion();
 
         for(int i = 0; i < this.markers.size(); i++){
-            addMarkerToGoogleMap(i);
+            addCustomMarker(i);
         }
+        addCurrentLocationMarker();
 
         googleMap.setTrafficEnabled(true);
 
@@ -89,7 +92,7 @@ public class MapHandler implements OnMapReadyCallback {
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
     }
 
-    void addMarkerToGoogleMap(int i){
+    void addCustomMarker(int i){
         int markerColour = this.returnMarkerDrawable(this.markers.get(i).getMarker());
         final Drawable circleDrawable = fragmentActivity.getResources().getDrawable(markerColour);
         final BitmapDescriptor markerIcon = Tools.getMarkerIconFromDrawable(circleDrawable);
@@ -103,15 +106,32 @@ public class MapHandler implements OnMapReadyCallback {
         googleMarkers.add(marker);
     }
 
+    void addCurrentLocationMarker(){
+        CurrentLocation currentLocation = new CurrentLocation(fragmentActivity);
+        LatLng latLng = currentLocation.accessGeolocation();
+
+        com.google.android.gms.maps.model.Marker marker = mMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
+        marker.setTag(fragmentActivity.getString(R.string.default_constant));
+
+        googleMarkers.add(marker);
+    }
+
     void addMarkersListener(){
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(com.google.android.gms.maps.model.Marker marker) {
-                Marker item = (Marker)marker.getTag();
-                MarkerModalFragment markerModalFragment = new MarkerModalFragment(item);
-                FragmentTransition.Transition(fragmentActivity.getSupportFragmentManager(), markerModalFragment, R.anim.right_animations, R.anim.left_animation,
-                        R.id.mapModalContainer, "");
-                return true;
+                if(!marker.getTag().equals(fragmentActivity.getString(R.string.default_constant))){
+                    Marker item = (Marker)marker.getTag();
+                    MarkerModalFragment markerModalFragment = new MarkerModalFragment(item);
+                    FragmentTransition.Transition(fragmentActivity.getSupportFragmentManager(), markerModalFragment, R.anim.right_animations, R.anim.left_animation,
+                            R.id.mapModalContainer, "");
+
+                    return true;
+                }
+                return false;
             }
         });
     }

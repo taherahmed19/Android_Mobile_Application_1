@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.myapplication.R;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
@@ -100,5 +101,46 @@ public class Tools {
         }
 
         return categoryItem;
+    }
+
+    public static int MarkerPicker(int category){
+        int drawable = -1;
+
+        switch (category) {
+            case 1:
+                drawable = R.drawable.ic_alerts_feed_marker_environment;
+                break;
+            case 2:
+                drawable = R.drawable.ic_alerts_feed_marker_weather;
+                break;
+            case 3:
+                drawable = R.drawable.ic_alerts_feed_marker_people;
+                break;
+            default:
+                break;
+        }
+
+        return drawable;
+    }
+
+    public static int MarkerPicker(String category){
+        int drawable = -1;
+
+        switch (category) {
+            case "environment":
+                drawable = R.drawable.ic_marker_green_maps;
+                break;
+            case "weather":
+                drawable = R.drawable.ic_marker_blue_maps;
+                break;
+            case "people":
+                drawable = R.drawable.ic_marker_purple_maps;
+                break;
+            default:
+                drawable = R.drawable.ic_alerts_feed_marker;
+                break;
+        }
+
+        return drawable;
     }
 }

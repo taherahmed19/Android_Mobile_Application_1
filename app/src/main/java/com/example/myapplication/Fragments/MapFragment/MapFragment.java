@@ -138,6 +138,11 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     }
 
     @Override
+    public int checkSearchFieldLength() {
+        return this.mapFeedFragmentHandler.getMapFeedSearchFragment().searchFieldLength();
+    }
+
+    @Override
     public void onSettingsUpdated(Settings settings) {
         try{
             httpMap = new HttpMap(getActivity(), getChildFragmentManager(), mapFragment, this, loadingSpinner, settings);

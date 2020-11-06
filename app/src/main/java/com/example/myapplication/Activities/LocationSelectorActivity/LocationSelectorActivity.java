@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -12,10 +14,12 @@ import android.widget.TextView;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.StringConstants.StringConstants;
+import com.example.myapplication.Utils.Tools.Tools;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -26,6 +30,8 @@ public class LocationSelectorActivity extends AppCompatActivity implements OnMap
     LatLng location;
     GoogleMap mMap;
     LatLng selectedLocation;
+
+    int customMarkerIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +46,7 @@ public class LocationSelectorActivity extends AppCompatActivity implements OnMap
 
         configureReturnButton();
         configureSubmitButton();
+        configureCustomMarkerIcon();
     }
 
     @Override
@@ -71,14 +78,33 @@ public class LocationSelectorActivity extends AppCompatActivity implements OnMap
 
     void setGoogleMapClickable(){
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            Drawable circleDrawable;
+            BitmapDescriptor markerIcon;
+
             @Override
             public void onMapClick(LatLng loc) {
+                setupMarker();
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions()
-                        .position(loc));
+                        .position(loc)
+                        .icon(markerIcon));
                 selectedLocation = loc;
             }
+
+            public void setupMarker(){
+                if(customMarkerIcon == (int)(BitmapDescriptorFactory.HUE_RED)){
+                    markerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+                }else{
+                    circleDrawable = getResources().getDrawable(customMarkerIcon);
+                    markerIcon = Tools.getMarkerIconFromDrawable(circleDrawable);
+                }
+            }
         });
+    }
+
+    void configureCustomMarkerIcon(){
+        Intent intent = getIntent();
+        this.customMarkerIcon = intent.getIntExtra("chosenMarker", (int)(BitmapDescriptorFactory.HUE_RED));
     }
 
     void configureSubmitButton(){

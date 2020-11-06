@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -72,6 +73,7 @@ public class MapFeedSearchFragmentHandler {
                     HttpMapFeedSearchAutocomplete httpMapFeedSearchAutocomplete = new HttpMapFeedSearchAutocomplete(getContext(), listener);
                     httpMapFeedSearchAutocomplete.execute(s.toString());
                 }else{
+                    Log.d("Print", "Search field is empty");
                     if ((Boolean) mapFeedSearch.getTag()) {
                         mapFeedSearch.setBackgroundResource(R.drawable.input_border_error_no_radius);
                         listener.onTriggerResultsClear();
@@ -85,6 +87,12 @@ public class MapFeedSearchFragmentHandler {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
+    }
+
+    public int searchFieldLength(){
+        EditText mapFeedSearch = (EditText) mapFeedSearchFragment.getView().findViewById(R.id.mapFeedSearch);
+
+        return mapFeedSearch.getText().toString().trim().length();
     }
 
     void configureMapFeedSearchSubmit(){

@@ -55,8 +55,8 @@ public class FeedForm {
         if(ableToSubmit){
             UserFeedFormFragmentSubmitHandler submitHandler =
                     new UserFeedFormFragmentSubmitHandler(fragmentManager, userFeedFormFragment, description, geolocation, category);
-           //submitHandler.submit();
-           //submitHandler.setSubmitted(true);
+           submitHandler.submit();
+           submitHandler.setSubmitted(true);
 
            return submitHandler.isSubmitted();
         }

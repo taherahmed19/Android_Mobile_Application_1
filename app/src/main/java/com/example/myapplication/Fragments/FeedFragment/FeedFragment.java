@@ -114,7 +114,7 @@ public class FeedFragment extends Fragment {
             feedItemTimestamp.setText(feedItemTimestampText);
             feedItemTimestamp.setTextSize(14f);
 
-            int icon = markerPicker(markerType);
+            int icon = Tools.MarkerPicker(markerType);
             ImageView feedItemIcon = new ImageView(getActivity());
             RelativeLayout.LayoutParams feedItemIconParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             feedItemIconParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -151,25 +151,6 @@ public class FeedFragment extends Fragment {
             return categoryChosen;
         }
 
-        int markerPicker(int category){
-            int drawable = -1;
-
-            switch (category) {
-                case 1:
-                    drawable = R.drawable.ic_alerts_feed_marker_environment;
-                    break;
-                case 2:
-                    drawable = R.drawable.ic_alerts_feed_marker_weather;
-                    break;
-                case 3:
-                    drawable = R.drawable.ic_alerts_feed_marker_people;
-                    break;
-                default:
-                    break;
-            }
-
-            return drawable;
-        }
     }
 
 }

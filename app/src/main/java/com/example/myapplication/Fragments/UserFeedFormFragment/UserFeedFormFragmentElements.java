@@ -1,6 +1,7 @@
 package com.example.myapplication.Fragments.UserFeedFormFragment;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,12 +12,15 @@ import android.widget.TextView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.myapplication.Activities.LocationSelectorActivity.LocationSelectorActivity;
+import com.example.myapplication.Adapters.CustomFilterSpinnerAdapter.CustomFilterSpinnerAdapter;
 import com.example.myapplication.Adapters.CustomSpinnerAdapter.CustomSpinnerAdapter;
 import com.example.myapplication.HttpRequest.FormStaticMap.FormStaticMap;
 import com.example.myapplication.Models.FeedForm.FeedForm;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.Models.SpinnerItem.SpinnerItem;
 import com.example.myapplication.R;
+import com.example.myapplication.Utils.Tools.Tools;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.text.MessageFormat;
@@ -78,7 +82,19 @@ public class UserFeedFormFragmentElements {
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                spinner = userFeedFormFragment.getView().findViewById(R.id.formSpinner);
+                int marker = -1;
+
+                if(spinner.getSelectedItemPosition() == 0){
+                    marker = (int)(BitmapDescriptorFactory.HUE_RED);
+                }else{
+                    SpinnerItem spinnerItem = (SpinnerItem)spinner.getSelectedItem();
+                    marker = Tools.MarkerPicker(spinnerItem.getName().toLowerCase());
+                }
+
                 Intent intent = new Intent(userFeedFormFragment.getActivity(), LocationSelectorActivity.class);
+                intent.putExtra("chosenMarker", marker);
+
                 userFeedFormFragment.startActivityForResult(intent, 1);
             }
         });
@@ -148,7 +164,9 @@ public class UserFeedFormFragmentElements {
             public void onClick(View view) {
                 boolean submitted = feedForm.requestSubmit();
                 if(submitted){
+                    Log.d("Print", "Button clicked");
                     viewPager.getAdapter().notifyDataSetChanged(); //add to new post submission
+                    userFeedFormFragment.getActivity().onBackPressed();
                 }
             }
         });
@@ -158,7 +176,7 @@ public class UserFeedFormFragmentElements {
         spinner = userFeedFormFragment.getView().findViewById(R.id.formSpinner);
         ArrayList<SpinnerItem> customList = createMarkerSpinnerItems();
 
-        CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(Objects.requireNonNull(userFeedFormFragment.getActivity()), customList);
+        CustomFilterSpinnerAdapter adapter = new CustomFilterSpinnerAdapter(Objects.requireNonNull(userFeedFormFragment.getActivity()), customList);
 
         if(spinner != null){
             spinner.setAdapter(adapter);

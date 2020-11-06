@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.Handlers.MapFeedSearchFragmentHandler.MapFeedSearchFragmentHandler;
@@ -31,6 +32,7 @@ public class MapFeedSearchFragment extends Fragment {
         void onInputSearchSent(CharSequence input);
         void onSearchTextChanged(Place place, String mainText, String secondText);
         void onTriggerResultsClear();
+        int checkSearchFieldLength();
     }
 
     @Override
@@ -48,6 +50,10 @@ public class MapFeedSearchFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         this.mapFeedSearchFragmentHandler.configureElements();
+    }
+
+    public int searchFieldLength(){
+        return this.mapFeedSearchFragmentHandler.searchFieldLength();
     }
 
     public void updateEditText(CharSequence newText) {

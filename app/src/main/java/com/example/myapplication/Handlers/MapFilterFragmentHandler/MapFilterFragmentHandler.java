@@ -51,15 +51,10 @@ public class MapFilterFragmentHandler {
     public void configureCategorySpinner(){
         Spinner spinner = mapFilterFragment.getView().findViewById(R.id.filterSpinner);
         ArrayList<SpinnerItem> customList = createMarkerSpinnerItems();
-
-        spinner.setDropDownVerticalOffset(200);
-
         CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(Objects.requireNonNull(mapFilterFragment.getActivity()), customList);
 
-        if(spinner != null){
-            spinner.setAdapter(adapter);
-        }
-
+        spinner.setAdapter(adapter);
+        spinner.setDropDownVerticalOffset(125);
         spinnerListener(spinner);
     }
 
@@ -67,22 +62,34 @@ public class MapFilterFragmentHandler {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if(position != 0){
+                if (position != 0) {
                     SpinnerItem item = (SpinnerItem) spinner.getSelectedItem();
 
                     ArrayList<String> tempItems = filterSortBy.getTempItems();
                     ArrayList<String> selectedItems = filterSortBy.getSelectedItems();
 
-                    if(!tempItems.contains(item.getName()) && !selectedItems.contains(item.getName())){
+
+                    Log.d("Print", "Clicked " + item.getName() + " " + tempItems.size());
+
+                    if (tempItems.contains(item.getName())) {
+                        Log.d("Print", "temp item container " + item.getName());
+                    }
+                    if (selectedItems.contains(item.getName())) {
+                        Log.d("Print", "selected item container " + item.getName());
+                    }
+
+
+                    if (!tempItems.contains(item.getName()) && !selectedItems.contains(item.getName())) {
+                        Log.d("Print", "Added " + item.getName());
                         item.setConfirmation(R.drawable.ic_map_filter_confirm);
                         filterSortBy.addTempItem(item.getName());
-                    }else{
+                    } else {
+                        Log.d("Print", "Removed " + item.getName());
                         item.setConfirmation(R.drawable.empty);
                         filterSortBy.removeTempItem(item.getName());
                     }
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parentView) { }
 
@@ -101,7 +108,7 @@ public class MapFilterFragmentHandler {
                 }
 
                 Intent intent = new Intent(mapFilterFragment.getActivity(), RegionSelectorActivity.class);
-                intent.putExtra("selectedRegion",selectedRegion);
+                intent.putExtra("selectedRegion", selectedRegion);
 
                 mapFilterFragment.startActivityForResult(intent,1);
             }
@@ -134,7 +141,7 @@ public class MapFilterFragmentHandler {
     }
 
     public void configureSubmitButton(){
-        Button mapFeedSubmit = (Button) mapFilterFragment.getView().findViewById(R.id.mapFeedSubmit);
+        Button mapFeedSubmit = (Button) mapFilterFragment.getView().findViewById(R.id.mapFilterSubmit);
         mapFeedSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

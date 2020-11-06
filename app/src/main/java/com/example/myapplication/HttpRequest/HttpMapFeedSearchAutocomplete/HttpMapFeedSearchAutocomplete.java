@@ -69,8 +69,11 @@ public class HttpMapFeedSearchAutocomplete extends AsyncTask<String, Void, Place
     @Override
     protected void onPostExecute(Places places) {
         listener.onTriggerResultsClear();
-        for(int i = 0; i < places.getPlaces().size(); i++){
-            listener.onSearchTextChanged(places.getPlaces().get(i), places.getPlaces().get(i).getMainText(), places.getPlaces().get(i).getSecondText());
+        int searchFieldLength = listener.checkSearchFieldLength();
+        if(searchFieldLength > 0){
+            for(int i = 0; i < places.getPlaces().size(); i++){
+                listener.onSearchTextChanged(places.getPlaces().get(i), places.getPlaces().get(i).getMainText(), places.getPlaces().get(i).getSecondText());
+            }
         }
     }
 
