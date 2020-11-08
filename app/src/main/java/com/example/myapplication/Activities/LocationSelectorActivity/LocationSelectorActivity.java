@@ -31,8 +31,6 @@ public class LocationSelectorActivity extends AppCompatActivity implements OnMap
     GoogleMap mMap;
     LatLng selectedLocation;
 
-    int customMarkerIcon;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +44,6 @@ public class LocationSelectorActivity extends AppCompatActivity implements OnMap
 
         configureReturnButton();
         configureSubmitButton();
-        configureCustomMarkerIcon();
     }
 
     @Override
@@ -78,33 +75,15 @@ public class LocationSelectorActivity extends AppCompatActivity implements OnMap
 
     void setGoogleMapClickable(){
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            Drawable circleDrawable;
-            BitmapDescriptor markerIcon;
-
             @Override
             public void onMapClick(LatLng loc) {
-                setupMarker();
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions()
                         .position(loc)
-                        .icon(markerIcon));
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                 selectedLocation = loc;
             }
-
-            public void setupMarker(){
-                if(customMarkerIcon == (int)(BitmapDescriptorFactory.HUE_RED)){
-                    markerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
-                }else{
-                    circleDrawable = getResources().getDrawable(customMarkerIcon);
-                    markerIcon = Tools.getMarkerIconFromDrawable(circleDrawable);
-                }
-            }
         });
-    }
-
-    void configureCustomMarkerIcon(){
-        Intent intent = getIntent();
-        this.customMarkerIcon = intent.getIntExtra("chosenMarker", (int)(BitmapDescriptorFactory.HUE_RED));
     }
 
     void configureSubmitButton(){

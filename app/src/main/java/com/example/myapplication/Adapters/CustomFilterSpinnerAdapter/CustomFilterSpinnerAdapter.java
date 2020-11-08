@@ -29,14 +29,11 @@ public class CustomFilterSpinnerAdapter extends ArrayAdapter<SpinnerItem> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.spinner_categories, parent, false);
         }
 
-
         SpinnerItem item = getItem(position);
-        ImageView dropdownImage = convertView.findViewById(R.id.spinnerImage);
         TextView dropdownText = convertView.findViewById(R.id.spinnerText);
 
         if(item != null){
-            dropdownImage.setImageResource(item.getImage());
-            dropdownText.setText(item.getName());
+            dropdownText.setText("Select a category");
         }
 
         return convertView;
@@ -44,19 +41,25 @@ public class CustomFilterSpinnerAdapter extends ArrayAdapter<SpinnerItem> {
 
     @Override
     public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        if(convertView == null){
+       if(position == 0){
+          convertView = new View(getContext());
+          convertView.setVisibility(View.GONE);
+       }else{
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.spinner_categories, parent, false);
-        }
 
-        SpinnerItem item = getItem(position);
-        ImageView image = convertView.findViewById((R.id.spinnerImage));
-        TextView text = convertView.findViewById((R.id.spinnerText));
+            SpinnerItem item = getItem(position);
+            ImageView confirmation = convertView.findViewById((R.id.spinnerConfirmation));
+            ImageView image = convertView.findViewById((R.id.spinnerImage));
+            TextView text = convertView.findViewById((R.id.spinnerText));
 
-        if(item != null){
-            image.setImageResource(item.getImage());
-            text.setText(item.getName());
+            if(item != null){
+                confirmation.setImageResource(item.getConfirmation());
+                image.setImageResource(item.getImage());
+                text.setText(item.getName());
+            }
         }
 
         return convertView;
     }
+
 }

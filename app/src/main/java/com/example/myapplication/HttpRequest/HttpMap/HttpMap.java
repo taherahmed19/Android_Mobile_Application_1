@@ -144,10 +144,10 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
         }
     }
 
-    //refactor
-    public void saveMapCameraPosition(){
-        mapHandler.saveMapCameraPosition();
-    }
+//    //refactor
+//    public void saveMapCameraPosition(){
+//        mapHandler.saveMapCameraPosition();
+//    }
 
     //refactor
     public MapHandler getDatabaseMarkerMap() {

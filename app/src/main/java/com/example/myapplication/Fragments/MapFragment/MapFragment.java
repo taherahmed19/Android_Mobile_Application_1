@@ -1,5 +1,6 @@
 package com.example.myapplication.Fragments.MapFragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.Map
 import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
 import com.example.myapplication.Fragments.MapFilterFragment.MapFilterFragment;
 import com.example.myapplication.Handlers.MapFeedFragmentHandler.MapFeedFragmentHandler;
+import com.example.myapplication.Handlers.MapHandler.MapHandler;
 import com.example.myapplication.HttpRequest.HttpMap.HttpMap;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.Models.LoadingSpinner.LoadingSpinner;
@@ -39,8 +41,14 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
 
     LockableViewPager viewPager;
 
+    MapHandler mapHandler;
+
     public MapFragment(LockableViewPager viewPager) {
         this.viewPager = viewPager;
+    }
+
+    public interface MapSaveListener {
+        void onMapSave();
     }
 
     @Override
@@ -58,6 +66,7 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
         this.mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
         this.mapFeedFragmentHandler.configureElements();
 
+
         this.httpMap = new HttpMap(getActivity(), getChildFragmentManager(), mapFragment, this, loadingSpinner, null);
         this.httpMap.execute("https://10.0.2.2:443/api/getmarkers");
     }
@@ -73,34 +82,6 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
                 httpMap.getDatabaseMarkerMap().setMapLocation(latLng);
                 this.loadingSpinner.hide();
             }
-        }
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            updateMapFeed();
-        }else{
-            try{
-                if(httpMap != null){
-                    httpMap.saveMapCameraPosition();
-                    httpMap = null;
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void updateMapFeed(){
-        try{
-            if(httpMap == null){
-//                databaseMarkers = new DatabaseMarkers(getActivity(), getChildFragmentManager(), mapFragment, this, loadingSpinner, null);
-//                databaseMarkers.execute("https://10.0.2.2:443/api/getmarkers");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
         }
     }
 

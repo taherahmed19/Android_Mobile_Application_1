@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.myapplication.Activities.LocationSelectorActivity.LocationSelectorActivity;
-import com.example.myapplication.Adapters.CustomFilterSpinnerAdapter.CustomFilterSpinnerAdapter;
 import com.example.myapplication.Adapters.CustomSpinnerAdapter.CustomSpinnerAdapter;
 import com.example.myapplication.HttpRequest.FormStaticMap.FormStaticMap;
 import com.example.myapplication.Models.FeedForm.FeedForm;
@@ -176,7 +175,7 @@ public class UserFeedFormFragmentElements {
         spinner = userFeedFormFragment.getView().findViewById(R.id.formSpinner);
         ArrayList<SpinnerItem> customList = createMarkerSpinnerItems();
 
-        CustomFilterSpinnerAdapter adapter = new CustomFilterSpinnerAdapter(Objects.requireNonNull(userFeedFormFragment.getActivity()), customList);
+        CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(Objects.requireNonNull(userFeedFormFragment.getActivity()), customList);
 
         if(spinner != null){
             spinner.setAdapter(adapter);

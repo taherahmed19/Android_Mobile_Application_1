@@ -1,6 +1,7 @@
 package com.example.myapplication.Handlers.MapFilterFragmentHandler;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,7 +14,7 @@ import android.widget.TextView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.myapplication.Activities.RegionSelectorActivity.RegionSelectorActivity;
-import com.example.myapplication.Adapters.CustomSpinnerAdapter.CustomSpinnerAdapter;
+import com.example.myapplication.Adapters.CustomFilterSpinnerAdapter.CustomFilterSpinnerAdapter;
 import com.example.myapplication.Adapters.SeekBarAdapter.SeekBarAdapter;
 import com.example.myapplication.Fragments.MapFilterFragment.MapFilterFragment;
 import com.example.myapplication.Models.Filter.FilterSortBy.FilterSortBy;
@@ -35,10 +36,13 @@ public class MapFilterFragmentHandler {
     FilterSortBy filterSortBy;
     MapFilterFragment.FragmentMapFilterListener listener;
 
+    ArrayList<SpinnerItem> selectedItemsSaved;
+
     public MapFilterFragmentHandler(MapFilterFragment mapFilterFragment, ViewPager viewPager) {
         this.mapFilterFragment = mapFilterFragment;
         this.viewPager = viewPager;
         this.filterSortBy = new FilterSortBy();
+        this.selectedItemsSaved = new ArrayList<>();
     }
 
     public void configure(){
@@ -51,7 +55,7 @@ public class MapFilterFragmentHandler {
     public void configureCategorySpinner(){
         Spinner spinner = mapFilterFragment.getView().findViewById(R.id.filterSpinner);
         ArrayList<SpinnerItem> customList = createMarkerSpinnerItems();
-        CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(Objects.requireNonNull(mapFilterFragment.getActivity()), customList);
+        CustomFilterSpinnerAdapter adapter = new CustomFilterSpinnerAdapter(Objects.requireNonNull(mapFilterFragment.getActivity()), customList);
 
         spinner.setAdapter(adapter);
         spinner.setDropDownVerticalOffset(125);
@@ -68,25 +72,14 @@ public class MapFilterFragmentHandler {
                     ArrayList<String> tempItems = filterSortBy.getTempItems();
                     ArrayList<String> selectedItems = filterSortBy.getSelectedItems();
 
-
-                    Log.d("Print", "Clicked " + item.getName() + " " + tempItems.size());
-
-                    if (tempItems.contains(item.getName())) {
-                        Log.d("Print", "temp item container " + item.getName());
-                    }
-                    if (selectedItems.contains(item.getName())) {
-                        Log.d("Print", "selected item container " + item.getName());
-                    }
-
-
                     if (!tempItems.contains(item.getName()) && !selectedItems.contains(item.getName())) {
-                        Log.d("Print", "Added " + item.getName());
                         item.setConfirmation(R.drawable.ic_map_filter_confirm);
                         filterSortBy.addTempItem(item.getName());
+                        selectedItemsSaved.add(item);
                     } else {
-                        Log.d("Print", "Removed " + item.getName());
                         item.setConfirmation(R.drawable.empty);
                         filterSortBy.removeTempItem(item.getName());
+                        selectedItemsSaved.remove(item);
                     }
                 }
             }
@@ -94,7 +87,6 @@ public class MapFilterFragmentHandler {
             public void onNothingSelected(AdapterView<?> parentView) { }
 
         });
-
     }
 
     public void configureRegionSelector(){
@@ -196,4 +188,7 @@ public class MapFilterFragmentHandler {
         this.listener = listener;
     }
 
+    public ArrayList<SpinnerItem> getSelectedItemsSaved() {
+        return selectedItemsSaved;
+    }
 }

@@ -29,6 +29,7 @@ public class MapFeedFragmentHandler  {
     MapFeedSearchAutocompleteFragment mapFeedSearchAutocompleteFragment;
     MapFeedSearchFragment mapFeedSearchFragment;
     LockableViewPager viewPager;
+    MapFragment.MapSaveListener listener;
 
     public MapFeedFragmentHandler(MapFragment mapFragment, LockableViewPager viewPager) {
         this.mapFragment = mapFragment;
@@ -98,13 +99,19 @@ public class MapFeedFragmentHandler  {
     }
 
     void configureFilterButton(){
-        MapFilterFragment fragment = new MapFilterFragment(mapFragment.getFragmentManager(), viewPager,  mapFragment);
-
         ImageButton filterButton = (ImageButton) mapFragment.getView().findViewById(R.id.filterButton);
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction transition = FragmentTransition.Transition(mapFragment.getFragmentManager(), fragment, R.anim.right_animations, R.anim.left_animation, R.id.userFeedFormPointer, "");
+                listener.onMapSave();
+
+                MapFilterFragment fragment = (MapFilterFragment) mapFragment.getFragmentManager().findFragmentByTag(MapFilterFragment.TAG);
+                if (fragment == null) {
+                    fragment = new MapFilterFragment(mapFragment.getFragmentManager(), viewPager,  mapFragment);
+                }
+
+                FragmentTransaction transition = FragmentTransition.Transition(mapFragment.getFragmentManager(), fragment,
+                        R.anim.right_animations, R.anim.left_animation, R.id.userFeedFormPointer, MapFilterFragment.TAG);
             }
         });
     }

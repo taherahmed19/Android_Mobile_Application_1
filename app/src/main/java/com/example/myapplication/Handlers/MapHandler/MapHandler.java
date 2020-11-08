@@ -3,6 +3,7 @@ package com.example.myapplication.Handlers.MapHandler;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -31,7 +32,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
-public class MapHandler implements OnMapReadyCallback {
+public class MapHandler implements OnMapReadyCallback, MapFragment.MapSaveListener {
 
     GoogleMap mMap;
     FragmentActivity fragmentActivity;
@@ -58,9 +59,6 @@ public class MapHandler implements OnMapReadyCallback {
         mMap = googleMap;
         mMap.clear();
 
-        FilterSettings filterSettings = Filter.retrieveFilterJson(fragmentActivity);
-        FilteredRegion filteredRegion = filterSettings.getFilteredRegion();
-
         for(int i = 0; i < this.markers.size(); i++){
             addCustomMarker(i);
         }
@@ -69,9 +67,6 @@ public class MapHandler implements OnMapReadyCallback {
         googleMap.setTrafficEnabled(true);
 
         LatLng savedLatLng = this.getMapCameraPosition();
-        if(filteredRegion != null){
-            savedLatLng = filteredRegion.getLatLng();
-        }
 
         if(savedLatLng != null){
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(savedLatLng.latitude, savedLatLng.longitude), 15));
@@ -176,7 +171,7 @@ public class MapHandler implements OnMapReadyCallback {
         String latitudeStr = mapState.getString("latitude", "");
         String longitudeStr = mapState.getString("longitude", "");
 
-        if(!latitudeStr.equals("") && !longitudeStr.equals("")){
+        if(latitudeStr != "" && longitudeStr != ""){
             double latitude = Double.parseDouble(latitudeStr);
             double longitude = Double.parseDouble(longitudeStr);
 
@@ -184,5 +179,11 @@ public class MapHandler implements OnMapReadyCallback {
         }
 
         return null;
+    }
+
+    @Override
+    public void onMapSave() {
+        Log.d("Print", "On map save");
+        saveMapCameraPosition();
     }
 }
