@@ -2,6 +2,7 @@ package com.example.myapplication.Fragments.MapFilterFragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -46,7 +47,7 @@ public class MapFilterFragment extends Fragment{
     public MapFilterFragment(FragmentManager fragmentSupport, ViewPager viewPager, MapFragment mapFragment){
         this.fragmentSupport = fragmentSupport;
         this.viewPager = viewPager;
-        this.mapFilterFragmentHandler = new MapFilterFragmentHandler(this, viewPager );
+        this.mapFilterFragmentHandler = new MapFilterFragmentHandler(this, viewPager);
         this.mapFragment = mapFragment;
     }
 
@@ -60,7 +61,6 @@ public class MapFilterFragment extends Fragment{
                 String name = data.getStringExtra("name");
 
                 FilteredRegion filteredRegion = new FilteredRegion(new LatLng(latitude,longitude), name);
-                this.mapFilterFragmentHandler.updateRegionLocationName(name);
             }
         }
     }
@@ -80,7 +80,6 @@ public class MapFilterFragment extends Fragment{
         super.onActivityCreated(savedInstanceState);
 
         this.mapFilterFragmentHandler.configure();
-        this.mapFilterFragmentHandler.configureRegionSelector();
     }
 
     @Override
@@ -99,5 +98,4 @@ public class MapFilterFragment extends Fragment{
         super.onDetach();
         this.mapFilterFragmentHandler.setListener(null);
     }
-
 }

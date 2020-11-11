@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity  {
         getApplicationContext().getSharedPreferences("Main_MapFeed_Map_State", 0).edit().clear().apply();
         getApplicationContext().getSharedPreferences("Map_Filter_Fragment", 0).edit().clear().apply();
         getApplicationContext().getSharedPreferences("Region_Geolocation_State", 0).edit().clear().apply();
+        getApplicationContext().getSharedPreferences("Map_Filter_Fragment_Settings", 0).edit().clear().apply();
     }
 
     @Override

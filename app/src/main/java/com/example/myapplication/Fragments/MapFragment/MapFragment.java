@@ -33,7 +33,6 @@ import org.jetbrains.annotations.NotNull;
 public class MapFragment extends Fragment implements MapFeedSearchFragment.FragmentSearchListener, MapFeedSearchAutocompleteFragment.FragmentAutocompleteListener
                                                      , MapFilterFragment.FragmentMapFilterListener {
     CurrentLocation currentLocation;
-    HttpMap httpMap;
     SupportMapFragment mapFragment;
 
     LoadingSpinner loadingSpinner;
@@ -41,14 +40,8 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
 
     LockableViewPager viewPager;
 
-    MapHandler mapHandler;
-
     public MapFragment(LockableViewPager viewPager) {
         this.viewPager = viewPager;
-    }
-
-    public interface MapSaveListener {
-        void onMapSave();
     }
 
     @Override
@@ -61,28 +54,19 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
         super.onActivityCreated(savedInstanceState);
 
         this.mapFeedFragmentHandler = new MapFeedFragmentHandler(this, viewPager);
-
-        this.loadingSpinner = new LoadingSpinner((ProgressBar) getView().findViewById(R.id.feedLoadingSpinner));
         this.mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
+        this.loadingSpinner = new LoadingSpinner((ProgressBar) getView().findViewById(R.id.feedLoadingSpinner));
         this.mapFeedFragmentHandler.configureElements();
 
-
-        this.httpMap = new HttpMap(getActivity(), getChildFragmentManager(), mapFragment, this, loadingSpinner, null);
-        this.httpMap.execute("https://10.0.2.2:443/api/getmarkers");
+        this.mapFeedFragmentHandler.requestMap(null);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        this.loadingSpinner.show();
+        this.mapFeedFragmentHandler.showSpinner();
 
         LatLng latLng = this.mapFeedFragmentHandler.handleResult(requestCode, resultCode, data);
-
-        if(latLng != null){
-            if(httpMap.getDatabaseMarkerMap() != null){
-                httpMap.getDatabaseMarkerMap().setMapLocation(latLng);
-                this.loadingSpinner.hide();
-            }
-        }
+        this.mapFeedFragmentHandler.handleSavedLocation(latLng);
     }
 
     public void showFeedMapContainer(){
@@ -126,8 +110,7 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     @Override
     public void onSettingsUpdated(Settings settings) {
         try{
-            httpMap = new HttpMap(getActivity(), getChildFragmentManager(), mapFragment, this, loadingSpinner, settings);
-            httpMap.execute("https://10.0.2.2:443/api/getmarkers");
+            this.mapFeedFragmentHandler.requestMap(settings);
         }catch (Exception e){
             e.printStackTrace();
         }

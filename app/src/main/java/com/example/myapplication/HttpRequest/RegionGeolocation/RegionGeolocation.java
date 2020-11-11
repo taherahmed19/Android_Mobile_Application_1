@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.myapplication.Activities.RegionSelectorActivity.RegionSelectorActivity;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
 import com.google.android.gms.maps.model.LatLng;
@@ -21,13 +20,11 @@ public class RegionGeolocation extends AsyncTask<String , Void ,String> {
 
     Context context;
     LatLng region;
-    RegionSelectorActivity regionSelectorActivity;
     String regionName;
 
-    public RegionGeolocation(Context context, RegionSelectorActivity regionSelectorActivity){
+    public RegionGeolocation(Context context){
         this.context = context;
         this.region = null;
-        this.regionSelectorActivity = regionSelectorActivity;
         this.regionName = "";
     }
 
@@ -69,7 +66,6 @@ public class RegionGeolocation extends AsyncTask<String , Void ,String> {
 
     @Override
     protected void onPostExecute(String str) {
-        regionSelectorActivity.configureSubmitButtonRegionSelected(this.region, this.regionName);
     }
 
     void buildGeocoordinates(String response){

@@ -1,22 +1,23 @@
 package com.example.myapplication.Utils.Tools;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-
+import com.example.myapplication.Models.SpinnerItem.SpinnerItem;
 import com.example.myapplication.R;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,7 +25,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Tools {
 
@@ -143,4 +146,23 @@ public class Tools {
 
         return drawable;
     }
+
+    public static String ArrayListToJson(ArrayList arrayList){
+        return new Gson().toJson(arrayList).toString();
+    }
+
+    public static ArrayList<String> JsonToArrayList(String json) throws JSONException {
+        ArrayList<String> arrayList = new ArrayList();
+        JSONArray jsonArray = new JSONArray(json);
+
+        try{
+            for(int i = 0; i < jsonArray.length(); i++){
+                arrayList.add(jsonArray.get(i).toString());
+            }
+        }catch (Exception e){
+        }
+
+        return arrayList;
+    }
+
 }

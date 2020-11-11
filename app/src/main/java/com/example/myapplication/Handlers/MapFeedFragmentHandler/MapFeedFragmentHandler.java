@@ -2,9 +2,11 @@ package com.example.myapplication.Handlers.MapFeedFragmentHandler;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import androidx.fragment.app.FragmentTransaction;
 
@@ -15,9 +17,14 @@ import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFr
 import com.example.myapplication.Fragments.UserFeedFormFragment.UserFeedFormFragment;
 import com.example.myapplication.Handlers.MapFeedSearchFragmentHandler.MapFeedSearchFragmentHandler;
 import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.MapFeedSearchAutocompleteFragment;
+import com.example.myapplication.Handlers.MapHandler.MapHandler;
+import com.example.myapplication.HttpRequest.HttpMap.HttpMap;
+import com.example.myapplication.Models.LoadingSpinner.LoadingSpinner;
+import com.example.myapplication.Models.Settings.Settings;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Utils.StringConstants.StringConstants;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import static android.app.Activity.RESULT_OK;
@@ -29,7 +36,10 @@ public class MapFeedFragmentHandler  {
     MapFeedSearchAutocompleteFragment mapFeedSearchAutocompleteFragment;
     MapFeedSearchFragment mapFeedSearchFragment;
     LockableViewPager viewPager;
-    MapFragment.MapSaveListener listener;
+    LoadingSpinner loadingSpinner;
+
+    SupportMapFragment supportMapFragment;
+    HttpMap httpMap;
 
     public MapFeedFragmentHandler(MapFragment mapFragment, LockableViewPager viewPager) {
         this.mapFragment = mapFragment;
@@ -39,15 +49,51 @@ public class MapFeedFragmentHandler  {
     }
 
     public void configureElements(){
+        this.configureSupportMapFragment();
+        this.configureSpinner();
         this.configureMapSearchButton();
         this.configureNewPostButton();
         this.configureFilterButton();
         this.configureSwitchButton();
     }
 
+    public void requestMap(Settings settings){
+        this.httpMap = new HttpMap(mapFragment.getActivity(), mapFragment.getChildFragmentManager(), supportMapFragment, mapFragment, loadingSpinner, settings);
+        this.httpMap.execute("https://10.0.2.2:443/api/getmarkers");
+    }
+
+    public void handleSavedLocation(LatLng latLng){
+        if(latLng != null){
+            if(httpMap.getDatabaseMarkerMap() != null){
+                httpMap.getDatabaseMarkerMap().setMapLocation(latLng);
+                hideSpinner();
+            }
+        }
+    }
+
+    public void showSpinner(){
+        if(this.loadingSpinner != null){
+            this.loadingSpinner.show();
+        }
+    }
+
+    public void hideSpinner(){
+        if(this.loadingSpinner != null){
+            this.loadingSpinner.hide();
+        }
+    }
+
     public void showFeedMapContainer(){
         LinearLayout feedMapContainer = (LinearLayout) mapFragment.getView().findViewById(R.id.feedMapContainer);
         feedMapContainer.setVisibility(View.VISIBLE);
+    }
+
+    void configureSupportMapFragment(){
+        supportMapFragment = (SupportMapFragment) mapFragment.getChildFragmentManager().findFragmentById(R.id.mapFragment);
+    }
+
+    void configureSpinner(){
+        this.loadingSpinner = new LoadingSpinner((ProgressBar) mapFragment.getView().findViewById(R.id.feedLoadingSpinner));
     }
 
     void configureMapSearchButton(){
@@ -103,7 +149,7 @@ public class MapFeedFragmentHandler  {
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onMapSave();
+                httpMap.saveMapCameraPosition();
 
                 MapFilterFragment fragment = (MapFilterFragment) mapFragment.getFragmentManager().findFragmentByTag(MapFilterFragment.TAG);
                 if (fragment == null) {

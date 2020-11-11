@@ -173,7 +173,7 @@ public class UserFeedFormFragmentElements {
 
     ArrayList<SpinnerItem> configureMarkerSpinner(){
         spinner = userFeedFormFragment.getView().findViewById(R.id.formSpinner);
-        ArrayList<SpinnerItem> customList = createMarkerSpinnerItems();
+        ArrayList<SpinnerItem> customList = CustomSpinnerAdapter.CreateMarkerSpinnerItems(userFeedFormFragment.getContext());
 
         CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(Objects.requireNonNull(userFeedFormFragment.getActivity()), customList);
 
@@ -182,16 +182,5 @@ public class UserFeedFormFragmentElements {
         }
 
         return customList;
-    }
-
-    ArrayList<SpinnerItem> createMarkerSpinnerItems(){
-        ArrayList<SpinnerItem> list = new ArrayList<>();
-
-        list.add(new SpinnerItem(userFeedFormFragment.getString(R.string.form_spinner_item_1), R.drawable.ic_marker));
-        list.add(new SpinnerItem(userFeedFormFragment.getString(R.string.form_spinner_item_2), R.drawable.ic_marker_green));
-        list.add(new SpinnerItem(userFeedFormFragment.getString(R.string.form_spinner_item_3), R.drawable.ic_marker_blue));
-        list.add(new SpinnerItem(userFeedFormFragment.getString(R.string.form_spinner_item_4), R.drawable.ic_marker_purple));
-
-        return list;
     }
 }

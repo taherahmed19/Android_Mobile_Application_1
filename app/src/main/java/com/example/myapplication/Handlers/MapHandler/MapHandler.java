@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
+import com.example.myapplication.Models.Marker.Markers;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
 import com.example.myapplication.R;
@@ -30,16 +31,18 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import net.sourceforge.jtds.jdbc.Support;
+
 import java.util.ArrayList;
 
-public class MapHandler implements OnMapReadyCallback, MapFragment.MapSaveListener {
+public class MapHandler implements OnMapReadyCallback {
 
     GoogleMap mMap;
     FragmentActivity fragmentActivity;
     FragmentManager fragmentManager;
     ArrayList<Marker> markers;
     ArrayList<com.google.android.gms.maps.model.Marker> googleMarkers;
-
+    SupportMapFragment supportMapFragment;
     MapFragment mapFragment;
 
     public MapHandler(SupportMapFragment supportMapFragment, FragmentActivity fragmentActivity, FragmentManager fragmentManager, ArrayList<Marker> markers, MapFragment mapFragment){
@@ -179,11 +182,5 @@ public class MapHandler implements OnMapReadyCallback, MapFragment.MapSaveListen
         }
 
         return null;
-    }
-
-    @Override
-    public void onMapSave() {
-        Log.d("Print", "On map save");
-        saveMapCameraPosition();
     }
 }

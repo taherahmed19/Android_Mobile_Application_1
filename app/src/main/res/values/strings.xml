@@ -54,6 +54,25 @@
     <string name="form_spinner_item_2">Environment</string>
     <string name="form_spinner_item_3">Weather</string>
     <string name="form_spinner_item_4">People</string>
+    <string name="form_spinner_item_5">Abandoned vehicles</string>
+    <string name="form_spinner_item_6">Bus stops</string>
+    <string name="form_spinner_item_7">Car parking</string>
+    <string name="form_spinner_item_8">Dog fouling</string>
+    <string name="form_spinner_item_9">Flyposting</string>
+    <string name="form_spinner_item_10">Graffiti</string>
+    <string name="form_spinner_item_11">Graffiti</string>
+    <string name="form_spinner_item_12">Parks/landscapes</string>
+    <string name="form_spinner_item_13">Pavements/footpaths</string>
+    <string name="form_spinner_item_14">Pavements/footpaths</string>
+    <string name="form_spinner_item_15">Potholes</string>
+    <string name="form_spinner_item_16">Public toilets</string>
+    <string name="form_spinner_item_17">Road traffic signs</string>
+    <string name="form_spinner_item_18">Roads/highways</string>
+    <string name="form_spinner_item_19">Rubbish (refuse and recycling)</string>
+    <string name="form_spinner_item_20">Street cleaning</string>
+    <string name="form_spinner_item_21">Street lighting</string>
+    <string name="form_spinner_item_22">Street nameplates</string>
+    <string name="form_spinner_item_23">Traffic lights</string>
 
     <!-- Form current location -->
     <string name="form_current_location"><u>Using current location</u></string>
