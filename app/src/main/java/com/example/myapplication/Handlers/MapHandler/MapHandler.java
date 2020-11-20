@@ -1,12 +1,15 @@
 package com.example.myapplication.Handlers.MapHandler;
 
+import android.Manifest;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
@@ -32,37 +35,25 @@ import net.sourceforge.jtds.jdbc.Support;
 
 import java.util.ArrayList;
 
-public class MapHandler implements OnMapReadyCallback, CurrentLocation.MyListener {
+public class MapHandler implements OnMapReadyCallback {
 
     GoogleMap mMap;
     FragmentActivity fragmentActivity;
     FragmentManager fragmentManager;
-    ArrayList<Marker> markers;
     ArrayList<com.google.android.gms.maps.model.Marker> googleMarkers;
     MapFragment mapFragment;
     CurrentLocation currentLocation;
 
-    public MapHandler(SupportMapFragment supportMapFragment, FragmentActivity fragmentActivity, FragmentManager fragmentManager, ArrayList<Marker> markers, MapFragment mapFragment){
-        this.fragmentActivity =  fragmentActivity;
+    com.google.android.gms.maps.model.Marker userLocationMarker;
+
+    public MapHandler(SupportMapFragment supportMapFragment, FragmentActivity fragmentActivity, FragmentManager fragmentManager, MapFragment mapFragment) {
+        this.fragmentActivity = fragmentActivity;
         this.fragmentManager = fragmentManager;
-        this.markers = markers;
         this.mapFragment = mapFragment;
         this.googleMarkers = new ArrayList<>();
 
-        if(mMap == null) {
-            supportMapFragment.getMapAsync( this);
-        }
-    }
-
-    public MapHandler(SupportMapFragment supportMapFragment, FragmentActivity fragmentActivity, FragmentManager fragmentManager, MapFragment mapFragment){
-        this.fragmentActivity =  fragmentActivity;
-        this.fragmentManager = fragmentManager;
-        this.markers = markers;
-        this.mapFragment = mapFragment;
-        this.googleMarkers = new ArrayList<>();
-
-        if(mMap == null) {
-            supportMapFragment.getMapAsync( this);
+        if (mMap == null) {
+            supportMapFragment.getMapAsync(this);
         }
     }
 
@@ -71,69 +62,78 @@ public class MapHandler implements OnMapReadyCallback, CurrentLocation.MyListene
         mMap = googleMap;
         mMap.clear();
 
-        if(this.markers != null){
-            for(int i = 0; i < this.markers.size(); i++){
-                addCustomMarker(i);
-            }
-        }
-
-        googleMap.setTrafficEnabled(true);
+        googleMap.setTrafficEnabled(false);
 
         LatLng savedLatLng = this.getMapCameraPosition();
 
-        //access current location
-
-        if(savedLatLng != null){
+        if (savedLatLng != null) {
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(savedLatLng.latitude, savedLatLng.longitude), 15));
             googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
         }
-
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.5182706,-0.1364264), 15));
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
 
         this.addMarkersListener();
         mapFragment.showFeedMapContainer();
     }
 
-    public void startLocationUpdates(){
+    public void addDataSetMarkers(ArrayList<Marker> markers) {
+        for (int i = 0; i < markers.size(); i++) {
+            addCustomMarker(i, markers);
+        }
+    }
+
+    public void startLocationUpdates() {
         currentLocation.startLocationUpdates();
     }
 
-    public void stopLocationUpdates(){
+    public void stopLocationUpdates() {
         currentLocation.stopLocationUpdates();
     }
 
-    public void setMapLocation(LatLng latLng){
+    public void setMapLocation(LatLng latLng) {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latLng.latitude, latLng.longitude), 15));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
     }
 
-    void addCustomMarker(int i){
-        int markerColour = this.returnMarkerDrawable(this.markers.get(i).getMarker());
+    void addCustomMarker(int i, ArrayList<Marker> markers) {
+        int markerColour = this.returnMarkerDrawable(markers.get(i).getMarker());
         final Drawable circleDrawable = fragmentActivity.getResources().getDrawable(markerColour);
         final BitmapDescriptor markerIcon = Tools.getMarkerIconFromDrawable(circleDrawable);
 
         com.google.android.gms.maps.model.Marker marker = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(Double.parseDouble(this.markers.get(i).getLat()), Double.parseDouble(this.markers.get(i).getLng())))
+                .position(new LatLng(Double.parseDouble(markers.get(i).getLat()), Double.parseDouble(markers.get(i).getLng())))
                 .icon(markerIcon));
 
-        marker.setTag(this.markers.get(i));
+        marker.setTag(markers.get(i));
 
         googleMarkers.add(marker);
     }
 
-    @Override
-    public void currentLocationCallback(LatLng currentLcation) {
-        com.google.android.gms.maps.model.Marker marker = mMap.addMarker(new MarkerOptions()
-                .position(currentLcation)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+    public void setUserLocationMarker(Location location) {
+        LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
 
-        marker.setTag(fragmentActivity.getString(R.string.default_constant));
-        googleMarkers.add(marker);
+        if (this.userLocationMarker == null) {
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(currentLocation);
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            markerOptions.rotation(location.getBearing());
+            markerOptions.anchor((float) 0.5, (float) 0.5);
 
-        if(mMap != null){
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLcation.latitude, currentLcation.longitude), 15));
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+//            this.userLocationMarker = mMap.addMarker(markerOptions);
+//            userLocationMarker.setTag(fragmentActivity.getString(R.string.default_constant));
+//            googleMarkers.add(userLocationMarker);
+
+            if (mMap != null) {
+                //uber like marker
+                if (ActivityCompat.checkSelfPermission(fragmentActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(fragmentActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                mMap.setMyLocationEnabled(true);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.latitude, currentLocation.longitude), 17));
+            }
+        }else{
+            this.userLocationMarker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
+            userLocationMarker.setRotation(location.getBearing());
         }
     }
 

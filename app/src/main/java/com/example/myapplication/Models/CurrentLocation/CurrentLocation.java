@@ -34,19 +34,19 @@ public class CurrentLocation {
 
     Activity context;
     public static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 111;
-    MyListener listener;
 
     FusedLocationProviderClient fusedLocationProviderClient;
     LocationRequest locationRequest;
 
-
-//    //public CurrentLocation(Activity context) {
-//        this.context = context;
-//    }
+    MapFragment.CurrentLocationListener listener;
 
     public CurrentLocation(Activity context) {
         this.context = context;
-        //this.listener = listener;
+    }
+
+    public CurrentLocation(Activity context, MapFragment.CurrentLocationListener listener) {
+        this.context = context;
+        this.listener = listener;
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
 
@@ -56,64 +56,17 @@ public class CurrentLocation {
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
-    public interface MyListener {
-        void currentLocationCallback(LatLng latLng);
-    }
-
-    /**/
-    public LatLng accessGeolocation() {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
-            return null;
-        }
-
-        permissionRunTime();
-
-        return new LatLng(52.500426, -1.969457);
-    }
-
-    void permissionRunTime() {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_FINE_LOCATION);
-        } else {
-            getGeoLocation();
-        }
-    }
-
-    void getGeoLocation() {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-
-            mFusedLocationClient.getLastLocation().addOnSuccessListener(context, new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location locationResponse) {
-                    if (locationResponse != null) {
-                        if (listener != null) {
-                            listener.currentLocationCallback(new LatLng(locationResponse.getLatitude(), locationResponse.getLongitude()));
-                        }
-                    }
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    throw new RuntimeException(e.toString());
-                }
-            });
-        }
-    }
-
-    public Location currentLocation;
-
     LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
-            Log.d("TAG", "onLocationResult: " + locationResult.getLastLocation());
-            currentLocation = locationResult.getLastLocation();
+            listener.updateUserLocation(locationResult.getLastLocation());
         }
     };
+
+    public LatLng accessGeolocation() {
+        return new LatLng(52.500426, -1.969457);
+    }
 
     public void startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -125,24 +78,5 @@ public class CurrentLocation {
 
     public void stopLocationUpdates() {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback);
-    }
-
-    public void setUserLocationMaker(Location location, Marker userLocationMarker, GoogleMap mMap){
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-        if (userLocationMarker == null) {
-            //Create a new marker
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(latLng);
-            markerOptions.rotation(location.getBearing());
-            markerOptions.anchor((float) 0.5, (float) 0.5);
-            userLocationMarker = mMap.addMarker(markerOptions);
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
-        } else  {
-            //use the previously created marker
-            userLocationMarker.setPosition(latLng);
-            userLocationMarker.setRotation(location.getBearing());
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
-        }
     }
 }

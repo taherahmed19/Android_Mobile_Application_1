@@ -4,6 +4,9 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -25,6 +28,7 @@ import com.example.myapplication.Handlers.MapHandler.MapHandler;
 import com.example.myapplication.HttpRequest.HttpMap.HttpMap;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.Models.LoadingSpinner.LoadingSpinner;
+import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Models.Settings.Settings;
 import com.example.myapplication.R;
 import com.example.myapplication.Refactor.searchAutocomplete.Place;
@@ -33,9 +37,11 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 public class MapFragment extends Fragment implements MapFeedSearchFragment.FragmentSearchListener, MapFeedSearchAutocompleteFragment.FragmentAutocompleteListener
                                                      , MapFilterFragment.FragmentMapFilterListener {
-    SupportMapFragment mapFragment;
+    SupportMapFragment supportMapFragment;
 
     LoadingSpinner loadingSpinner;
     MapFeedFragmentHandler mapFeedFragmentHandler;
@@ -43,6 +49,14 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     LockableViewPager viewPager;
 
     CurrentLocation currentLocation;
+
+    public interface MarkerListener {
+        void addMarkerData(ArrayList<Marker> markers);
+    }
+
+    public interface CurrentLocationListener {
+        void updateUserLocation(Location location);
+    }
 
     public MapFragment(LockableViewPager viewPager) {
         this.viewPager = viewPager;
@@ -58,10 +72,14 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
         super.onActivityCreated(savedInstanceState);
 
         this.mapFeedFragmentHandler = new MapFeedFragmentHandler(this, viewPager);
-        this.mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
+        this.supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
         this.loadingSpinner = new LoadingSpinner((ProgressBar) getView().findViewById(R.id.feedLoadingSpinner));
         this.mapFeedFragmentHandler.configureElements();
 
+        this.mapFeedFragmentHandler.setCurrentLocationListenerListener((CurrentLocationListener) mapFeedFragmentHandler);
+        this.mapFeedFragmentHandler.setListener((MarkerListener) mapFeedFragmentHandler);
+
+        currentLocation = new CurrentLocation(getActivity(), this.mapFeedFragmentHandler.getCurrentLocationListener());
         this.mapFeedFragmentHandler.requestMap(null);
     }
 
@@ -75,14 +93,6 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
 
     public void showFeedMapContainer(){
         this.mapFeedFragmentHandler.showFeedMapContainer();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NotNull String permissions[], @NotNull int[] grantResults) {
-        if (requestCode == CurrentLocation.MY_PERMISSIONS_REQUEST_FINE_LOCATION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            }
-        }
     }
 
     @Override
@@ -123,16 +133,16 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     public void onStart() {
         super.onStart();
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-         //   currentLocation.startLocationUpdates();
-        } else {
-            // you need to request permissions...
+            currentLocation.startLocationUpdates();
         }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-       // currentLocation.stopLocationUpdates();
+        currentLocation.stopLocationUpdates();
+        this.mapFeedFragmentHandler.setListener(null);
+        this.mapFeedFragmentHandler.setCurrentLocationListenerListener(null);
     }
 
 }

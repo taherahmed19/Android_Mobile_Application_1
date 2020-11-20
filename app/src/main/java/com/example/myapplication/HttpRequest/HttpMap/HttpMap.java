@@ -57,8 +57,10 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
     MapHandler mapHandler;
     MapJsonBuilder mapJsonBuilder;
 
+    MapFragment.MarkerListener listener;
+
     public HttpMap(FragmentActivity fragmentActivity, FragmentManager fragmentManager, SupportMapFragment supportMapFragment,
-                   Fragment viewPagerFragment, LoadingSpinner loadingSpinner, Settings settings){
+                   Fragment viewPagerFragment, LoadingSpinner loadingSpinner, Settings settings, MapFragment.MarkerListener listener){
         this.fragmentActivity = fragmentActivity;
         this.markers = new ArrayList<>();
         this.supportMapFragment = supportMapFragment;
@@ -67,6 +69,7 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
         this.settings = settings;
         this.mapJsonBuilder = new MapJsonBuilder(this.markers, settings);
         this.responseCode = 0;
+        this.listener = listener;
     }
 
     public HttpMap(FragmentActivity fragmentActivity, FragmentManager fragmentManager, Fragment viewPagerFragment, LoadingSpinner loadingSpinner){
@@ -132,7 +135,6 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
     @Override
     protected void onPostExecute(String str) {
         this.loadingSpinner.hide();
-
         ArrayList<Marker> markers = this.mapJsonBuilder.getMarkers();
 
         if(this.viewPagerFragment instanceof FeedFragment){
@@ -140,7 +142,9 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
             feedFragment.renderFeed(markers);
 
         }else{
-            mapHandler = new MapHandler(supportMapFragment, fragmentActivity, fragmentManager, markers, (MapFragment)viewPagerFragment);
+            if(this.markers != null){
+                listener.addMarkerData(markers);
+            }
         }
     }
 

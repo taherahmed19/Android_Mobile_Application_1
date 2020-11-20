@@ -2,7 +2,9 @@ package com.example.myapplication.Handlers.MapFeedFragmentHandler;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -20,6 +22,7 @@ import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.Map
 import com.example.myapplication.Handlers.MapHandler.MapHandler;
 import com.example.myapplication.HttpRequest.HttpMap.HttpMap;
 import com.example.myapplication.Models.LoadingSpinner.LoadingSpinner;
+import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Models.Settings.Settings;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
@@ -27,9 +30,12 @@ import com.example.myapplication.Utils.StringConstants.StringConstants;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import static android.app.Activity.RESULT_OK;
 
-public class MapFeedFragmentHandler  {
+public class MapFeedFragmentHandler implements MapFragment.MarkerListener, MapFragment.CurrentLocationListener {
 
     ImageButton mapSearchButton;
     MapFragment mapFragment;
@@ -39,13 +45,28 @@ public class MapFeedFragmentHandler  {
     LoadingSpinner loadingSpinner;
 
     SupportMapFragment supportMapFragment;
+
     HttpMap httpMap;
+    MapHandler mapHandler;
+
+    MapFragment.MarkerListener listener;
+    MapFragment.CurrentLocationListener currentLocationListener;
 
     public MapFeedFragmentHandler(MapFragment mapFragment, LockableViewPager viewPager) {
         this.mapFragment = mapFragment;
         this.mapFeedSearchAutocompleteFragment = new MapFeedSearchAutocompleteFragment(mapFragment);
         this.mapFeedSearchFragment = new MapFeedSearchFragment(mapFragment);
         this.viewPager = viewPager;
+    }
+
+    @Override
+    public void addMarkerData(ArrayList<Marker> markers) {
+        this.mapHandler.addDataSetMarkers(markers);
+    }
+
+    @Override
+    public void updateUserLocation(Location location) {
+        this.mapHandler.setUserLocationMarker(location);
     }
 
     public void configureElements(){
@@ -58,11 +79,10 @@ public class MapFeedFragmentHandler  {
     }
 
     public void requestMap(Settings settings){
-        MapHandler mapHandler = new MapHandler(supportMapFragment, mapFragment.getActivity(), mapFragment.getChildFragmentManager(), mapFragment);
-        loadingSpinner.hide();
+        this.mapHandler = new MapHandler(supportMapFragment, mapFragment.getActivity(), mapFragment.getChildFragmentManager(), mapFragment);
 
-//        this.httpMap = new HttpMap(mapFragment.getActivity(), mapFragment.getChildFragmentManager(), supportMapFragment, mapFragment, loadingSpinner, settings);
-//        this.httpMap.execute("https://10.0.2.2:443/api/getmarkers");
+        this.httpMap = new HttpMap(mapFragment.getActivity(), mapFragment.getChildFragmentManager(), supportMapFragment, mapFragment, loadingSpinner, settings, listener);
+        this.httpMap.execute("https://10.0.2.2:443/api/getmarkers");
     }
 
     public void handleSavedLocation(LatLng latLng){
@@ -89,6 +109,40 @@ public class MapFeedFragmentHandler  {
     public void showFeedMapContainer(){
         LinearLayout feedMapContainer = (LinearLayout) mapFragment.getView().findViewById(R.id.feedMapContainer);
         feedMapContainer.setVisibility(View.VISIBLE);
+    }
+
+    public LatLng handleResult(int requestCode, int resultCode, Intent data){
+        if (resultCode == RESULT_OK) {
+            if (requestCode == MapFeedSearchFragmentHandler.REQUEST_CODE_SEARCH){
+                return (LatLng)data.getParcelableExtra(StringConstants.INTENT_MAP_FEED_SEARCH_LAT_LNG);
+            }
+        }
+
+        return null;
+    }
+
+    public Context getContext(){
+        return this.mapFragment.getContext();
+    }
+
+    public MapFeedSearchAutocompleteFragment getMapFeedSearchAutocompleteFragment() {
+        return mapFeedSearchAutocompleteFragment;
+    }
+
+    public MapFeedSearchFragment getMapFeedSearchFragment() {
+        return mapFeedSearchFragment;
+    }
+
+    public void setListener(MapFragment.MarkerListener listener) {
+        this.listener = listener;
+    }
+
+    public void setCurrentLocationListenerListener(MapFragment.CurrentLocationListener currentLocationListener) {
+        this.currentLocationListener = currentLocationListener;
+    }
+
+    public MapFragment.CurrentLocationListener getCurrentLocationListener() {
+        return currentLocationListener;
     }
 
     void configureSupportMapFragment(){
@@ -163,27 +217,5 @@ public class MapFeedFragmentHandler  {
                         R.anim.right_animations, R.anim.left_animation, R.id.userFeedFormPointer, MapFilterFragment.TAG);
             }
         });
-    }
-
-    public LatLng handleResult(int requestCode, int resultCode, Intent data){
-        if (resultCode == RESULT_OK) {
-            if (requestCode == MapFeedSearchFragmentHandler.REQUEST_CODE_SEARCH){
-                return (LatLng)data.getParcelableExtra(StringConstants.INTENT_MAP_FEED_SEARCH_LAT_LNG);
-            }
-        }
-
-        return null;
-    }
-
-    public Context getContext(){
-        return this.mapFragment.getContext();
-    }
-
-    public MapFeedSearchAutocompleteFragment getMapFeedSearchAutocompleteFragment() {
-        return mapFeedSearchAutocompleteFragment;
-    }
-
-    public MapFeedSearchFragment getMapFeedSearchFragment() {
-        return mapFeedSearchFragment;
     }
 }
