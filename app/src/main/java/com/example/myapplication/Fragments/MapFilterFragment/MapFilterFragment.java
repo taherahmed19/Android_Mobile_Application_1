@@ -2,30 +2,24 @@ package com.example.myapplication.Fragments.MapFilterFragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
-import com.example.myapplication.Handlers.MapFeedFragmentHandler.MapFeedFragmentHandler;
-import com.example.myapplication.Handlers.MapFeedSearchFragmentHandler.MapFeedSearchFragmentHandler;
 import com.example.myapplication.Handlers.MapFilterFragmentHandler.MapFilterFragmentHandler;
 import com.example.myapplication.Models.Settings.Settings;
-import com.example.myapplication.Models.SpinnerItem.SpinnerItem;
 import com.example.myapplication.R;
 import com.example.myapplication.Models.FilteredRegion.FilteredRegion;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
 

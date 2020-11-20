@@ -10,17 +10,14 @@ import android.widget.LinearLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.myapplication.Activities.MainActivity.MainActivity;
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
-import com.example.myapplication.Models.Marker.Markers;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.Tools.Tools;
 import com.example.myapplication.Models.Marker.Marker;
-import com.example.myapplication.Models.Filter.Filter;
-import com.example.myapplication.Models.FilterSettings.FilterSettings;
-import com.example.myapplication.Models.FilteredRegion.FilteredRegion;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -35,17 +32,29 @@ import net.sourceforge.jtds.jdbc.Support;
 
 import java.util.ArrayList;
 
-public class MapHandler implements OnMapReadyCallback {
+public class MapHandler implements OnMapReadyCallback, CurrentLocation.MyListener {
 
     GoogleMap mMap;
     FragmentActivity fragmentActivity;
     FragmentManager fragmentManager;
     ArrayList<Marker> markers;
     ArrayList<com.google.android.gms.maps.model.Marker> googleMarkers;
-    SupportMapFragment supportMapFragment;
     MapFragment mapFragment;
+    CurrentLocation currentLocation;
 
     public MapHandler(SupportMapFragment supportMapFragment, FragmentActivity fragmentActivity, FragmentManager fragmentManager, ArrayList<Marker> markers, MapFragment mapFragment){
+        this.fragmentActivity =  fragmentActivity;
+        this.fragmentManager = fragmentManager;
+        this.markers = markers;
+        this.mapFragment = mapFragment;
+        this.googleMarkers = new ArrayList<>();
+
+        if(mMap == null) {
+            supportMapFragment.getMapAsync( this);
+        }
+    }
+
+    public MapHandler(SupportMapFragment supportMapFragment, FragmentActivity fragmentActivity, FragmentManager fragmentManager, MapFragment mapFragment){
         this.fragmentActivity =  fragmentActivity;
         this.fragmentManager = fragmentManager;
         this.markers = markers;
@@ -62,27 +71,36 @@ public class MapHandler implements OnMapReadyCallback {
         mMap = googleMap;
         mMap.clear();
 
-        for(int i = 0; i < this.markers.size(); i++){
-            addCustomMarker(i);
+        if(this.markers != null){
+            for(int i = 0; i < this.markers.size(); i++){
+                addCustomMarker(i);
+            }
         }
-        addCurrentLocationMarker();
 
         googleMap.setTrafficEnabled(true);
 
         LatLng savedLatLng = this.getMapCameraPosition();
 
+        //access current location
+
         if(savedLatLng != null){
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(savedLatLng.latitude, savedLatLng.longitude), 15));
             googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
-        }else{
-            if(this.markers.size() > 0){
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(this.markers.get(0).getLat()), Double.parseDouble(this.markers.get(0).getLng())), 15));
-                googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
-            }
         }
 
-        addMarkersListener();
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.5182706,-0.1364264), 15));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+
+        this.addMarkersListener();
         mapFragment.showFeedMapContainer();
+    }
+
+    public void startLocationUpdates(){
+        currentLocation.startLocationUpdates();
+    }
+
+    public void stopLocationUpdates(){
+        currentLocation.stopLocationUpdates();
     }
 
     public void setMapLocation(LatLng latLng){
@@ -104,17 +122,19 @@ public class MapHandler implements OnMapReadyCallback {
         googleMarkers.add(marker);
     }
 
-    void addCurrentLocationMarker(){
-        CurrentLocation currentLocation = new CurrentLocation(fragmentActivity);
-        LatLng latLng = currentLocation.accessGeolocation();
-
+    @Override
+    public void currentLocationCallback(LatLng currentLcation) {
         com.google.android.gms.maps.model.Marker marker = mMap.addMarker(new MarkerOptions()
-                .position(latLng)
+                .position(currentLcation)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
         marker.setTag(fragmentActivity.getString(R.string.default_constant));
-
         googleMarkers.add(marker);
+
+        if(mMap != null){
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLcation.latitude, currentLcation.longitude), 15));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+        }
     }
 
     void addMarkersListener(){

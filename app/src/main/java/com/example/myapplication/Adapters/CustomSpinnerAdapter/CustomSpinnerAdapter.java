@@ -84,8 +84,6 @@ public class CustomSpinnerAdapter extends ArrayAdapter<SpinnerItem> {
         list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_19), R.drawable.ic_marker_purple));
         list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_20), R.drawable.ic_marker_purple));
         list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_21), R.drawable.ic_marker_purple));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_22), R.drawable.ic_marker_purple));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_23), R.drawable.ic_marker_purple));
 
         return list;
     }

@@ -1,14 +1,23 @@
 package com.example.myapplication.Activities.MainActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.MapFeedSearchAutocompleteFragment;
 import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
+import com.example.myapplication.Handlers.MapHandler.MapHandler;
+import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.R;
+import com.google.android.gms.maps.model.LatLng;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -18,8 +27,12 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
 
         resetSharedPreference();
-        //BottomNavigationBar();
     }
+
+//    @Override
+//    public String callback() {
+//        return "current location " + currentLocation.currentLocation;
+//    }
 
 //    void BottomNavigationBar(){
 //        final MainFragment mainFragment = new MainFragment();
@@ -87,4 +100,7 @@ public class MainActivity extends AppCompatActivity  {
             mapFeedSearchAutocompleteFragment.getFragmentManager().popBackStack();
         }
     }
+
+
+
 }

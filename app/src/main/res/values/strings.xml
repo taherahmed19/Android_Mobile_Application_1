@@ -7,21 +7,9 @@
     <string name="OPEN_CAGE_API_KEY">f6a961747ae5471bac2c27b9c5ed38fa</string>
     <string name="ROUTING_API_KEY">U1L13ff4eUGcXgZ0JIA76A9V7qd2iTf0</string>
     <string name="AQICN_API_KEY">9c42a328c1ee521c61648560c965c1b6c22ab231</string>
+    <string name="form_static_map">https://maps.googleapis.com/maps/api/staticmap?center={0},{1}&amp;zoom={2}&amp;size=400x100&amp;markers=color:red%7C{3},{4}&amp;key={5}</string>
 
     <string name="default_constant">DEFAULT</string>
-
-    <!--Submit Fragment Strings -->
-    <string name="main_text">New post submitted!</string>
-    <string name="sub_text">You can now view this by returning to the Feed. Other users will also be able to view this data on their devices.</string>
-    <string name="ok">OK</string>
-    <string name="post_error">New Post Error</string>
-    <string name="post_error_message">Your new post could not be submitted. Please try again.</string>
-
-    <!-- Menu items -->
-    <string name="bottom_nav_item_1">Home</string>
-    <string name="bottom_nav_item_2">Map</string>
-    <string name="bottom_nav_item_3">Weather</string>
-    <string name="bottom_nav_item_4">Travel</string>
 
     <!-- Map Filter Fragment -->
     <string name="category_filter_title">Sort by</string>
@@ -33,6 +21,27 @@
     <string name="category_filter_distance">Distance</string>
     <string name="category_filter_clear">Clear Filter</string>
 
+    <!--Submit Fragment Strings -->
+    <string name="main_text">New post submitted!</string>
+    <string name="sub_text">You can now view this by returning to the Feed. Other users will also be able to view this data on their devices.</string>
+    <string name="ok">OK</string>
+    <string name="post_error">New Post Error</string>
+    <string name="post_error_message">Your new post could not be submitted. Please try again.</string>
+
+    <string name="map_feed_search_error_title_1"><u>Error</u></string>
+    <string name="map_feed_search_error_body_1"><u>Search field is empty</u></string>
+    <string name="map_feed_search_error_title_2"><u>Search Error</u></string>
+    <string name="map_feed_search_error_body_2"><u>Could not find location searched.</u></string>
+
+    <!-- Form current location -->
+    <string name="form_current_location"><u>Using current location</u></string>
+    <string name="form_use_current_location"><u>Use current location</u></string>
+
+    <!-- Form static map -->
+    <string name="map_feed_search_location">Search location…</string>
+    <string name="map_feed_search_current_location"><u>Go to current location</u></string>
+
+    <!-- REMOVE -->
     <!-- Region Selector Activity -->
     <string name="region_selector_title">Select Region</string>
 
@@ -43,50 +52,4 @@
     <!-- Routing Search -->
     <string name="routing_search_from">From</string>
     <string name="routing_search_where_to">Where to?</string>
-
-    <!-- FORM STRINGS -->
-    <!-- Map Feed Form Error Messages -->
-    <string name="form_category_error">Please select a valid category</string>
-    <string name="form_description_error">Please enter a valid description</string>
-
-    <!-- Spinner Category's -->
-    <string name="form_spinner_item_1">Select a category</string>
-    <string name="form_spinner_item_2">Environment</string>
-    <string name="form_spinner_item_3">Weather</string>
-    <string name="form_spinner_item_4">People</string>
-    <string name="form_spinner_item_5">Abandoned vehicles</string>
-    <string name="form_spinner_item_6">Bus stops</string>
-    <string name="form_spinner_item_7">Car parking</string>
-    <string name="form_spinner_item_8">Dog fouling</string>
-    <string name="form_spinner_item_9">Flyposting</string>
-    <string name="form_spinner_item_10">Graffiti</string>
-    <string name="form_spinner_item_11">Graffiti</string>
-    <string name="form_spinner_item_12">Parks/landscapes</string>
-    <string name="form_spinner_item_13">Pavements/footpaths</string>
-    <string name="form_spinner_item_14">Pavements/footpaths</string>
-    <string name="form_spinner_item_15">Potholes</string>
-    <string name="form_spinner_item_16">Public toilets</string>
-    <string name="form_spinner_item_17">Road traffic signs</string>
-    <string name="form_spinner_item_18">Roads/highways</string>
-    <string name="form_spinner_item_19">Rubbish (refuse and recycling)</string>
-    <string name="form_spinner_item_20">Street cleaning</string>
-    <string name="form_spinner_item_21">Street lighting</string>
-    <string name="form_spinner_item_22">Street nameplates</string>
-    <string name="form_spinner_item_23">Traffic lights</string>
-
-    <!-- Form current location -->
-    <string name="form_current_location"><u>Using current location</u></string>
-    <string name="form_use_current_location"><u>Use current location</u></string>
-
-    <!-- Form static map -->
-    <string name="form_static_map">https://maps.googleapis.com/maps/api/staticmap?center={0},{1}&amp;zoom={2}&amp;size=400x100&amp;markers=color:red%7C{3},{4}&amp;key={5}</string>
-
-    <string name="map_feed_search_location">Search location…</string>
-    <string name="map_feed_search_current_location"><u>Go to current location</u></string>
-
-    <string name="map_feed_search_error_title_1"><u>Error</u></string>
-    <string name="map_feed_search_error_body_1"><u>Search field is empty</u></string>
-    <string name="map_feed_search_error_title_2"><u>Search Error</u></string>
-    <string name="map_feed_search_error_body_2"><u>Could not find location searched.</u></string>
-
 </resources>

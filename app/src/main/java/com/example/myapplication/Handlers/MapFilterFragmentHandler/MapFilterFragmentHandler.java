@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -13,10 +12,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.myapplication.Adapters.CustomFilterSpinnerAdapter.CustomFilterSpinnerAdapter;
 import com.example.myapplication.Adapters.CustomSpinnerAdapter.CustomSpinnerAdapter;
-import com.example.myapplication.Adapters.SeekBarAdapter.SeekBarAdapter;
 import com.example.myapplication.Fragments.MapFilterFragment.MapFilterFragment;
 import com.example.myapplication.Models.Filter.FilterSortBy.FilterSortBy;
-import com.example.myapplication.Models.FilteredRegion.FilteredRegion;
 import com.example.myapplication.Models.Settings.Settings;
 import com.example.myapplication.Models.SpinnerItem.SpinnerItem;
 import com.example.myapplication.R;
@@ -42,32 +39,32 @@ public class MapFilterFragmentHandler {
     }
 
     public void configure(){
-        getSettingsItems();
+        retrieveSavedSettingsState();
         configureSubmitButton();
         configureFormCloseButton();
-        configureSeekBar();
         configureCategorySpinner();
     }
 
-    public void configureCategorySpinner(){
+    public void setListener(MapFilterFragment.FragmentMapFilterListener listener) {
+        this.listener = listener;
+    }
+
+    void configureCategorySpinner(){
         Spinner spinner = mapFilterFragment.getView().findViewById(R.id.filterSpinner);
         ArrayList<SpinnerItem> customList = CustomSpinnerAdapter.CreateMarkerSpinnerItems(mapFilterFragment.getContext());
         CustomFilterSpinnerAdapter adapter = new CustomFilterSpinnerAdapter(Objects.requireNonNull(mapFilterFragment.getActivity()), customList);
 
         spinner.setAdapter(adapter);
-        spinner.setDropDownVerticalOffset(125);
         spinnerListener(spinner);
+        setSpinnerDropdownTopPosition(spinner);
         updateDrawableSelectedSpinnerItems(adapter);
     }
 
-    public void configureSeekBar(){
-        SeekBar seekBar = (SeekBar) mapFilterFragment.getView().findViewById(R.id.filterSeekBar);
-        TextView maxValueText = (TextView) mapFilterFragment.getView().findViewById(R.id.maxValueText);
-
-        SeekBarAdapter seekBarAdapter = new SeekBarAdapter(seekBar,maxValueText);
+    void setSpinnerDropdownTopPosition(Spinner spinner){
+        int dropdownMargin = Tools.pixelsToDP(45, mapFilterFragment.getResources());
     }
 
-    public void configureFormCloseButton(){
+    void configureFormCloseButton(){
         final TextView formClose = (TextView) Objects.requireNonNull(mapFilterFragment.getView()).findViewById(R.id.formClose);
         formClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +89,7 @@ public class MapFilterFragmentHandler {
         });
     }
 
-    public void configureSubmitButton(){
+    void configureSubmitButton(){
         Button mapFeedSubmit = (Button) mapFilterFragment.getView().findViewById(R.id.mapFilterSubmit);
         mapFeedSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,7 +101,7 @@ public class MapFilterFragmentHandler {
         });
     }
 
-    public void submit(){
+    void submit(){
         ArrayList<String> selectedItems = filterSortBy.getSelectedItems();
         ArrayList<String> tempItems = filterSortBy.getTempItems();
 
@@ -128,10 +125,6 @@ public class MapFilterFragmentHandler {
         saveSettingsSharedPreference();
 
         listener.onSettingsUpdated(new Settings((filterSortBy)));
-    }
-
-    public void setListener(MapFilterFragment.FragmentMapFilterListener listener) {
-        this.listener = listener;
     }
 
     void spinnerListener(Spinner spinner){
@@ -187,14 +180,11 @@ public class MapFilterFragmentHandler {
         preferenceEditor.putString("settingsJson", json);
         preferenceEditor.apply();
 
-        Log.d("Print", "Settings Shared Preference " + settingsPreference.getString("settingsJson", "default"));
     }
 
-    void getSettingsItems(){
+    void retrieveSavedSettingsState(){
         SharedPreferences settingsPreference = this.mapFilterFragment.getContext().getSharedPreferences("Map_Filter_Fragment_Settings", 0);
         String json = settingsPreference.getString("settingsJson", "empty");
-
-        Log.d("Print", "Get settings saved " + json);
 
         ArrayList<String> selectedItems = filterSortBy.getSelectedItems();
         ArrayList<String> tempItems = filterSortBy.getTempItems();
@@ -206,7 +196,6 @@ public class MapFilterFragmentHandler {
                 for(String item : spinnerItems){
                     selectedItems.add(item);
                     tempItems.add(item);
-                    Log.d("Print", "Added items " + item);
                 }
 
             } catch (JSONException e) {

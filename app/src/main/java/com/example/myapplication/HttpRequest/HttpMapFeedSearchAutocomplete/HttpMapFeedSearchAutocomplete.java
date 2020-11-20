@@ -70,7 +70,7 @@ public class HttpMapFeedSearchAutocomplete extends AsyncTask<String, Void, Place
     protected void onPostExecute(Places places) {
         listener.onTriggerResultsClear();
         int searchFieldLength = listener.checkSearchFieldLength();
-        if(searchFieldLength > 0){
+        if(searchFieldLength > 0 && places != null){
             for(int i = 0; i < places.getPlaces().size(); i++){
                 listener.onSearchTextChanged(places.getPlaces().get(i), places.getPlaces().get(i).getMainText(), places.getPlaces().get(i).getSecondText());
             }

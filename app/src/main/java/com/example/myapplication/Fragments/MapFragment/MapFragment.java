@@ -1,10 +1,13 @@
 package com.example.myapplication.Fragments.MapFragment;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -32,13 +35,14 @@ import org.jetbrains.annotations.NotNull;
 
 public class MapFragment extends Fragment implements MapFeedSearchFragment.FragmentSearchListener, MapFeedSearchAutocompleteFragment.FragmentAutocompleteListener
                                                      , MapFilterFragment.FragmentMapFilterListener {
-    CurrentLocation currentLocation;
     SupportMapFragment mapFragment;
 
     LoadingSpinner loadingSpinner;
     MapFeedFragmentHandler mapFeedFragmentHandler;
 
     LockableViewPager viewPager;
+
+    CurrentLocation currentLocation;
 
     public MapFragment(LockableViewPager viewPager) {
         this.viewPager = viewPager;
@@ -77,7 +81,6 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     public void onRequestPermissionsResult(int requestCode, @NotNull String permissions[], @NotNull int[] grantResults) {
         if (requestCode == CurrentLocation.MY_PERMISSIONS_REQUEST_FINE_LOCATION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                currentLocation.accessGeolocation();
             }
         }
     }
@@ -115,4 +118,21 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+         //   currentLocation.startLocationUpdates();
+        } else {
+            // you need to request permissions...
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+       // currentLocation.stopLocationUpdates();
+    }
+
 }

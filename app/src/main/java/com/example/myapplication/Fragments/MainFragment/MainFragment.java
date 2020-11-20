@@ -31,6 +31,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback
     GoogleMap mMap;
     Markers markers;
 
+    //REMOVE
     public MainFragment(){
         mMap = null;
     }

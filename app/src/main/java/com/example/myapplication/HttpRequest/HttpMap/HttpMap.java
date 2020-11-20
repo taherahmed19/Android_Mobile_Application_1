@@ -146,7 +146,9 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
 
 //    //refactor
     public void saveMapCameraPosition(){
-        mapHandler.saveMapCameraPosition();
+        if(mapHandler != null){
+            mapHandler.saveMapCameraPosition();
+        }
     }
 
     //refactor

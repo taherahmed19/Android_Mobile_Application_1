@@ -58,8 +58,11 @@ public class MapFeedFragmentHandler  {
     }
 
     public void requestMap(Settings settings){
-        this.httpMap = new HttpMap(mapFragment.getActivity(), mapFragment.getChildFragmentManager(), supportMapFragment, mapFragment, loadingSpinner, settings);
-        this.httpMap.execute("https://10.0.2.2:443/api/getmarkers");
+        MapHandler mapHandler = new MapHandler(supportMapFragment, mapFragment.getActivity(), mapFragment.getChildFragmentManager(), mapFragment);
+        loadingSpinner.hide();
+
+//        this.httpMap = new HttpMap(mapFragment.getActivity(), mapFragment.getChildFragmentManager(), supportMapFragment, mapFragment, loadingSpinner, settings);
+//        this.httpMap.execute("https://10.0.2.2:443/api/getmarkers");
     }
 
     public void handleSavedLocation(LatLng latLng){
