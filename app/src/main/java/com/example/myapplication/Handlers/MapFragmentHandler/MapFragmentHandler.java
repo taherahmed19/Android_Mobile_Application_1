@@ -1,10 +1,8 @@
-package com.example.myapplication.Handlers.MapFeedFragmentHandler;
+package com.example.myapplication.Handlers.MapFragmentHandler;
 
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -31,11 +29,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
-public class MapFeedFragmentHandler implements MapFragment.MarkerListener, MapFragment.CurrentLocationListener {
+public class MapFragmentHandler implements MapFragment.MarkerListener {
 
     ImageButton mapSearchButton;
     MapFragment mapFragment;
@@ -50,9 +47,8 @@ public class MapFeedFragmentHandler implements MapFragment.MarkerListener, MapFr
     MapHandler mapHandler;
 
     MapFragment.MarkerListener listener;
-    MapFragment.CurrentLocationListener currentLocationListener;
 
-    public MapFeedFragmentHandler(MapFragment mapFragment, LockableViewPager viewPager) {
+    public MapFragmentHandler(MapFragment mapFragment, LockableViewPager viewPager) {
         this.mapFragment = mapFragment;
         this.mapFeedSearchAutocompleteFragment = new MapFeedSearchAutocompleteFragment(mapFragment);
         this.mapFeedSearchFragment = new MapFeedSearchFragment(mapFragment);
@@ -64,9 +60,8 @@ public class MapFeedFragmentHandler implements MapFragment.MarkerListener, MapFr
         this.mapHandler.addDataSetMarkers(markers);
     }
 
-    @Override
     public void updateUserLocation(Location location) {
-        this.mapHandler.setUserLocationMarker(location);
+        this.mapHandler.setUserLocationGoogleMarker(location);
     }
 
     public void configureElements(){
@@ -79,7 +74,7 @@ public class MapFeedFragmentHandler implements MapFragment.MarkerListener, MapFr
     }
 
     public void requestMap(Settings settings){
-        this.mapHandler = new MapHandler(supportMapFragment, mapFragment.getActivity(), mapFragment.getChildFragmentManager(), mapFragment);
+        this.mapHandler = new MapHandler(supportMapFragment, mapFragment.getActivity(), mapFragment.getChildFragmentManager());
 
         this.httpMap = new HttpMap(mapFragment.getActivity(), mapFragment.getChildFragmentManager(), supportMapFragment, mapFragment, loadingSpinner, settings, listener);
         this.httpMap.execute("https://10.0.2.2:443/api/getmarkers");
@@ -135,14 +130,6 @@ public class MapFeedFragmentHandler implements MapFragment.MarkerListener, MapFr
 
     public void setListener(MapFragment.MarkerListener listener) {
         this.listener = listener;
-    }
-
-    public void setCurrentLocationListenerListener(MapFragment.CurrentLocationListener currentLocationListener) {
-        this.currentLocationListener = currentLocationListener;
-    }
-
-    public MapFragment.CurrentLocationListener getCurrentLocationListener() {
-        return currentLocationListener;
     }
 
     void configureSupportMapFragment(){

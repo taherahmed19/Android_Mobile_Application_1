@@ -41,15 +41,16 @@ public class MapHandler implements OnMapReadyCallback {
     FragmentActivity fragmentActivity;
     FragmentManager fragmentManager;
     ArrayList<com.google.android.gms.maps.model.Marker> googleMarkers;
-    MapFragment mapFragment;
     CurrentLocation currentLocation;
 
     com.google.android.gms.maps.model.Marker userLocationMarker;
+    LatLng selectedLocation;
 
-    public MapHandler(SupportMapFragment supportMapFragment, FragmentActivity fragmentActivity, FragmentManager fragmentManager, MapFragment mapFragment) {
+    boolean cameraInitPos = false;
+
+    public MapHandler(SupportMapFragment supportMapFragment, FragmentActivity fragmentActivity, FragmentManager fragmentManager) {
         this.fragmentActivity = fragmentActivity;
         this.fragmentManager = fragmentManager;
-        this.mapFragment = mapFragment;
         this.googleMarkers = new ArrayList<>();
 
         if (mMap == null) {
@@ -72,7 +73,7 @@ public class MapHandler implements OnMapReadyCallback {
         }
 
         this.addMarkersListener();
-        mapFragment.showFeedMapContainer();
+       // this.setGoogleMapClickable();
     }
 
     public void addDataSetMarkers(ArrayList<Marker> markers) {
@@ -108,6 +109,9 @@ public class MapHandler implements OnMapReadyCallback {
         googleMarkers.add(marker);
     }
 
+    /*
+    * This method prints the current location using a custom google marker
+    * */
     public void setUserLocationMarker(Location location) {
         LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
 
@@ -118,22 +122,39 @@ public class MapHandler implements OnMapReadyCallback {
             markerOptions.rotation(location.getBearing());
             markerOptions.anchor((float) 0.5, (float) 0.5);
 
-//            this.userLocationMarker = mMap.addMarker(markerOptions);
-//            userLocationMarker.setTag(fragmentActivity.getString(R.string.default_constant));
-//            googleMarkers.add(userLocationMarker);
+            this.userLocationMarker = mMap.addMarker(markerOptions);
+            userLocationMarker.setTag(fragmentActivity.getString(R.string.default_constant));
+            googleMarkers.add(userLocationMarker);
 
             if (mMap != null) {
-                //uber like marker
+                if (ActivityCompat.checkSelfPermission(fragmentActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(fragmentActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.latitude, currentLocation.longitude), 17));
+            }
+        }else{
+            this.userLocationMarker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
+            userLocationMarker.setRotation(location.getBearing());
+        }
+    }
+
+    /*
+    * This method prints the current location using the Uber like blue dot marker
+    * */
+    public void setUserLocationGoogleMarker(Location location) {
+        LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+        if (!cameraInitPos) {
+            if (mMap != null) {
                 if (ActivityCompat.checkSelfPermission(fragmentActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                         && ActivityCompat.checkSelfPermission(fragmentActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
                 mMap.setMyLocationEnabled(true);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.latitude, currentLocation.longitude), 17));
+                cameraInitPos = true;
             }
-        }else{
-            this.userLocationMarker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
-            userLocationMarker.setRotation(location.getBearing());
         }
     }
 
@@ -150,6 +171,20 @@ public class MapHandler implements OnMapReadyCallback {
                     return true;
                 }
                 return false;
+            }
+        });
+    }
+
+    //location selector activity
+    void setGoogleMapClickable(){
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng loc) {
+                mMap.clear();
+                mMap.addMarker(new MarkerOptions()
+                        .position(loc)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                selectedLocation = loc;
             }
         });
     }
@@ -202,5 +237,9 @@ public class MapHandler implements OnMapReadyCallback {
         }
 
         return null;
+    }
+
+    public LatLng getSelectedLocation() {
+        return selectedLocation;
     }
 }
