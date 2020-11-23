@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.myapplication.Activities.MainActivity.MainActivity;
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
+import com.example.myapplication.Interfaces.MapListener;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
@@ -44,14 +45,15 @@ public class MapHandler implements OnMapReadyCallback {
     CurrentLocation currentLocation;
 
     com.google.android.gms.maps.model.Marker userLocationMarker;
-    LatLng selectedLocation;
-
     boolean cameraInitPos = false;
 
-    public MapHandler(SupportMapFragment supportMapFragment, FragmentActivity fragmentActivity, FragmentManager fragmentManager) {
+    MapListener mapListener;
+
+    public MapHandler(SupportMapFragment supportMapFragment, FragmentActivity fragmentActivity, FragmentManager fragmentManager, MapListener mapListener) {
         this.fragmentActivity = fragmentActivity;
         this.fragmentManager = fragmentManager;
         this.googleMarkers = new ArrayList<>();
+        this.mapListener = mapListener;
 
         if (mMap == null) {
             supportMapFragment.getMapAsync(this);
@@ -68,12 +70,12 @@ public class MapHandler implements OnMapReadyCallback {
         LatLng savedLatLng = this.getMapCameraPosition();
 
         if (savedLatLng != null) {
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(savedLatLng.latitude, savedLatLng.longitude), 15));
-            googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(savedLatLng.latitude, savedLatLng.longitude), 17));
+            googleMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
         }
 
-        this.addMarkersListener();
-       // this.setGoogleMapClickable();
+        mapListener.handleMapClick(mMap);
+        mapListener.handleMarkerClick(mMap, fragmentActivity);
     }
 
     public void addDataSetMarkers(ArrayList<Marker> markers) {
@@ -91,8 +93,8 @@ public class MapHandler implements OnMapReadyCallback {
     }
 
     public void setMapLocation(LatLng latLng) {
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latLng.latitude, latLng.longitude), 15));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latLng.latitude, latLng.longitude), 17));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
     }
 
     void addCustomMarker(int i, ArrayList<Marker> markers) {
@@ -158,37 +160,6 @@ public class MapHandler implements OnMapReadyCallback {
         }
     }
 
-    void addMarkersListener(){
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(com.google.android.gms.maps.model.Marker marker) {
-                if(!marker.getTag().equals(fragmentActivity.getString(R.string.default_constant))){
-                    Marker item = (Marker)marker.getTag();
-                    MarkerModalFragment markerModalFragment = new MarkerModalFragment(item);
-                    FragmentTransition.Transition(fragmentActivity.getSupportFragmentManager(), markerModalFragment, R.anim.right_animations, R.anim.left_animation,
-                            R.id.mapModalContainer, "");
-
-                    return true;
-                }
-                return false;
-            }
-        });
-    }
-
-    //location selector activity
-    void setGoogleMapClickable(){
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng loc) {
-                mMap.clear();
-                mMap.addMarker(new MarkerOptions()
-                        .position(loc)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                selectedLocation = loc;
-            }
-        });
-    }
-
     int returnMarkerDrawable(int marker){
         int markerColour = 0;
 
@@ -237,9 +208,5 @@ public class MapHandler implements OnMapReadyCallback {
         }
 
         return null;
-    }
-
-    public LatLng getSelectedLocation() {
-        return selectedLocation;
     }
 }

@@ -47,6 +47,7 @@ public class CurrentLocation {
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
             exampleInterface.updateUserLocation(locationResult.getLastLocation());
+            //exampleInterface.updateUserLocation(locationResult.getLastLocation());
         }
     };
 

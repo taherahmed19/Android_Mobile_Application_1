@@ -2,6 +2,7 @@ package com.example.myapplication.Handlers.MapFeedSearchFragmentHandler;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,6 +17,7 @@ import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFr
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.HttpRequest.HttpMapFeedSearch.HttpMapFeedSearch;
 import com.example.myapplication.HttpRequest.HttpMapFeedSearchAutocomplete.HttpMapFeedSearchAutocomplete;
+import com.example.myapplication.Interfaces.CurrentLocationListener;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
@@ -36,12 +38,20 @@ public class MapFeedSearchFragmentHandler {
     MapFeedSearchFragment mapFeedSearchFragment;
 
     MapFeedSearchFragment.FragmentSearchListener listener;
+    CurrentLocationListener currentLocationListener;
     MapFeedSearchFragmentValidator validator;
 
-    public MapFeedSearchFragmentHandler(MapFragment mapFragment, MapFeedSearchFragment mapFeedSearchFragment) {
+    Location currentUserLocation;
+
+    public MapFeedSearchFragmentHandler(MapFragment mapFragment, MapFeedSearchFragment mapFeedSearchFragment, CurrentLocationListener currentLocationListener) {
         this.mapFragment = mapFragment;
         this.mapFeedSearchFragment = mapFeedSearchFragment;
         this.validator = new MapFeedSearchFragmentValidator();
+        this.currentLocationListener = currentLocationListener;
+    }
+
+    public void updateUserLocation(Location location) {
+        this.currentUserLocation = location;
     }
 
     public void configureElements(){
@@ -139,10 +149,8 @@ public class MapFeedSearchFragmentHandler {
         mapFeedCurrentLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CurrentLocation currentLocation = new CurrentLocation(mapFeedSearchFragment.getActivity());
-                LatLng latLng = currentLocation.accessGeolocation();
                 popFragments();
-                returnFragmentData(latLng);
+                returnFragmentData(new LatLng(currentUserLocation.getLatitude(), currentUserLocation.getLongitude()));
             }
         });
     }

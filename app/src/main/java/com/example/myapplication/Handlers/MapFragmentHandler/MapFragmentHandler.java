@@ -3,36 +3,44 @@ package com.example.myapplication.Handlers.MapFragmentHandler;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.myapplication.Adapters.LockableViewPager.LockableViewPager;
 import com.example.myapplication.Fragments.MapFilterFragment.MapFilterFragment;
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
+import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
 import com.example.myapplication.Fragments.UserFeedFormFragment.UserFeedFormFragment;
 import com.example.myapplication.Handlers.MapFeedSearchFragmentHandler.MapFeedSearchFragmentHandler;
 import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.MapFeedSearchAutocompleteFragment;
 import com.example.myapplication.Handlers.MapHandler.MapHandler;
 import com.example.myapplication.HttpRequest.HttpMap.HttpMap;
+import com.example.myapplication.Interfaces.CustomMarkerListener;
+import com.example.myapplication.Interfaces.MapListener;
 import com.example.myapplication.Models.LoadingSpinner.LoadingSpinner;
 import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Models.Settings.Settings;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Utils.StringConstants.StringConstants;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
 
-public class MapFragmentHandler implements MapFragment.MarkerListener {
+public class MapFragmentHandler  {
 
     ImageButton mapSearchButton;
     MapFragment mapFragment;
@@ -46,22 +54,16 @@ public class MapFragmentHandler implements MapFragment.MarkerListener {
     HttpMap httpMap;
     MapHandler mapHandler;
 
-    MapFragment.MarkerListener listener;
+    CustomMarkerListener customMarkerListener;
+    MapListener mapListenerInstance;
 
-    public MapFragmentHandler(MapFragment mapFragment, LockableViewPager viewPager) {
+    public MapFragmentHandler(MapFragment mapFragment, LockableViewPager viewPager, MapListener mapListenerInstance, CustomMarkerListener customMarkerListener) {
         this.mapFragment = mapFragment;
         this.mapFeedSearchAutocompleteFragment = new MapFeedSearchAutocompleteFragment(mapFragment);
         this.mapFeedSearchFragment = new MapFeedSearchFragment(mapFragment);
         this.viewPager = viewPager;
-    }
-
-    @Override
-    public void addMarkerData(ArrayList<Marker> markers) {
-        this.mapHandler.addDataSetMarkers(markers);
-    }
-
-    public void updateUserLocation(Location location) {
-        this.mapHandler.setUserLocationGoogleMarker(location);
+        this.mapListenerInstance = mapListenerInstance;
+        this.customMarkerListener = customMarkerListener;
     }
 
     public void configureElements(){
@@ -74,16 +76,50 @@ public class MapFragmentHandler implements MapFragment.MarkerListener {
     }
 
     public void requestMap(Settings settings){
-        this.mapHandler = new MapHandler(supportMapFragment, mapFragment.getActivity(), mapFragment.getChildFragmentManager());
+        this.mapHandler = new MapHandler(supportMapFragment, mapFragment.getActivity(), mapFragment.getChildFragmentManager(), mapListenerInstance);
 
-        this.httpMap = new HttpMap(mapFragment.getActivity(), mapFragment.getChildFragmentManager(), supportMapFragment, mapFragment, loadingSpinner, settings, listener);
+        this.httpMap = new HttpMap(mapFragment.getActivity(), mapFragment.getChildFragmentManager(), supportMapFragment, mapFragment, loadingSpinner, settings, customMarkerListener);
         this.httpMap.execute("https://10.0.2.2:443/api/getmarkers");
+    }
+
+    public void addMarkerData(ArrayList<Marker> markers) {
+        this.mapHandler.addDataSetMarkers(markers);
+    }
+
+    public void updateUserLocation(Location location) {
+        this.mapHandler.setUserLocationGoogleMarker(location);
+    }
+
+    public void addMarkersListener(GoogleMap mMap, FragmentActivity fragmentActivity){
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(com.google.android.gms.maps.model.Marker marker) {
+                if(!marker.getTag().equals(fragmentActivity.getString(R.string.default_constant))){
+                    Marker item = (Marker)marker.getTag();
+                    MarkerModalFragment markerModalFragment = new MarkerModalFragment(item);
+                    FragmentTransition.Transition(fragmentActivity.getSupportFragmentManager(), markerModalFragment, R.anim.right_animations, R.anim.left_animation,
+                            R.id.mapModalContainer, "");
+
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    public void setGoogleMapClickable(GoogleMap mMap){
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng loc) {
+                return;
+            }
+        });
     }
 
     public void handleSavedLocation(LatLng latLng){
         if(latLng != null){
-            if(httpMap.getDatabaseMarkerMap() != null){
-                httpMap.getDatabaseMarkerMap().setMapLocation(latLng);
+            if(mapHandler != null){
+                mapHandler.setMapLocation(latLng);
                 hideSpinner();
             }
         }
@@ -126,10 +162,6 @@ public class MapFragmentHandler implements MapFragment.MarkerListener {
 
     public MapFeedSearchFragment getMapFeedSearchFragment() {
         return mapFeedSearchFragment;
-    }
-
-    public void setListener(MapFragment.MarkerListener listener) {
-        this.listener = listener;
     }
 
     void configureSupportMapFragment(){

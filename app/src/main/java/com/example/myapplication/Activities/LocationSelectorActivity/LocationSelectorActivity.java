@@ -1,18 +1,22 @@
 package com.example.myapplication.Activities.LocationSelectorActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 
 import com.example.myapplication.Handlers.LocationSelectorActivityHandler.LocationSelectorActivityHandler;
 import com.example.myapplication.Interfaces.CurrentLocationListener;
+import com.example.myapplication.Interfaces.MapListener;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.R;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
-public class LocationSelectorActivity extends AppCompatActivity implements CurrentLocationListener {
+public class LocationSelectorActivity extends AppCompatActivity implements CurrentLocationListener, MapListener {
 
     CurrentLocation currentLocation;
     LocationSelectorActivityHandler locationSelectorActivityHandler;
@@ -22,12 +26,28 @@ public class LocationSelectorActivity extends AppCompatActivity implements Curre
         locationSelectorActivityHandler.setUserLocationGoogleMarker(location);
     }
 
+    /*
+     * Map Listener
+     * */
+    @Override
+    public void handleMapClick(GoogleMap googleMap) {
+        this.locationSelectorActivityHandler.setGoogleMapClickable(googleMap);
+    }
+
+    /*
+     * Map Listener
+     * */
+    @Override
+    public void handleMarkerClick(GoogleMap googleMap, FragmentActivity fragmentActivity) {
+        this.locationSelectorActivityHandler.addMarkersListener(googleMap, fragmentActivity);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_selector);
 
-        locationSelectorActivityHandler = new LocationSelectorActivityHandler(this);
+        locationSelectorActivityHandler = new LocationSelectorActivityHandler(this, this);
         locationSelectorActivityHandler.configureElements();
         locationSelectorActivityHandler.requestMap(null);
         currentLocation = new CurrentLocation(this,  this);

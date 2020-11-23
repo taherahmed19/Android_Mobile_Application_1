@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager;
 import com.example.myapplication.Fragments.FeedFragment.FeedFragment;
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.HttpRequest.HttpMapFeedSearch.HttpMapFeedSearch;
+import com.example.myapplication.Interfaces.CustomMarkerListener;
 import com.example.myapplication.JsonBuilders.MapJsonBuilder.MapJsonBuilder;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.Models.Settings.Settings;
@@ -57,10 +58,10 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
     MapHandler mapHandler;
     MapJsonBuilder mapJsonBuilder;
 
-    MapFragment.MarkerListener listener;
+    CustomMarkerListener customMarkerListener;
 
     public HttpMap(FragmentActivity fragmentActivity, FragmentManager fragmentManager, SupportMapFragment supportMapFragment,
-                   Fragment viewPagerFragment, LoadingSpinner loadingSpinner, Settings settings, MapFragment.MarkerListener listener){
+                   Fragment viewPagerFragment, LoadingSpinner loadingSpinner, Settings settings, CustomMarkerListener customMarkerListener){
         this.fragmentActivity = fragmentActivity;
         this.markers = new ArrayList<>();
         this.supportMapFragment = supportMapFragment;
@@ -69,7 +70,7 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
         this.settings = settings;
         this.mapJsonBuilder = new MapJsonBuilder(this.markers, settings);
         this.responseCode = 0;
-        this.listener = listener;
+        this.customMarkerListener = customMarkerListener;
     }
 
     public HttpMap(FragmentActivity fragmentActivity, FragmentManager fragmentManager, Fragment viewPagerFragment, LoadingSpinner loadingSpinner){
@@ -143,7 +144,7 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
 
         }else{
             if(this.markers != null){
-                listener.addMarkerData(markers);
+                customMarkerListener.addMarkerData(markers);
             }
         }
     }

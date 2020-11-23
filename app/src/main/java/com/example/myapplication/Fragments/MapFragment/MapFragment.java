@@ -8,7 +8,9 @@ import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +22,15 @@ import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFr
 import com.example.myapplication.Fragments.MapFilterFragment.MapFilterFragment;
 import com.example.myapplication.Handlers.MapFragmentHandler.MapFragmentHandler;
 import com.example.myapplication.Interfaces.CurrentLocationListener;
+import com.example.myapplication.Interfaces.CustomMarkerListener;
+import com.example.myapplication.Interfaces.MapListener;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.Models.LoadingSpinner.LoadingSpinner;
 import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Models.Settings.Settings;
 import com.example.myapplication.R;
 import com.example.myapplication.Refactor.searchAutocomplete.Place;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -33,16 +38,12 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 
 public class MapFragment extends Fragment implements MapFeedSearchFragment.FragmentSearchListener, MapFeedSearchAutocompleteFragment.FragmentAutocompleteListener
-                                                     , MapFilterFragment.FragmentMapFilterListener, CurrentLocationListener {
+                                                     , MapFilterFragment.FragmentMapFilterListener, CurrentLocationListener, MapListener, CustomMarkerListener {
     SupportMapFragment supportMapFragment;
     LoadingSpinner loadingSpinner;
     MapFragmentHandler mapFragmentHandler;
     LockableViewPager viewPager;
     CurrentLocation currentLocation;
-
-    public interface MarkerListener {
-        void addMarkerData(ArrayList<Marker> markers);
-    }
 
     public MapFragment(LockableViewPager viewPager) {
         this.viewPager = viewPager;
@@ -57,20 +58,25 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        this.mapFragmentHandler = new MapFragmentHandler(this, viewPager);
+        this.mapFragmentHandler = new MapFragmentHandler(this, viewPager, this, this);
         this.supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
         this.loadingSpinner = new LoadingSpinner((ProgressBar) getView().findViewById(R.id.feedLoadingSpinner));
         this.mapFragmentHandler.configureElements();
-
-        this.mapFragmentHandler.setListener((MarkerListener) mapFragmentHandler);
 
         currentLocation = new CurrentLocation(getActivity(), this);
         this.mapFragmentHandler.requestMap(null);
     }
 
+    @Override
+    public void addMarkerData(ArrayList<Marker> markers) {
+        this.mapFragmentHandler.addMarkerData(markers);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         this.mapFragmentHandler.showSpinner();
+
 
         LatLng latLng = this.mapFragmentHandler.handleResult(requestCode, resultCode, data);
         this.mapFragmentHandler.handleSavedLocation(latLng);
@@ -120,6 +126,22 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
         this.showFeedMapContainer();
     }
 
+    /*
+    * Map Listener
+    * */
+    @Override
+    public void handleMapClick(GoogleMap googleMap) {
+        this.mapFragmentHandler.setGoogleMapClickable(googleMap);
+    }
+
+    /*
+     * Map Listener
+     * */
+    @Override
+    public void handleMarkerClick(GoogleMap googleMap, FragmentActivity fragmentActivity) {
+        this.mapFragmentHandler.addMarkersListener(googleMap, fragmentActivity);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -132,7 +154,6 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     public void onStop() {
         super.onStop();
         currentLocation.stopLocationUpdates();
-        this.mapFragmentHandler.setListener(null);
     }
 
 }

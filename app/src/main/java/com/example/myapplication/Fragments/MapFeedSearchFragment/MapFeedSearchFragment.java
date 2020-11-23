@@ -1,10 +1,12 @@
 package com.example.myapplication.Fragments.MapFeedSearchFragment;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,20 +14,29 @@ import android.widget.EditText;
 
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.Handlers.MapFeedSearchFragmentHandler.MapFeedSearchFragmentHandler;
+import com.example.myapplication.Interfaces.CurrentLocationListener;
+import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.R;
 import com.example.myapplication.Refactor.searchAutocomplete.Place;
 
-public class MapFeedSearchFragment extends Fragment {
+public class MapFeedSearchFragment extends Fragment implements CurrentLocationListener {
 
     public final static String TAG = MapFeedSearchFragment.class.getName();
 
     MapFragment mapFragment;
     MapFeedSearchFragmentHandler mapFeedSearchFragmentHandler;
     FragmentSearchListener listener;
+    CurrentLocation currentLocation;
 
     public MapFeedSearchFragment(MapFragment mapFragment) {
         this.mapFragment = mapFragment;
-        this.mapFeedSearchFragmentHandler = new MapFeedSearchFragmentHandler(mapFragment, this);
+        this.mapFeedSearchFragmentHandler = new MapFeedSearchFragmentHandler(mapFragment, this, this);
+    }
+
+    @Override
+    public void updateUserLocation(Location location) {
+        Log.d("Print", "MapFeedSearchFragment callback");
+        this.mapFeedSearchFragmentHandler.updateUserLocation(location);
     }
 
     public interface FragmentSearchListener {
@@ -38,6 +49,8 @@ public class MapFeedSearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.currentLocation = new CurrentLocation(getActivity(), this);
+
     }
 
     @Override
@@ -78,5 +91,17 @@ public class MapFeedSearchFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         this.mapFeedSearchFragmentHandler.setListener(null);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        currentLocation.startLocationUpdates();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        currentLocation.stopLocationUpdates();
     }
 }
