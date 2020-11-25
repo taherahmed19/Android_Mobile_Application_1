@@ -20,6 +20,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
 
+        <!-- Added to prevent app crashing due to "E/libprocessgroup: set_timerslack_ns write failed: Operation not permitted" error -->
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+
         <meta-data
             android:name="com.google.android.actions"
             android:resource="@xml/network_security_config" />

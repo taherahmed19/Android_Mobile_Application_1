@@ -64,14 +64,14 @@ public class MapHandler implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.clear();
-
-        googleMap.setTrafficEnabled(false);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        mMap.setTrafficEnabled(false);
 
         LatLng savedLatLng = this.getMapCameraPosition();
 
         if (savedLatLng != null) {
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(savedLatLng.latitude, savedLatLng.longitude), 17));
-            googleMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(savedLatLng.latitude, savedLatLng.longitude), 17));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
         }
 
         mapListener.handleMapClick(mMap);
