@@ -1,6 +1,7 @@
 package com.example.myapplication.Handlers.RegisterActivityHandler;
 
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;

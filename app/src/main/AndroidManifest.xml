@@ -19,7 +19,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activities.RegisterActivity.RegisterActivity"></activity>
         <!-- Added to prevent app crashing due to "E/libprocessgroup: set_timerslack_ns write failed: Operation not permitted" error -->
         <uses-library
             android:name="org.apache.http.legacy"
@@ -38,17 +37,21 @@
             android:name="OnlineRouting.Key"
             android:value="U1L13ff4eUGcXgZ0JIA76A9V7qd2iTf0" />
 
-        <activity android:name=".Activities.LocationSelectorActivity.LocationSelectorActivity" />
-        <activity android:name=".Activities.MainActivity.MainActivity" />
-
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyA9cD7GIi-iYLSVYoVp-I-WqRV3nkiZvDY" />
 
-        <activity android:name=".Activities.LoginActivity.LoginActivity">
+        <activity android:name=".Activities.LocationSelectorActivity.LocationSelectorActivity" />
+        <activity android:name=".Activities.MainActivity.MainActivity"
+            android:windowSoftInputMode="adjustNothing"/>
+        <activity
+            android:name=".Activities.RegisterActivity.RegisterActivity"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity android:name=".Activities.LoginActivity.LoginActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
