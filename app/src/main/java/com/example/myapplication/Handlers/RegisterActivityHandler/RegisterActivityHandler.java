@@ -22,9 +22,16 @@ public class RegisterActivityHandler {
     private String email;
     private String password;
     private String confirmPassword;
+    private boolean valid;
 
     public RegisterActivityHandler(RegisterActivity registerActivity) {
         this.registerActivity = registerActivity;
+        this.firstName = "";
+        this.lastName = "";
+        this.email = "";
+        this.password = "";
+        this.confirmPassword = "";
+        this.valid = true;
     }
 
     public void configure(){
@@ -40,7 +47,7 @@ public class RegisterActivityHandler {
             @Override
             public void onClick(View view) {
                 Log.d("Print", firstName + " " + lastName + " " + email + " " + password + " " + confirmPassword);
-
+                validateAllFields();
             }
         });
     }
@@ -69,12 +76,22 @@ public class RegisterActivityHandler {
         field.setCompoundDrawablesWithIntrinsicBounds(iconLeft, 0, iconRight, 0);
         errorMessage.setVisibility(View.VISIBLE);
         errorMessage.setText(message);
+        valid = false;
     }
 
     void hideErrorMessages(EditText field, TextView errorMessage, int iconLeft){
         field.setTag(1);
         errorMessage.setVisibility(View.INVISIBLE);
         field.setCompoundDrawablesWithIntrinsicBounds(iconLeft, 0, 0, 0);
+        valid = true;
+    }
+
+    void validateAllFields(){
+        if(valid){
+            Log.d("Print ", "Registration successful");
+        }else{
+            Log.d("Print ", "Field still invalid");
+        }
     }
 
     void configureFirstName(){
@@ -97,7 +114,8 @@ public class RegisterActivityHandler {
                 if(editable.length() > 0 ){
                     firstName = editable.toString();
 
-                    if(registerFirstName.getTag() != null && (int)registerFirstName.getTag() == -1){
+                    //if(registerFirstName.getTag() != null && (int)registerFirstName.getTag() == -1){
+                    if(firstName.length() > 0){
                         hideErrorMessages(registerFirstName, firstNameErrorMessage, R.drawable.ic_register_user);
                     }
                 }else{
@@ -139,7 +157,7 @@ public class RegisterActivityHandler {
                 if(editable.length() > 0 ){
                     lastName = editable.toString();
 
-                    if(registerLastName.getTag() != null && (int)registerLastName.getTag() == -1){
+                    if(lastName.length() > 0){
                         hideErrorMessages(registerLastName, lastNameErrorMessage, R.drawable.ic_register_user);
                     }
                 }else{
@@ -181,7 +199,7 @@ public class RegisterActivityHandler {
                 if(editable.length() > 0 ){
                     email = editable.toString();
 
-                    if(registerEmail.getTag() != null && (int)registerEmail.getTag() == -1 && email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")){
+                    if(email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")){
                         hideErrorMessages(registerEmail, emailErrorMessage, R.drawable.ic_login_email_icon);
                     }
                 }else{
@@ -226,8 +244,16 @@ public class RegisterActivityHandler {
                 if(editable.length() > 0 ){
                     password = editable.toString();
 
-                    if(registerPassword.getTag() != null && (int)registerPassword.getTag() == -1 && confirmPassword.equals(password)){
+                    if(password.length() > 0){
                         hideErrorMessages(registerPassword, passwordErrorMessage, R.drawable.ic_login_password_icon);
+
+                        if(confirmPassword.length() > 0 && !password.equals(confirmPassword)){
+                            showErrorMessage(registerConfirmPassword,  confirmPasswordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Password do not match");
+                            showErrorMessage(registerPassword,  passwordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Password do not match");
+                        }
+                    }
+
+                    if(password.equals(confirmPassword)){
                         hideErrorMessages(registerConfirmPassword, confirmPasswordErrorMessage, R.drawable.ic_login_password_icon);
                     }
                 }else{
@@ -242,7 +268,7 @@ public class RegisterActivityHandler {
                 if (!hasFocus) {
                     if(registerPassword.getText().length() == 0){
                         showErrorMessage(registerPassword,  passwordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Field must be inputted");
-                    }else if(!confirmPassword.equals(password)){
+                    }else if(!confirmPassword.equals(password) && confirmPassword.length() > 0){
                         showErrorMessage(registerConfirmPassword,  confirmPasswordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Password do not match");
                         showErrorMessage(registerPassword,  passwordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Password do not match");
                     }
@@ -273,8 +299,16 @@ public class RegisterActivityHandler {
                 if(editable.length() > 0 ){
                     confirmPassword = editable.toString();
 
-                    if(confirmPassword.equals(password) && registerPassword.getTag() != null && (int)registerConfirmPassword.getTag() == -1){
+                    if(confirmPassword.length() > 0){
                         hideErrorMessages(registerConfirmPassword, confirmPasswordErrorMessage, R.drawable.ic_login_password_icon);
+
+                        if(password.length() > 0 && !confirmPassword.equals(password)){
+                            showErrorMessage(registerConfirmPassword,  confirmPasswordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Password do not match");
+                            showErrorMessage(registerPassword,  passwordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Password do not match");
+                        }
+                    }
+
+                    if(confirmPassword.equals(password)){
                         hideErrorMessages(registerPassword, passwordErrorMessage, R.drawable.ic_login_password_icon);
                     }
                 }else{
@@ -289,7 +323,7 @@ public class RegisterActivityHandler {
                 if (!hasFocus) {
                     if(registerConfirmPassword.getText().length() == 0){
                         showErrorMessage(registerConfirmPassword,  confirmPasswordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Field must be inputted");
-                    }else if(!confirmPassword.equals(password)){
+                    }else if(!confirmPassword.equals(password) && confirmPassword.length() > 0){
                         showErrorMessage(registerConfirmPassword,  confirmPasswordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Password do not match");
                         showErrorMessage(registerPassword,  passwordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Password do not match");
                     }
