@@ -9,20 +9,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.example.myapplication.Activities.RegisterActivity.RegisterActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.Validation.RegisterActivityValidator.RegisterActivityValidator;
 
 public class RegisterActivityHandler {
 
     private RegisterActivity registerActivity;
+    private RegisterActivityValidator registerActivityValidator;
     private String firstName;
     private String lastName;
     private String email;
     private String password;
     private String confirmPassword;
-    private boolean valid;
 
     public RegisterActivityHandler(RegisterActivity registerActivity) {
         this.registerActivity = registerActivity;
@@ -31,7 +31,7 @@ public class RegisterActivityHandler {
         this.email = "";
         this.password = "";
         this.confirmPassword = "";
-        this.valid = true;
+        this.registerActivityValidator = new RegisterActivityValidator(registerActivity);
     }
 
     public void configure(){
@@ -46,7 +46,6 @@ public class RegisterActivityHandler {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("Print", firstName + " " + lastName + " " + email + " " + password + " " + confirmPassword);
                 validateAllFields();
             }
         });
@@ -71,56 +70,35 @@ public class RegisterActivityHandler {
         configureConfirmPassword();
     }
 
-    void showErrorMessage(EditText field, TextView errorMessage, int iconLeft, int iconRight, String message){
-        field.setTag(-1);
-        field.setCompoundDrawablesWithIntrinsicBounds(iconLeft, 0, iconRight, 0);
-        errorMessage.setVisibility(View.VISIBLE);
-        errorMessage.setText(message);
-        valid = false;
-    }
-
-    void hideErrorMessages(EditText field, TextView errorMessage, int iconLeft){
-        field.setTag(1);
-        errorMessage.setVisibility(View.INVISIBLE);
-        field.setCompoundDrawablesWithIntrinsicBounds(iconLeft, 0, 0, 0);
-        valid = true;
-    }
-
     void validateAllFields(){
-        if(valid){
-            Log.d("Print ", "Registration successful");
+        boolean validFirstName = registerActivityValidator.validateFirstNameTextChanged();
+        boolean validLastName = registerActivityValidator.validateLastNameTextChanged();
+        boolean validEmail = registerActivityValidator.validateEmailTextChanged();
+        boolean validPassword = registerActivityValidator.validatePasswordTextChanged();
+        boolean validConfirmPassword = registerActivityValidator.validateConfirmPasswordTextChanged();
+
+        if(validFirstName && validLastName && validEmail && validPassword && validConfirmPassword){
+            Log.d("Print", "Registration valid");
+            Log.d("Print", firstName + " " + lastName + " " + email + " " + password + " " + confirmPassword);
         }else{
-            Log.d("Print ", "Field still invalid");
+            Log.d("Print", "Registration invalid");
         }
     }
 
     void configureFirstName(){
         EditText registerFirstName = this.registerActivity.findViewById(R.id.registerFirstName);
-        TextView firstNameErrorMessage = this.registerActivity.findViewById(R.id.registerFirstNameErrorMessage);
 
         registerFirstName.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(editable.length() > 0 ){
-                    firstName = editable.toString();
-
-                    //if(registerFirstName.getTag() != null && (int)registerFirstName.getTag() == -1){
-                    if(firstName.length() > 0){
-                        hideErrorMessages(registerFirstName, firstNameErrorMessage, R.drawable.ic_register_user);
-                    }
-                }else{
-                    showErrorMessage(registerFirstName,  firstNameErrorMessage, R.drawable.ic_register_user, R.drawable.ic_login_register_error_icon, "Field must be inputted");
-                }
+                firstName = editable.toString();
+                registerActivityValidator.validateFirstNameTextChanged();
             }
         });
 
@@ -128,10 +106,7 @@ public class RegisterActivityHandler {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    //lost focused and field is empty. Add error message
-                    if(registerFirstName.getText().length() == 0){
-                        showErrorMessage(registerFirstName,  firstNameErrorMessage, R.drawable.ic_register_user, R.drawable.ic_login_register_error_icon, "Field must be inputted");
-                    }
+                    registerActivityValidator.validateFirstNameFocusChange();
                 }
             }
         });
@@ -139,30 +114,18 @@ public class RegisterActivityHandler {
 
     void configureLastName(){
         EditText registerLastName = this.registerActivity.findViewById(R.id.registerLastName);
-        TextView lastNameErrorMessage = this.registerActivity.findViewById(R.id.registerLastNameErrorMessage);
 
         registerLastName.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(editable.length() > 0 ){
-                    lastName = editable.toString();
-
-                    if(lastName.length() > 0){
-                        hideErrorMessages(registerLastName, lastNameErrorMessage, R.drawable.ic_register_user);
-                    }
-                }else{
-                    showErrorMessage(registerLastName,  lastNameErrorMessage, R.drawable.ic_register_user, R.drawable.ic_login_register_error_icon, "Field must be inputted");
-                }
+                lastName = editable.toString();
+                registerActivityValidator.validateLastNameTextChanged();
             }
         });
 
@@ -170,9 +133,7 @@ public class RegisterActivityHandler {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if(registerLastName.getText().length() == 0){
-                        showErrorMessage(registerLastName,  lastNameErrorMessage, R.drawable.ic_register_user, R.drawable.ic_login_register_error_icon, "Field must be inputted");
-                    }
+                    registerActivityValidator.validateLastNameFocusChange();
                 }
             }
         });
@@ -181,30 +142,18 @@ public class RegisterActivityHandler {
 
     void configureEmail(){
         EditText registerEmail = this.registerActivity.findViewById(R.id.registerEmail);
-        TextView emailErrorMessage = this.registerActivity.findViewById(R.id.registerEmailErrorMessage);
 
         registerEmail.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(editable.length() > 0 ){
-                    email = editable.toString();
-
-                    if(email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")){
-                        hideErrorMessages(registerEmail, emailErrorMessage, R.drawable.ic_login_email_icon);
-                    }
-                }else{
-                    showErrorMessage(registerEmail,  emailErrorMessage, R.drawable.ic_login_email_icon, R.drawable.ic_login_register_error_icon, "Field must be inputted");
-                }
+                email = editable.toString();
+                registerActivityValidator.validateEmailTextChanged();
             }
         });
 
@@ -212,53 +161,26 @@ public class RegisterActivityHandler {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if(registerEmail.getText().length() == 0){
-                        showErrorMessage(registerEmail,  emailErrorMessage, R.drawable.ic_login_email_icon, R.drawable.ic_login_register_error_icon, "Field must be inputted");
-                    }else if(!email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")){
-                        showErrorMessage(registerEmail,  emailErrorMessage, R.drawable.ic_login_email_icon, R.drawable.ic_login_register_error_icon, "Enter a valid email");
-                    }
+                    registerActivityValidator.validateEmailFocusChange();
                 }
             }
         });
     }
 
     void configurePassword(){
-        EditText registerConfirmPassword = this.registerActivity.findViewById(R.id.registerConfirmPassword);
-        TextView confirmPasswordErrorMessage = this.registerActivity.findViewById(R.id.registerConfirmPasswordErrorMessage);
         EditText registerPassword = this.registerActivity.findViewById(R.id.registerPassword);
-        TextView passwordErrorMessage = this.registerActivity.findViewById(R.id.registerPasswordErrorMessage);
 
         registerPassword.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(editable.length() > 0 ){
-                    password = editable.toString();
-
-                    if(password.length() > 0){
-                        hideErrorMessages(registerPassword, passwordErrorMessage, R.drawable.ic_login_password_icon);
-
-                        if(confirmPassword.length() > 0 && !password.equals(confirmPassword)){
-                            showErrorMessage(registerConfirmPassword,  confirmPasswordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Password do not match");
-                            showErrorMessage(registerPassword,  passwordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Password do not match");
-                        }
-                    }
-
-                    if(password.equals(confirmPassword)){
-                        hideErrorMessages(registerConfirmPassword, confirmPasswordErrorMessage, R.drawable.ic_login_password_icon);
-                    }
-                }else{
-                    showErrorMessage(registerPassword,  passwordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Field must be inputted");
-                }
+                password = editable.toString();
+                registerActivityValidator.validatePasswordTextChanged();
             }
         });
 
@@ -266,12 +188,7 @@ public class RegisterActivityHandler {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if(registerPassword.getText().length() == 0){
-                        showErrorMessage(registerPassword,  passwordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Field must be inputted");
-                    }else if(!confirmPassword.equals(password) && confirmPassword.length() > 0){
-                        showErrorMessage(registerConfirmPassword,  confirmPasswordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Password do not match");
-                        showErrorMessage(registerPassword,  passwordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Password do not match");
-                    }
+                    registerActivityValidator.validatePasswordFocusChange();
                 }
             }
         });
@@ -279,41 +196,18 @@ public class RegisterActivityHandler {
 
     void configureConfirmPassword(){
         EditText registerConfirmPassword = this.registerActivity.findViewById(R.id.registerConfirmPassword);
-        TextView confirmPasswordErrorMessage = this.registerActivity.findViewById(R.id.registerConfirmPasswordErrorMessage);
-        EditText registerPassword = this.registerActivity.findViewById(R.id.registerPassword);
-        TextView passwordErrorMessage = this.registerActivity.findViewById(R.id.registerPasswordErrorMessage);
 
         registerConfirmPassword.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(editable.length() > 0 ){
-                    confirmPassword = editable.toString();
-
-                    if(confirmPassword.length() > 0){
-                        hideErrorMessages(registerConfirmPassword, confirmPasswordErrorMessage, R.drawable.ic_login_password_icon);
-
-                        if(password.length() > 0 && !confirmPassword.equals(password)){
-                            showErrorMessage(registerConfirmPassword,  confirmPasswordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Password do not match");
-                            showErrorMessage(registerPassword,  passwordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Password do not match");
-                        }
-                    }
-
-                    if(confirmPassword.equals(password)){
-                        hideErrorMessages(registerPassword, passwordErrorMessage, R.drawable.ic_login_password_icon);
-                    }
-                }else{
-                    showErrorMessage(registerConfirmPassword,  confirmPasswordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Field must be inputted");
-                }
+                confirmPassword = editable.toString();
+                registerActivityValidator.validateConfirmPasswordTextChanged();
             }
         });
 
@@ -321,12 +215,7 @@ public class RegisterActivityHandler {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if(registerConfirmPassword.getText().length() == 0){
-                        showErrorMessage(registerConfirmPassword,  confirmPasswordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Field must be inputted");
-                    }else if(!confirmPassword.equals(password) && confirmPassword.length() > 0){
-                        showErrorMessage(registerConfirmPassword,  confirmPasswordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Password do not match");
-                        showErrorMessage(registerPassword,  passwordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Password do not match");
-                    }
+                    registerActivityValidator.validateConfirmPasswordFocusChange();
                 }
             }
         });
