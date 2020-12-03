@@ -13,15 +13,20 @@ import com.example.myapplication.Activities.LoginActivity.LoginActivity;
 import com.example.myapplication.Activities.MainActivity.MainActivity;
 import com.example.myapplication.Activities.RegisterActivity.RegisterActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.Validation.LoginActivityValidator.LoginActivityValidator;
 
 public class LoginActivityHandler {
 
     private LoginActivity loginActivity;
+    private LoginActivityValidator loginActivityValidator;
     private String email;
     private String password;
 
     public LoginActivityHandler(LoginActivity loginActivity) {
         this.loginActivity = loginActivity;
+        this.loginActivityValidator = new LoginActivityValidator(loginActivity);
+        this.email = "";
+        this.password = "";
     }
 
     public void configure(){
@@ -37,8 +42,10 @@ public class LoginActivityHandler {
             @Override
             public void onClick(View view) {
                 Log.d("Print", "" + email + " " + password);
-                Intent intent = new Intent(loginActivity.getBaseContext(), MainActivity.class);
-                loginActivity.startActivity(intent);
+                if(validateAllFields()){
+                    Intent intent = new Intent(loginActivity.getBaseContext(), MainActivity.class);
+                    loginActivity.startActivity(intent);
+                }
             }
         });
     }
@@ -60,6 +67,17 @@ public class LoginActivityHandler {
         configurePassword();
     }
 
+    boolean validateAllFields(){
+        boolean validEmail = this.loginActivityValidator.validateEmailTextChanged();
+        boolean validPassword = this.loginActivityValidator.validatePasswordTextChanged();
+
+        if(validEmail && validPassword){
+            return true;
+        }
+
+        return false;
+    }
+
     void configureEmail(){
         EditText loginEmail = (EditText) this.loginActivity.findViewById(R.id.loginEmail);
 
@@ -77,6 +95,16 @@ public class LoginActivityHandler {
             @Override
             public void afterTextChanged(Editable editable) {
                 email = editable.toString();
+                loginActivityValidator.validateEmailTextChanged();
+            }
+        });
+
+        loginEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    loginActivityValidator.validateEmailFocusChanged();
+                }
             }
         });
     }
@@ -98,6 +126,16 @@ public class LoginActivityHandler {
             @Override
             public void afterTextChanged(Editable editable) {
                 password = editable.toString();
+                loginActivityValidator.validatePasswordTextChanged();
+            }
+        });
+
+        loginPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    loginActivityValidator.validatePasswordFocusChange();
+                }
             }
         });
     }

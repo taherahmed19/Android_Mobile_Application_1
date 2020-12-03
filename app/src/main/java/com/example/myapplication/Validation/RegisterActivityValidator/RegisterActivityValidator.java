@@ -75,6 +75,8 @@ public class RegisterActivityValidator {
         String email = registerEmail.getText().toString();
 
         if(email.length() > 0 ){
+            hideErrorMessages(registerEmail, emailErrorMessage, R.drawable.ic_login_email_icon);
+
             if(email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")){
                 hideErrorMessages(registerEmail, emailErrorMessage, R.drawable.ic_login_email_icon);
             }
