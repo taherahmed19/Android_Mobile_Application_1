@@ -1,5 +1,6 @@
 package com.example.myapplication.Fragments.ErrorFragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,11 +16,18 @@ import com.example.myapplication.R;
 
 public class ErrorFragment extends Fragment {
 
+    Activity activity;
     Fragment fragment;
     String titleMessage;
     String bodyMessage;
 
     public ErrorFragment(Fragment fragment, String titleMessage, String bodyMessage) {
+        this.fragment = fragment;
+        this.titleMessage = titleMessage;
+        this.bodyMessage = bodyMessage;
+    }
+
+    public ErrorFragment(Activity activity, String titleMessage, String bodyMessage) {
         this.fragment = fragment;
         this.titleMessage = titleMessage;
         this.bodyMessage = bodyMessage;

@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +20,9 @@ import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.Map
 import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
 import com.example.myapplication.Fragments.MapFilterFragment.MapFilterFragment;
 import com.example.myapplication.Handlers.MapFragmentHandler.MapFragmentHandler;
-import com.example.myapplication.Interfaces.CurrentLocationListener;
-import com.example.myapplication.Interfaces.CustomMarkerListener;
-import com.example.myapplication.Interfaces.MapListener;
+import com.example.myapplication.Interfaces.CurrentLocationListener.CurrentLocationListener;
+import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
+import com.example.myapplication.Interfaces.MapListener.MapListener;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.Models.LoadingSpinner.LoadingSpinner;
 import com.example.myapplication.Models.Marker.Marker;

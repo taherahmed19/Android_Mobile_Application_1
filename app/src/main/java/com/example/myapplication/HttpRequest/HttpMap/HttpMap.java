@@ -1,7 +1,6 @@
 package com.example.myapplication.HttpRequest.HttpMap;
 
 import android.annotation.SuppressLint;
-import android.location.Location;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
@@ -10,28 +9,18 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.myapplication.Fragments.FeedFragment.FeedFragment;
-import com.example.myapplication.Fragments.MapFragment.MapFragment;
-import com.example.myapplication.HttpRequest.HttpMapFeedSearch.HttpMapFeedSearch;
-import com.example.myapplication.Interfaces.CustomMarkerListener;
+import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
 import com.example.myapplication.JsonBuilders.MapJsonBuilder.MapJsonBuilder;
-import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.Models.Settings.Settings;
-import com.example.myapplication.R;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
 import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Models.LoadingSpinner.LoadingSpinner;
 import com.example.myapplication.Handlers.MapHandler.MapHandler;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;

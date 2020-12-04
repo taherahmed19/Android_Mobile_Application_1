@@ -1,4 +1,4 @@
-package com.example.myapplication.Interfaces;
+package com.example.myapplication.Interfaces.MapListener;
 
 import androidx.fragment.app.FragmentActivity;
 

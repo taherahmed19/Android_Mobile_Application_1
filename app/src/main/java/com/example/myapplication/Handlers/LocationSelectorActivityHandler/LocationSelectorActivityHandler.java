@@ -1,24 +1,18 @@
 package com.example.myapplication.Handlers.LocationSelectorActivityHandler;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.myapplication.Activities.LocationSelectorActivity.LocationSelectorActivity;
-import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
 import com.example.myapplication.Handlers.MapHandler.MapHandler;
-import com.example.myapplication.HttpRequest.HttpMap.HttpMap;
-import com.example.myapplication.Interfaces.MapListener;
-import com.example.myapplication.Models.Marker.Marker;
+import com.example.myapplication.Interfaces.MapListener.MapListener;
 import com.example.myapplication.Models.Settings.Settings;
 import com.example.myapplication.R;
-import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Utils.StringConstants.StringConstants;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;

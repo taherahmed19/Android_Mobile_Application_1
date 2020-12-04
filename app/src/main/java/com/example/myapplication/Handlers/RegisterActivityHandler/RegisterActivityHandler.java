@@ -1,5 +1,6 @@
 package com.example.myapplication.Handlers.RegisterActivityHandler;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.InputType;
@@ -10,8 +11,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.example.myapplication.Activities.MainActivity.MainActivity;
 import com.example.myapplication.Activities.RegisterActivity.RegisterActivity;
+import com.example.myapplication.Fragments.ConfirmFragment.ConfirmFragment;
+import com.example.myapplication.Fragments.ErrorFragment.ErrorFragment;
+import com.example.myapplication.HttpRequest.HttpRegisterUser.HttpRegisterUser;
 import com.example.myapplication.R;
+import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
+import com.example.myapplication.Utils.HashingTool.HashingTool;
 import com.example.myapplication.Validation.RegisterActivityValidator.RegisterActivityValidator;
 
 public class RegisterActivityHandler {
@@ -32,6 +39,26 @@ public class RegisterActivityHandler {
         this.password = "";
         this.confirmPassword = "";
         this.registerActivityValidator = new RegisterActivityValidator(registerActivity);
+    }
+
+    public void handleRegistrationAttempt(boolean valid){
+        if(valid){
+            ConfirmFragment confirmFragment = new ConfirmFragment(this.registerActivity, this.registerActivity.getString(R.string.registration_confirm_title),
+                    this.registerActivity.getString(R.string.registration_confirm_body));
+            FragmentTransition.OpenFragment(this.registerActivity.getSupportFragmentManager(), confirmFragment, R.id.registerActivity, "");
+
+            enterApplication();
+        }else{
+            ErrorFragment errorFragment = new ErrorFragment(this.registerActivity, this.registerActivity.getString(R.string.registration_error_title),
+                    this.registerActivity.getString(R.string.registration_error_body));
+
+            FragmentTransition.OpenFragment(this.registerActivity.getSupportFragmentManager(), errorFragment, R.id.registerActivity, "");
+        }
+    }
+
+    void enterApplication(){
+        Intent intent = new Intent(this.registerActivity.getBaseContext(), MainActivity.class);
+        this.registerActivity.startActivity(intent);
     }
 
     public void configure(){
@@ -78,11 +105,14 @@ public class RegisterActivityHandler {
         boolean validConfirmPassword = registerActivityValidator.validateConfirmPasswordTextChanged();
 
         if(validFirstName && validLastName && validEmail && validPassword && validConfirmPassword){
-            Log.d("Print", "Registration valid");
-            Log.d("Print", firstName + " " + lastName + " " + email + " " + password + " " + confirmPassword);
-        }else{
-            Log.d("Print", "Registration invalid");
+            this.hashPassword();
+            HttpRegisterUser httpRegisterUser = new HttpRegisterUser(this.registerActivity.getApplicationContext(), this, this.registerActivity);
+            httpRegisterUser.execute("");
         }
+    }
+
+    void hashPassword(){
+        password = HashingTool.HashString(password);
     }
 
     void configureFirstName(){
@@ -219,5 +249,21 @@ public class RegisterActivityHandler {
                 }
             }
         });
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

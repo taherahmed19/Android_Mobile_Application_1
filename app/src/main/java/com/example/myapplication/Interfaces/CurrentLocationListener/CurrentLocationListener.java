@@ -1,4 +1,4 @@
-package com.example.myapplication.Interfaces;
+package com.example.myapplication.Interfaces.CurrentLocationListener;
 
 import android.location.Location;
 

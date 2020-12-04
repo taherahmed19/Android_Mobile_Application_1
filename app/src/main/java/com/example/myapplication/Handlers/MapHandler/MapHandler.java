@@ -5,20 +5,13 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.util.Log;
-import android.view.View;
-import android.widget.LinearLayout;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
-import com.example.myapplication.Activities.MainActivity.MainActivity;
-import com.example.myapplication.Fragments.MapFragment.MapFragment;
-import com.example.myapplication.Interfaces.MapListener;
+import com.example.myapplication.Interfaces.MapListener.MapListener;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
-import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
-import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.Tools.Tools;
 import com.example.myapplication.Models.Marker.Marker;
@@ -31,8 +24,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import net.sourceforge.jtds.jdbc.Support;
 
 import java.util.ArrayList;
 

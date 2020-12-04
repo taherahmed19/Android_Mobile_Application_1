@@ -12,7 +12,12 @@ import android.widget.EditText;
 import com.example.myapplication.Activities.LoginActivity.LoginActivity;
 import com.example.myapplication.Activities.MainActivity.MainActivity;
 import com.example.myapplication.Activities.RegisterActivity.RegisterActivity;
+import com.example.myapplication.Fragments.ConfirmFragment.ConfirmFragment;
+import com.example.myapplication.Fragments.ErrorFragment.ErrorFragment;
+import com.example.myapplication.HttpRequest.HttpLoginUser.HttpLoginUser;
 import com.example.myapplication.R;
+import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
+import com.example.myapplication.Utils.HashingTool.HashingTool;
 import com.example.myapplication.Validation.LoginActivityValidator.LoginActivityValidator;
 
 public class LoginActivityHandler {
@@ -29,6 +34,26 @@ public class LoginActivityHandler {
         this.password = "";
     }
 
+    public void handleSignInAttempt(boolean valid) {
+        if(valid){
+            ConfirmFragment confirmFragment = new ConfirmFragment(this.loginActivity, this.loginActivity.getString(R.string.login_confirm_title),
+                    this.loginActivity.getString(R.string.login_confirm_body));
+            FragmentTransition.OpenFragment(this.loginActivity.getSupportFragmentManager(), confirmFragment, R.id.loginActivity, "");
+
+            enterApplication();
+        }else{
+            ErrorFragment errorFragment = new ErrorFragment(this.loginActivity, this.loginActivity.getString(R.string.login_error_title),
+                    this.loginActivity.getString(R.string.login_error_body));
+
+            FragmentTransition.OpenFragment(this.loginActivity.getSupportFragmentManager(), errorFragment, R.id.loginActivity, "");
+        }
+    }
+
+    void enterApplication(){
+        Intent intent = new Intent(this.loginActivity.getBaseContext(), MainActivity.class);
+        this.loginActivity.startActivity(intent);
+    }
+
     public void configure(){
         configureLoginSubmitButton();
         configureRegisterButton();
@@ -41,13 +66,27 @@ public class LoginActivityHandler {
         loginSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("Print", "" + email + " " + password);
-                if(validateAllFields()){
-                    Intent intent = new Intent(loginActivity.getBaseContext(), MainActivity.class);
-                    loginActivity.startActivity(intent);
-                }
+                validateAllFields();
             }
         });
+    }
+
+    boolean validateAllFields(){
+        boolean validEmail = this.loginActivityValidator.validateEmailTextChanged();
+        boolean validPassword = this.loginActivityValidator.validatePasswordTextChanged();
+
+        if(validEmail && validPassword){
+            this.hashPassword();
+            HttpLoginUser httpLoginUser = new HttpLoginUser(this.loginActivity.getApplicationContext(), this, this.loginActivity);
+            httpLoginUser.execute("");
+            return true;
+        }
+
+        return false;
+    }
+
+    void hashPassword(){
+        password = HashingTool.HashString(password);
     }
 
     void configureRegisterButton(){
@@ -65,17 +104,6 @@ public class LoginActivityHandler {
     void configureFields(){
         configureEmail();
         configurePassword();
-    }
-
-    boolean validateAllFields(){
-        boolean validEmail = this.loginActivityValidator.validateEmailTextChanged();
-        boolean validPassword = this.loginActivityValidator.validatePasswordTextChanged();
-
-        if(validEmail && validPassword){
-            return true;
-        }
-
-        return false;
     }
 
     void configureEmail(){
@@ -140,5 +168,11 @@ public class LoginActivityHandler {
         });
     }
 
+    public String getEmail() {
+        return email;
+    }
 
+    public String getPassword() {
+        return password;
+    }
 }

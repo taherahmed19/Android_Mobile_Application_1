@@ -39,18 +39,18 @@
         </ImageView>
 
         <TextView
+            android:id="@+id/confirmFragmentTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/main_text"
             android:textColor="#000"
             android:textSize="23sp"
             android:layout_marginBottom="10sp"
             android:layout_gravity="center_horizontal"/>
 
         <TextView
+            android:id="@+id/confirmFragmentBody"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sub_text"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:layout_marginBottom="15sp"

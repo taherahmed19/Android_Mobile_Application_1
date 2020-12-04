@@ -3,7 +3,6 @@ package com.example.myapplication.Handlers.MapFragmentHandler;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -22,8 +21,8 @@ import com.example.myapplication.Handlers.MapFeedSearchFragmentHandler.MapFeedSe
 import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.MapFeedSearchAutocompleteFragment;
 import com.example.myapplication.Handlers.MapHandler.MapHandler;
 import com.example.myapplication.HttpRequest.HttpMap.HttpMap;
-import com.example.myapplication.Interfaces.CustomMarkerListener;
-import com.example.myapplication.Interfaces.MapListener;
+import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
+import com.example.myapplication.Interfaces.MapListener.MapListener;
 import com.example.myapplication.Models.LoadingSpinner.LoadingSpinner;
 import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Models.Settings.Settings;
@@ -32,9 +31,7 @@ import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Utils.StringConstants.StringConstants;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 

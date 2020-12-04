@@ -10,11 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.Handlers.MapFeedSearchFragmentHandler.MapFeedSearchFragmentHandler;
-import com.example.myapplication.Interfaces.CurrentLocationListener;
+import com.example.myapplication.Interfaces.CurrentLocationListener.CurrentLocationListener;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.R;
 import com.example.myapplication.Refactor.searchAutocomplete.Place;

@@ -12,4 +12,16 @@
     <string name="login_confirm_password">Confirm Password</string>
     <string name="login_register">Register</string>
 
+    <string name="login_confirm_title">Sign In Successful</string>
+    <string name="login_confirm_body"></string>
+
+    <string name="login_error_title">Sign In Error</string>
+    <string name="login_error_body">Login credentials are invalid.</string>
+
+    <string name="registration_confirm_title">Account Registered</string>
+    <string name="registration_confirm_body"></string>
+
+    <string name="registration_error_title">Registration Error</string>
+    <string name="registration_error_body">This Email address is already associated with an account.</string>
+
 </resources>

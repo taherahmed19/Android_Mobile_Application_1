@@ -4,14 +4,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.example.myapplication.Handlers.LoginActivityHandler.LoginActivityHandler;
+import com.example.myapplication.Interfaces.LoginListener.LoginListener;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.Tools.Tools;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
 
-public class LoginActivity extends AppCompatActivity {
+import java.nio.charset.Charset;
+
+public class LoginActivity extends AppCompatActivity implements LoginListener {
 
     LoginActivityHandler loginActivityHandler;
 
@@ -26,5 +32,10 @@ public class LoginActivity extends AppCompatActivity {
 
         this.loginActivityHandler = new LoginActivityHandler(this);
         this.loginActivityHandler.configure();
+    }
+
+    @Override
+    public void handleSignInAttempt(boolean valid) {
+        this.loginActivityHandler.handleSignInAttempt(valid);
     }
 }

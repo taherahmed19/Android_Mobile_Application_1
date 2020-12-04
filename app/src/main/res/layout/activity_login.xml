@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.LoginActivity.LoginActivity"
-    android:background="@drawable/login_activity_background">
+    android:background="@drawable/login_activity_background"
+    android:id="@+id/loginActivity">
 
     <ScrollView
         android:layout_width="match_parent"

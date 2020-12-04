@@ -8,10 +8,11 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.example.myapplication.Handlers.RegisterActivityHandler.RegisterActivityHandler;
+import com.example.myapplication.Interfaces.RegisterListener.RegisterListener;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.Tools.Tools;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements RegisterListener {
 
     RegisterActivityHandler registerActivityHandler;
 
@@ -26,5 +27,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         this.registerActivityHandler = new RegisterActivityHandler(this);
         this.registerActivityHandler.configure();
+    }
+
+    @Override
+    public void handleRegistrationAttempt(boolean valid) {
+        this.registerActivityHandler.handleRegistrationAttempt(valid);
     }
 }

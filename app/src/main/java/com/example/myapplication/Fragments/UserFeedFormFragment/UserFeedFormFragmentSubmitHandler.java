@@ -36,7 +36,7 @@ public class UserFeedFormFragmentSubmitHandler {
                 userFeedForm.getResources().getString(R.string.post_error),
                 userFeedForm.getResources().getString(R.string.post_error_message));
 
-        ConfirmFragment confirmFragment = new ConfirmFragment(userFeedForm);
+        ConfirmFragment confirmFragment = new ConfirmFragment(userFeedForm, userFeedForm.getString(R.string.main_text), userFeedForm.getString(R.string.sub_text));
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.userFeedForm,confirmFragment,"");

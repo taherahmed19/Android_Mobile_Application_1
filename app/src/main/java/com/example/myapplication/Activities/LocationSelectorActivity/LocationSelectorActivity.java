@@ -8,13 +8,11 @@ import android.location.Location;
 import android.os.Bundle;
 
 import com.example.myapplication.Handlers.LocationSelectorActivityHandler.LocationSelectorActivityHandler;
-import com.example.myapplication.Interfaces.CurrentLocationListener;
-import com.example.myapplication.Interfaces.MapListener;
+import com.example.myapplication.Interfaces.CurrentLocationListener.CurrentLocationListener;
+import com.example.myapplication.Interfaces.MapListener.MapListener;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.R;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 
 public class LocationSelectorActivity extends AppCompatActivity implements CurrentLocationListener, MapListener {
 

@@ -17,8 +17,7 @@ import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFr
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.HttpRequest.HttpMapFeedSearch.HttpMapFeedSearch;
 import com.example.myapplication.HttpRequest.HttpMapFeedSearchAutocomplete.HttpMapFeedSearchAutocomplete;
-import com.example.myapplication.Interfaces.CurrentLocationListener;
-import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
+import com.example.myapplication.Interfaces.CurrentLocationListener.CurrentLocationListener;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Utils.StringConstants.StringConstants;
