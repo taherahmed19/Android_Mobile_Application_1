@@ -2,9 +2,7 @@ package com.example.myapplication.Handlers.LoginActivityHandler;
 
 import android.content.Intent;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +14,7 @@ import com.example.myapplication.Fragments.ConfirmFragment.ConfirmFragment;
 import com.example.myapplication.Fragments.ErrorFragment.ErrorFragment;
 import com.example.myapplication.HttpRequest.HttpLoginUser.HttpLoginUser;
 import com.example.myapplication.R;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Utils.HashingTool.HashingTool;
 import com.example.myapplication.Validation.LoginActivityValidator.LoginActivityValidator;
@@ -36,10 +35,10 @@ public class LoginActivityHandler {
 
     public void handleSignInAttempt(boolean valid) {
         if(valid){
-            ConfirmFragment confirmFragment = new ConfirmFragment(this.loginActivity, this.loginActivity.getString(R.string.login_confirm_title),
-                    this.loginActivity.getString(R.string.login_confirm_body));
+            ConfirmFragment confirmFragment = new ConfirmFragment(this.loginActivity, this.loginActivity.getString(R.string.login_confirm_title), this.loginActivity.getString(R.string.login_confirm_body));
             FragmentTransition.OpenFragment(this.loginActivity.getSupportFragmentManager(), confirmFragment, R.id.loginActivity, "");
 
+            saveLoginState();
             enterApplication();
         }else{
             ErrorFragment errorFragment = new ErrorFragment(this.loginActivity, this.loginActivity.getString(R.string.login_error_title),
@@ -49,15 +48,22 @@ public class LoginActivityHandler {
         }
     }
 
+    public void configure(){
+        configureLoginSubmitButton();
+        configureRegisterButton();
+        configureFields();
+    }
+
     void enterApplication(){
         Intent intent = new Intent(this.loginActivity.getBaseContext(), MainActivity.class);
         this.loginActivity.startActivity(intent);
     }
 
-    public void configure(){
-        configureLoginSubmitButton();
-        configureRegisterButton();
-        configureFields();
+    void saveLoginState(){
+        LoginPreferenceData.setUserId(this.loginActivity.getApplicationContext(), 1);
+        LoginPreferenceData.setFirstName(this.loginActivity.getApplicationContext(), "First Name");
+        LoginPreferenceData.setLastName(this.loginActivity.getApplicationContext(), "Last Name");
+        LoginPreferenceData.setEmail(this.loginActivity.getApplicationContext(), this.email);
     }
 
     void configureLoginSubmitButton(){

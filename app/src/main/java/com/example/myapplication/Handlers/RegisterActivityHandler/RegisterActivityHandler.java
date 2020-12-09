@@ -1,11 +1,8 @@
 package com.example.myapplication.Handlers.RegisterActivityHandler;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +14,7 @@ import com.example.myapplication.Fragments.ConfirmFragment.ConfirmFragment;
 import com.example.myapplication.Fragments.ErrorFragment.ErrorFragment;
 import com.example.myapplication.HttpRequest.HttpRegisterUser.HttpRegisterUser;
 import com.example.myapplication.R;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Utils.HashingTool.HashingTool;
 import com.example.myapplication.Validation.RegisterActivityValidator.RegisterActivityValidator;
@@ -43,10 +41,10 @@ public class RegisterActivityHandler {
 
     public void handleRegistrationAttempt(boolean valid){
         if(valid){
-            ConfirmFragment confirmFragment = new ConfirmFragment(this.registerActivity, this.registerActivity.getString(R.string.registration_confirm_title),
-                    this.registerActivity.getString(R.string.registration_confirm_body));
+            ConfirmFragment confirmFragment = new ConfirmFragment(this.registerActivity, this.registerActivity.getString(R.string.registration_confirm_title), this.registerActivity.getString(R.string.registration_confirm_body));
             FragmentTransition.OpenFragment(this.registerActivity.getSupportFragmentManager(), confirmFragment, R.id.registerActivity, "");
 
+            saveLoginState();
             enterApplication();
         }else{
             ErrorFragment errorFragment = new ErrorFragment(this.registerActivity, this.registerActivity.getString(R.string.registration_error_title),
@@ -54,6 +52,10 @@ public class RegisterActivityHandler {
 
             FragmentTransition.OpenFragment(this.registerActivity.getSupportFragmentManager(), errorFragment, R.id.registerActivity, "");
         }
+    }
+
+    void saveLoginState(){
+        LoginPreferenceData.setUserId(this.registerActivity.getApplicationContext(), 1);
     }
 
     void enterApplication(){
@@ -182,7 +184,7 @@ public class RegisterActivityHandler {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                email = editable.toString();
+                email = editable.toString().toLowerCase();
                 registerActivityValidator.validateEmailTextChanged();
             }
         });

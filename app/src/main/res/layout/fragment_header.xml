@@ -33,6 +33,7 @@
                 android:layout_centerVertical="true"/>
 
             <ImageButton
+                android:id="@+id/userMenu"
                 android:layout_width="30sp"
                 android:layout_height="30sp"
                 android:cropToPadding="false"
