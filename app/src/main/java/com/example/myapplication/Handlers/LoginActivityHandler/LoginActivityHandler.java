@@ -3,6 +3,7 @@ package com.example.myapplication.Handlers.LoginActivityHandler;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -60,9 +61,10 @@ public class LoginActivityHandler {
     }
 
     void saveLoginState(){
+        LoginPreferenceData.setUserLoggedIn(this.loginActivity.getApplicationContext(), true);
         LoginPreferenceData.setUserId(this.loginActivity.getApplicationContext(), 1);
-        LoginPreferenceData.setFirstName(this.loginActivity.getApplicationContext(), "First Name");
-        LoginPreferenceData.setLastName(this.loginActivity.getApplicationContext(), "Last Name");
+        LoginPreferenceData.setFirstName(this.loginActivity.getApplicationContext(), "name");
+        LoginPreferenceData.setLastName(this.loginActivity.getApplicationContext(), "name");
         LoginPreferenceData.setEmail(this.loginActivity.getApplicationContext(), this.email);
     }
 

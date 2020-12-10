@@ -1,18 +1,21 @@
 package com.example.myapplication.Activities.MainActivity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.MapFeedSearchAutocompleteFragment;
 import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
 import com.example.myapplication.Handlers.MainActivityHandler.MainActivityHandler;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.R;
+import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     MainActivityHandler mainActivityHandler;
 
@@ -28,8 +31,13 @@ public class MainActivity extends AppCompatActivity  {
         this.mainActivityHandler.configure();
 
         resetSharedPreference();
+    }
 
-        Log.d("Print", "Login Id " + LoginPreferenceData.getUserId(this.getApplicationContext()));
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        this.mainActivityHandler.handleNavMenuItemListener(item);
+
+        return true;
     }
 
     void resetSharedPreference(){

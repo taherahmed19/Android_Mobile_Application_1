@@ -25,9 +25,9 @@
                 android:icon="@drawable/ic_routing_burger"
                 android:title="Share" />
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/nav_sign_out"
                 android:icon="@drawable/ic_routing_burger"
-                android:title="Send" />
+                android:title="Sign Out" />
         </menu>
     </item>
 

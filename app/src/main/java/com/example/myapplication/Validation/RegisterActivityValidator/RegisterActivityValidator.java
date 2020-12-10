@@ -77,7 +77,7 @@ public class RegisterActivityValidator {
         if(email.length() > 0 ){
             hideErrorMessages(registerEmail, emailErrorMessage, R.drawable.ic_login_email_icon);
 
-            if(email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")){
+            if(email.matches("[a-zA-Z0-9._-]+@[a-zA-Z]+\\.+[a-zA-Z]+")){
                 hideErrorMessages(registerEmail, emailErrorMessage, R.drawable.ic_login_email_icon);
             }
         }else{
@@ -96,7 +96,7 @@ public class RegisterActivityValidator {
         if(registerEmail.getText().length() == 0){
             showErrorMessage(registerEmail,  emailErrorMessage, R.drawable.ic_login_email_icon, R.drawable.ic_login_register_error_icon, "Field must be inputted");
             return false;
-        }else if(!email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")){
+        }else if(!email.matches("[a-zA-Z0-9._-]+@[a-zA-Z]+\\.+[a-zA-Z]+")){
             showErrorMessage(registerEmail,  emailErrorMessage, R.drawable.ic_login_email_icon, R.drawable.ic_login_register_error_icon, "Enter a valid email");
             return false;
         }

@@ -33,4 +33,10 @@ public class RegisterActivity extends AppCompatActivity implements RegisterListe
     public void handleRegistrationAttempt(boolean valid) {
         this.registerActivityHandler.handleRegistrationAttempt(valid);
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        finish();
+    }
 }

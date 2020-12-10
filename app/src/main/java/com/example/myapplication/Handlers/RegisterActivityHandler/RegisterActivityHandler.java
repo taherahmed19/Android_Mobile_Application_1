@@ -55,7 +55,11 @@ public class RegisterActivityHandler {
     }
 
     void saveLoginState(){
+        LoginPreferenceData.setUserLoggedIn(this.registerActivity.getApplicationContext(), true);
         LoginPreferenceData.setUserId(this.registerActivity.getApplicationContext(), 1);
+        LoginPreferenceData.setFirstName(this.registerActivity.getApplicationContext(), "First Name");
+        LoginPreferenceData.setLastName(this.registerActivity.getApplicationContext(), "Last Name");
+        LoginPreferenceData.setEmail(this.registerActivity.getApplicationContext(), this.email);
     }
 
     void enterApplication(){

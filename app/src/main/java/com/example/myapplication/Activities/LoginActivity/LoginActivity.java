@@ -38,4 +38,11 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     public void handleSignInAttempt(boolean valid) {
         this.loginActivityHandler.handleSignInAttempt(valid);
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());    }
+
 }

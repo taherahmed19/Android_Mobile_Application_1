@@ -3,16 +3,32 @@ package com.example.myapplication.SharedPreference.LoginPreferenceData;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 public class LoginPreferenceData {
 
+    private static final String PREF_USER_LOGGED_IN = "user_logged_in";
     private static final String PREF_USER_ID = "user_id";
     private static final String PREF_USER_FIRST_NAME = "user_first_name";
     private static final String PREF_USER_LAST_NAME = "user_last_name";
-    private static final String PREF_USER_EMAIL = "user_last_name";
+    private static final String PREF_USER_EMAIL = "user_email";
 
     private static SharedPreferences getSharedPreferences(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    public static void clear(Context context){
+        getSharedPreferences(context).edit().remove(PREF_USER_LOGGED_IN).apply();
+        getSharedPreferences(context).edit().remove(PREF_USER_ID).apply();
+        getSharedPreferences(context).edit().remove(PREF_USER_FIRST_NAME).apply();
+        getSharedPreferences(context).edit().remove(PREF_USER_LAST_NAME).apply();
+        getSharedPreferences(context).edit().remove(PREF_USER_EMAIL).apply();
+    }
+
+    public static void setUserLoggedIn(Context context, boolean loggedIn){
+        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putBoolean(PREF_USER_LOGGED_IN, loggedIn);
+        editor.apply();
     }
 
     public static void setUserId(Context context, int userId)
@@ -38,6 +54,11 @@ public class LoginPreferenceData {
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
         editor.putString(PREF_USER_EMAIL, email);
         editor.apply();
+    }
+
+    public static boolean getUserLoggedIn(Context context)
+    {
+        return getSharedPreferences(context).getBoolean(PREF_USER_LOGGED_IN, false);
     }
 
     public static int getUserId(Context context)
