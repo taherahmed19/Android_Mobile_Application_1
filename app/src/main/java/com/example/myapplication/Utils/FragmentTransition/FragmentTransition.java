@@ -1,5 +1,8 @@
 package com.example.myapplication.Utils.FragmentTransition;
 
+import android.app.Activity;
+import android.content.Intent;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -7,9 +10,15 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.annotation.AnimRes;
 import androidx.annotation.IdRes;
 
+import com.example.myapplication.Activities.MainActivity.MainActivity;
 import com.example.myapplication.R;
 
 public class FragmentTransition {
+
+    public static void StartActivity(Activity baseActivity, Class targetActivityClass){
+        Intent intent = new Intent(baseActivity.getBaseContext(), targetActivityClass);
+        baseActivity.startActivity(intent);
+    }
 
     public static FragmentTransaction Transition(FragmentManager fragmentManager, Fragment fragment, @AnimRes int enter, @AnimRes int exit, @IdRes int containerViewId, String tag){
         FragmentTransaction transaction = fragmentManager.beginTransaction();

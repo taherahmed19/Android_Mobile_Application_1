@@ -35,8 +35,8 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     }
 
     @Override
-    public void handleSignInAttempt(boolean valid) {
-        this.loginActivityHandler.handleSignInAttempt(valid);
+    public void handleSignInAttempt(boolean valid, int userId, String userFirstName, String userLastName, String userEmail) {
+        this.loginActivityHandler.handleSignInAttempt(valid, userId, userFirstName, userLastName, userEmail);
     }
 
     @Override

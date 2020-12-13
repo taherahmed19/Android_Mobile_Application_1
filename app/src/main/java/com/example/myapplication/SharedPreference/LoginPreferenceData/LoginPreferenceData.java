@@ -1,5 +1,6 @@
 package com.example.myapplication.SharedPreference.LoginPreferenceData;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -15,6 +16,14 @@ public class LoginPreferenceData {
 
     private static SharedPreferences getSharedPreferences(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    public static void SaveLoginState(Activity activity, boolean userLoggedIn, int userId, String userFirstName, String userLastName, String userEmail){
+        LoginPreferenceData.setUserLoggedIn(activity.getApplicationContext(), userLoggedIn);
+        LoginPreferenceData.setUserId(activity.getApplicationContext(), userId);
+        LoginPreferenceData.setFirstName(activity.getApplicationContext(), userFirstName);
+        LoginPreferenceData.setLastName(activity.getApplicationContext(), userLastName);
+        LoginPreferenceData.setEmail(activity.getApplicationContext(), userEmail);
     }
 
     public static void clear(Context context){

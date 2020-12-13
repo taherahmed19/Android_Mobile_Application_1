@@ -66,6 +66,7 @@ public class MainActivityHandler {
         configureNavigationListener();
         configureNavHeaderName();
         configureNavHeaderEmail();
+        configureNavHeaderUserIcon();
     }
 
     void configureNavigationListener(){
@@ -94,5 +95,19 @@ public class MainActivityHandler {
 
         TextView text = headerLayout.findViewById(R.id.nav_header_email);
         text.setText(email);
+    }
+
+    void configureNavHeaderUserIcon(){
+        String firstName = LoginPreferenceData.getUserFirstName(this.mainActivity);
+        String lastName = LoginPreferenceData.getUserLastName(this.mainActivity);
+
+        String concatInitials = firstName.substring(0, 1).toUpperCase() + " " + lastName.substring(0, 1).toUpperCase();
+
+        NavigationView navigationView = (NavigationView) this.mainActivity.findViewById(R.id.nav_view);
+        View headerLayout = navigationView.getHeaderView(0);
+
+        TextView nav_header_name_logo = (TextView) headerLayout.findViewById(R.id.nav_header_name_logo);
+        nav_header_name_logo.setText(concatInitials);
+
     }
 }

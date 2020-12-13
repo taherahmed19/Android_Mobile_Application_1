@@ -10,6 +10,10 @@ import com.example.myapplication.Interfaces.LoginListener.LoginListener;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
+import com.google.gson.JsonObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -26,10 +30,18 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
     LoginActivityHandler loginActivityHandler;
     LoginListener loginListener;
 
+    boolean validCredentials;
+    int userId;
+    String userFirstName;
+    String userLastName;
+    String userEmail;
+
     public HttpLoginUser(Context context, LoginActivityHandler loginActivityHandler, LoginListener loginListener) {
         this.context = context;
         this.loginActivityHandler = loginActivityHandler;
         this.loginListener = loginListener;
+        this.validCredentials = false;
+        this.userId = 0;
     }
 
     @Override
@@ -54,6 +66,12 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
         return null;
     }
 
+    @Override
+    protected void onPostExecute(String responseString) {
+        handleJSONResponse(responseString);
+        loginListener.handleSignInAttempt(validCredentials, userId, userFirstName, userLastName, userEmail);
+    }
+
     String handleRequest(String apiRequest){
         String response = null;
         try {
@@ -73,10 +91,18 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
         return response;
     }
 
-    @Override
-    protected void onPostExecute(String responseString) {
-        boolean response = Boolean.parseBoolean(responseString);
-        loginListener.handleSignInAttempt(response);
+    void handleJSONResponse(String jsonString){
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            validCredentials = jsonObject.getBoolean("validCredentials");
+            userId = jsonObject.getInt("userId");
+            userFirstName = jsonObject.getString("userFirstName");
+            userLastName = jsonObject.getString("userLastName");
+            userEmail = jsonObject.getString("userEmail");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     String createApiQuery(){

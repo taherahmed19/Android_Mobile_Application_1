@@ -3,12 +3,16 @@ package com.example.myapplication.HttpRequest.HttpRegisterUser;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.example.myapplication.Handlers.RegisterActivityHandler.RegisterActivityHandler;
 import com.example.myapplication.Interfaces.RegisterListener.RegisterListener;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -23,6 +27,12 @@ public class HttpRegisterUser extends AsyncTask<String , Void ,String> {
     Context context;
     RegisterActivityHandler registerActivityHandler;
     RegisterListener registerListener;
+
+    boolean validCredentials;
+    int userId;
+    String userFirstName;
+    String userLastName;
+    String userEmail;
 
     public HttpRegisterUser(Context context, RegisterActivityHandler registerActivityHandler, RegisterListener registerListener) {
         this.context = context;
@@ -73,8 +83,22 @@ public class HttpRegisterUser extends AsyncTask<String , Void ,String> {
 
     @Override
     protected void onPostExecute(String responseString) {
-        boolean response = Boolean.parseBoolean(responseString);
-        registerListener.handleRegistrationAttempt(response);
+        handleJSONResponse(responseString);
+        registerListener.handleRegistrationAttempt(validCredentials, userId, userFirstName, userLastName, userEmail);
+    }
+
+    void handleJSONResponse(String jsonString){
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            validCredentials = jsonObject.getBoolean("validCredentials");
+            userId = jsonObject.getInt("userId");
+            userFirstName = jsonObject.getString("userFirstName");
+            userLastName = jsonObject.getString("userLastName");
+            userEmail = jsonObject.getString("userEmail");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     String createApiQuery(){

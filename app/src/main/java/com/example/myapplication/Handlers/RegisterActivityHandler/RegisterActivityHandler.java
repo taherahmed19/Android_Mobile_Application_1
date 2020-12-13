@@ -39,12 +39,12 @@ public class RegisterActivityHandler {
         this.registerActivityValidator = new RegisterActivityValidator(registerActivity);
     }
 
-    public void handleRegistrationAttempt(boolean valid){
+    public void handleRegistrationAttempt(boolean valid, int userId, String userFirstName, String userLastName, String userEmail){
         if(valid){
             ConfirmFragment confirmFragment = new ConfirmFragment(this.registerActivity, this.registerActivity.getString(R.string.registration_confirm_title), this.registerActivity.getString(R.string.registration_confirm_body));
             FragmentTransition.OpenFragment(this.registerActivity.getSupportFragmentManager(), confirmFragment, R.id.registerActivity, "");
 
-            saveLoginState();
+            LoginPreferenceData.SaveLoginState(this.registerActivity, true, userId, userFirstName, userLastName, userEmail);
             enterApplication();
         }else{
             ErrorFragment errorFragment = new ErrorFragment(this.registerActivity, this.registerActivity.getString(R.string.registration_error_title),
@@ -54,21 +54,16 @@ public class RegisterActivityHandler {
         }
     }
 
-    void saveLoginState(){
-        LoginPreferenceData.setUserLoggedIn(this.registerActivity.getApplicationContext(), true);
-        LoginPreferenceData.setUserId(this.registerActivity.getApplicationContext(), 1);
-        LoginPreferenceData.setFirstName(this.registerActivity.getApplicationContext(), "First Name");
-        LoginPreferenceData.setLastName(this.registerActivity.getApplicationContext(), "Last Name");
-        LoginPreferenceData.setEmail(this.registerActivity.getApplicationContext(), this.email);
-    }
-
     void enterApplication(){
-        Intent intent = new Intent(this.registerActivity.getBaseContext(), MainActivity.class);
-        this.registerActivity.startActivity(intent);
+        FragmentTransition.StartActivity(this.registerActivity, MainActivity.class);
     }
 
     public void configure(){
-        configureFields();
+        configureFirstName();
+        configureLastName();
+        configureEmail();
+        configurePassword();
+        configureConfirmPassword();
         configureRegisterButton();
         configureReturnButton();
     }
@@ -93,14 +88,6 @@ public class RegisterActivityHandler {
                 registerActivity.finish();
             }
         });
-    }
-
-    void configureFields(){
-        configureFirstName();
-        configureLastName();
-        configureEmail();
-        configurePassword();
-        configureConfirmPassword();
     }
 
     void validateAllFields(){

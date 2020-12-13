@@ -34,12 +34,12 @@ public class LoginActivityHandler {
         this.password = "";
     }
 
-    public void handleSignInAttempt(boolean valid) {
+    public void handleSignInAttempt(boolean valid, int userId, String userFirstName, String userLastName, String userEmail) {
         if(valid){
             ConfirmFragment confirmFragment = new ConfirmFragment(this.loginActivity, this.loginActivity.getString(R.string.login_confirm_title), this.loginActivity.getString(R.string.login_confirm_body));
             FragmentTransition.OpenFragment(this.loginActivity.getSupportFragmentManager(), confirmFragment, R.id.loginActivity, "");
 
-            saveLoginState();
+            LoginPreferenceData.SaveLoginState(this.loginActivity, true, userId, userFirstName, userLastName, userEmail);
             enterApplication();
         }else{
             ErrorFragment errorFragment = new ErrorFragment(this.loginActivity, this.loginActivity.getString(R.string.login_error_title),
@@ -52,20 +52,12 @@ public class LoginActivityHandler {
     public void configure(){
         configureLoginSubmitButton();
         configureRegisterButton();
-        configureFields();
+        configureEmail();
+        configurePassword();
     }
 
     void enterApplication(){
-        Intent intent = new Intent(this.loginActivity.getBaseContext(), MainActivity.class);
-        this.loginActivity.startActivity(intent);
-    }
-
-    void saveLoginState(){
-        LoginPreferenceData.setUserLoggedIn(this.loginActivity.getApplicationContext(), true);
-        LoginPreferenceData.setUserId(this.loginActivity.getApplicationContext(), 1);
-        LoginPreferenceData.setFirstName(this.loginActivity.getApplicationContext(), "name");
-        LoginPreferenceData.setLastName(this.loginActivity.getApplicationContext(), "name");
-        LoginPreferenceData.setEmail(this.loginActivity.getApplicationContext(), this.email);
+        FragmentTransition.StartActivity(this.loginActivity, MainActivity.class);
     }
 
     void configureLoginSubmitButton(){
@@ -107,11 +99,6 @@ public class LoginActivityHandler {
                 loginActivity.startActivity(intent);
             }
         });
-    }
-
-    void configureFields(){
-        configureEmail();
-        configurePassword();
     }
 
     void configureEmail(){

@@ -31,6 +31,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.mainActivityHandler.configure();
 
         resetSharedPreference();
+
+        Log.d("Print", "Login state " + LoginPreferenceData.getUserLoggedIn(this.getApplicationContext()));
+        Log.d("Print", "Login state " + LoginPreferenceData.getUserId(this.getApplicationContext()));
+        Log.d("Print", "Login state " + LoginPreferenceData.getUserFirstName(this.getApplicationContext()));
+        Log.d("Print", "Login state " + LoginPreferenceData.getUserLastName(this.getApplicationContext()));
+        Log.d("Print", "Login state " + LoginPreferenceData.getUserEmail(this.getApplicationContext()));
     }
 
     @Override
