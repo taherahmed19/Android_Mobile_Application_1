@@ -10,13 +10,11 @@ import com.example.myapplication.R;
 public class RatingHandler {
 
     MarkerModalFragment markerModalFragment;
-    boolean isUpvote;
-    boolean isDownvote;
+    boolean isUpvoteClicked;
+    boolean isDownvoteClicked;
 
     public RatingHandler(MarkerModalFragment markerModalFragment) {
         this.markerModalFragment = markerModalFragment;
-        this.isUpvote = false;
-        this.isDownvote = false;
     }
 
     public void configure(){
@@ -30,31 +28,43 @@ public class RatingHandler {
         upVoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("Print", "Clicked upvote button");
-                if(!isUpvote){
-                    isUpvote = true;
-                    upVoteButton.setImageDrawable(markerModalFragment.getResources().getDrawable(R.drawable.ic_upvote_arrow_clicked));
-                    downVoteButton.setImageDrawable(markerModalFragment.getResources().getDrawable(R.drawable.ic_downvote_arrow));
-                }else{
-                    isUpvote = false;
-                    upVoteButton.setBackgroundResource(R.drawable.ic_upvote_arrow);
-                }
+                isUpVoteClicked();
+                upVoteButton.setImageDrawable(markerModalFragment.getResources().getDrawable(R.drawable.ic_upvote_arrow_clicked));
+                downVoteButton.setImageDrawable(markerModalFragment.getResources().getDrawable(R.drawable.ic_downvote_arrow));
+
+                Log.d("Print", "Upvote clicked " + isUpvoteClicked + " " + isDownvoteClicked);
             }
         });
 
         downVoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!isDownvote){
-                    isDownvote = true;
-                    downVoteButton.setImageDrawable(markerModalFragment.getResources().getDrawable(R.drawable.ic_downvote_arrow_clicked));
-                    upVoteButton.setImageDrawable(markerModalFragment.getResources().getDrawable(R.drawable.ic_upvote_arrow));
-                }else{
-                    isDownvote = false;
-                    downVoteButton.setImageDrawable(markerModalFragment.getResources().getDrawable(R.drawable.ic_downvote_arrow));
-                }
+                isDownVoteClicked();
+                downVoteButton.setImageDrawable(markerModalFragment.getResources().getDrawable(R.drawable.ic_downvote_arrow_clicked));
+                upVoteButton.setImageDrawable(markerModalFragment.getResources().getDrawable(R.drawable.ic_upvote_arrow));
+
+                Log.d("Print", "Upvote clicked " + isDownvoteClicked + " " + isUpvoteClicked);
+
             }
         });
 
+    }
+
+    void isUpVoteClicked(){
+        if(isUpvoteClicked){
+            isUpvoteClicked = false;
+        }else{
+            isUpvoteClicked = true;
+        }
+        isDownvoteClicked = false;
+    }
+
+    void isDownVoteClicked(){
+        if(isDownvoteClicked){
+            isDownvoteClicked = false;
+        }else{
+            isDownvoteClicked = true;
+        }
+        isUpvoteClicked = false;
     }
 }
