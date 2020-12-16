@@ -1,4 +1,4 @@
-package com.example.myapplication.Validation.LoginActivityValidator;
+package com.example.myapplication.Validators.LoginActivityValidator;
 
 import android.view.View;
 import android.widget.EditText;
@@ -80,7 +80,6 @@ public class LoginActivityValidator {
 
         return true;
     }
-
 
     void showErrorMessage(EditText field, TextView errorMessage, int iconLeft, int iconRight, String message){
         field.setCompoundDrawablesWithIntrinsicBounds(iconLeft, 0, iconRight, 0);

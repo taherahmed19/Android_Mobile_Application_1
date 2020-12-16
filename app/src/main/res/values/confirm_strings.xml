@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="form_confirm_title">Post Submitted!</string>
+    <string name="form_confirm_body">Your post is valid and can be see by all users</string>
+
+
+</resources>

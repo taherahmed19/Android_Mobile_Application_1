@@ -6,4 +6,7 @@
     <string name="form_description_error">Please enter a valid description</string>
 
 
+    <string name="form_error_title">Post invalid</string>
+    <string name="form_error_body">Please retry submitting your post.</string>
+
 </resources>

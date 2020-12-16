@@ -21,7 +21,7 @@ import com.example.myapplication.Interfaces.CurrentLocationListener.CurrentLocat
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Utils.StringConstants.StringConstants;
-import com.example.myapplication.Validation.MapFeedSearchFragmentValidator;
+import com.example.myapplication.Validators.MapFeedSearchFragmentValidator;
 import com.google.android.gms.maps.model.LatLng;
 
 import com.example.myapplication.Utils.Tools.Tools;

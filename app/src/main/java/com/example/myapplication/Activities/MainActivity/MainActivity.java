@@ -31,12 +31,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.mainActivityHandler.configure();
 
         resetSharedPreference();
-
-        Log.d("Print", "Login state " + LoginPreferenceData.getUserLoggedIn(this.getApplicationContext()));
-        Log.d("Print", "Login state " + LoginPreferenceData.getUserId(this.getApplicationContext()));
-        Log.d("Print", "Login state " + LoginPreferenceData.getUserFirstName(this.getApplicationContext()));
-        Log.d("Print", "Login state " + LoginPreferenceData.getUserLastName(this.getApplicationContext()));
-        Log.d("Print", "Login state " + LoginPreferenceData.getUserEmail(this.getApplicationContext()));
     }
 
     @Override
@@ -76,46 +70,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-//    @Override
-//    public String callback() {
-//        return "current location " + currentLocation.currentLocation;
-//    }
-
-//    void BottomNavigationBar(){
-//        final MainFragment mainFragment = new MainFragment();
-//        final ActivityUserAlerts activityUserAlerts = new ActivityUserAlerts();
-//        final RoutingFragment routingFragment = new RoutingFragment();
-//
-//        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-//        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//
-//                switch (item.getItemId()) {
-//                    case R.id.homepage_fragment:
-//                        bottomNavOpenFragment(mainFragment);
-//                        break;
-//                    case R.id.map_fragment:
-//                        bottomNavOpenFragment(activityUserAlerts);
-//                        break;
-//                    case R.id.weather_fragment:
-//                        break;
-//                    case R.id.travel_fragment:
-//                        bottomNavOpenFragment(routingFragment);
-//                        break;
-//                }
-//                return true;
-//            }
-//
-//        });
-//    }
-
-//    public void bottomNavOpenFragment(Fragment fragment){
-//        try{
-//            FragmentTransition.OpenFragment(getSupportFragmentManager(), fragment, R.id.homepage, "");
-//        }catch(Exception e){
-//            throw new RuntimeException(e.toString());
-//        }
-//    }
 
 }

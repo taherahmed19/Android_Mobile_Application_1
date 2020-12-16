@@ -108,6 +108,5 @@ public class MainActivityHandler {
 
         TextView nav_header_name_logo = (TextView) headerLayout.findViewById(R.id.nav_header_name_logo);
         nav_header_name_logo.setText(concatInitials);
-
     }
 }

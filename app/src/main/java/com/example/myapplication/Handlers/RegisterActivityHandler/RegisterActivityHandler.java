@@ -1,6 +1,5 @@
 package com.example.myapplication.Handlers.RegisterActivityHandler;
 
-import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -17,7 +16,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Utils.HashingTool.HashingTool;
-import com.example.myapplication.Validation.RegisterActivityValidator.RegisterActivityValidator;
+import com.example.myapplication.Validators.RegisterActivityValidator.RegisterActivityValidator;
 
 public class RegisterActivityHandler {
 

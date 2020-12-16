@@ -18,6 +18,27 @@ public class Marker {
         this.id = id;
     }
 
+    public static int CategorySwitchCase(String category){
+        int categoryItem = -1;
+
+        switch (category.toLowerCase()){
+            case "environment":
+                categoryItem = 1;
+                break;
+            case "weather":
+                categoryItem = 2;
+                break;
+            case "people":
+                categoryItem = 3;
+                break;
+            default:
+                categoryItem = 0;
+                break;
+        }
+
+        return categoryItem;
+    }
+
     public int getMarker() {
         return marker;
     }

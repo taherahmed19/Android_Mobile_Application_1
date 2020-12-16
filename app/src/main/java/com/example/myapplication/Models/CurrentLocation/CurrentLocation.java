@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.Manifest;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 
@@ -47,7 +48,6 @@ public class CurrentLocation {
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
             exampleInterface.updateUserLocation(locationResult.getLastLocation());
-            //exampleInterface.updateUserLocation(locationResult.getLastLocation());
         }
     };
 

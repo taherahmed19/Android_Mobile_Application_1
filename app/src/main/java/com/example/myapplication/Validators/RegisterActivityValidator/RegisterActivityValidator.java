@@ -1,4 +1,4 @@
-package com.example.myapplication.Validation.RegisterActivityValidator;
+package com.example.myapplication.Validators.RegisterActivityValidator;
 
 import android.view.View;
 import android.widget.EditText;

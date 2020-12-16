@@ -1,5 +1,6 @@
 package com.example.myapplication.Fragments.MarkerModalFragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,17 +8,30 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.myapplication.Handlers.MarkerModalFragmentHandler.MarkerModalFragmentHandler;
+import com.example.myapplication.Handlers.RatingHandler.RatingHandler;
 import com.example.myapplication.R;
 import com.example.myapplication.Models.Marker.Marker;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
+import com.google.android.material.navigation.NavigationView;
+
+import java.util.Random;
 
 public class MarkerModalFragment extends Fragment {
+
+    MarkerModalFragmentHandler markerModalFragmentHandler;
+    RatingHandler ratingHandler;
     Marker marker;
 
     public MarkerModalFragment(Marker marker) {
         this.marker = marker;
+        this.markerModalFragmentHandler = new MarkerModalFragmentHandler(this);
+        this.ratingHandler = new RatingHandler(this);
     }
 
     @Override
@@ -34,56 +48,12 @@ public class MarkerModalFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        populateModal();
-        configureCloseButton();
+
+        this.markerModalFragmentHandler.configure();
+        this.ratingHandler.configure();
     }
 
-    void configureCloseButton(){
-        LinearLayout modalCloseButton = (LinearLayout) getView().findViewById(R.id.modalCloseButton);
-        modalCloseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getFragmentManager().popBackStack();
-            }
-        });
-    }
-
-    void populateModal(){
-        populateCategory();
-        populateDescription();
-    }
-
-    void populateImage(){
-
-    }
-
-    void populateCategory() {
-        TextView modalCategory = getView().findViewById(R.id.modalCategory);
-        String category = "";
-        int markerType = marker.getMarker();
-
-        switch (markerType) {
-            case 1:
-                category = "Environment";
-                break;
-            case 2:
-                category = "Weather";
-                break;
-            case 3:
-                category = "People";
-                break;
-            default:
-                category = "None";
-                break;
-        }
-
-        modalCategory.setText(category);
-    }
-
-    void populateDescription(){
-        String description = marker.getDescription();
-        TextView modalDescription = (TextView) getView().findViewById(R.id.modalDescription);
-
-        modalDescription.setText(description);
+    public Marker getMarker() {
+        return marker;
     }
 }

@@ -1,4 +1,4 @@
-package com.example.myapplication.Validation;
+package com.example.myapplication.Validators;
 
 import android.text.Editable;
 import android.text.TextUtils;

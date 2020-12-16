@@ -4,14 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.example.myapplication.Handlers.MapFeedSearchFragmentHandler.MapFeedSearchFragmentHandler;
 import com.example.myapplication.JsonBuilders.MapFeedSearchJsonBuilder.MapFeedSearchJsonBuilder;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
-import com.example.myapplication.Validation.MapFeedSearchFragmentValidator;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.net.HttpURLConnection;

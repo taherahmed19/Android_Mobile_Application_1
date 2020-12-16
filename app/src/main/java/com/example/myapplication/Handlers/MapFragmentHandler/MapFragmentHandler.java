@@ -16,7 +16,7 @@ import com.example.myapplication.Fragments.MapFilterFragment.MapFilterFragment;
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
-import com.example.myapplication.Fragments.UserFeedFormFragment.UserFeedFormFragment;
+import com.example.myapplication.Fragments.FormFragment.FormFragment;
 import com.example.myapplication.Handlers.MapFeedSearchFragmentHandler.MapFeedSearchFragmentHandler;
 import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.MapFeedSearchAutocompleteFragment;
 import com.example.myapplication.Handlers.MapHandler.MapHandler;
@@ -191,7 +191,7 @@ public class MapFragmentHandler  {
         newPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UserFeedFormFragment fragment = new UserFeedFormFragment(mapFragment.getFragmentManager(), viewPager);
+                FormFragment fragment = new FormFragment(mapFragment.getFragmentManager(), viewPager);
                 FragmentTransaction transition = FragmentTransition.Transition(mapFragment.getFragmentManager(), fragment, R.anim.right_animations, R.anim.left_animation, R.id.userFeedFormPointer, "");
             }
         });
