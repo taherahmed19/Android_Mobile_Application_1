@@ -3,8 +3,10 @@ package com.example.myapplication.Handlers.MapHandler;
 import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -22,6 +24,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -68,6 +72,8 @@ public class MapHandler implements OnMapReadyCallback {
         mapListener.handleMapClick(mMap);
         mapListener.handleMarkerClick(mMap, fragmentActivity);
     }
+
+
 
     public void addDataSetMarkers(ArrayList<Marker> markers) {
         for (int i = 0; i < markers.size(); i++) {
@@ -149,6 +155,24 @@ public class MapHandler implements OnMapReadyCallback {
                 cameraInitPos = true;
             }
         }
+//        if(circle == null) {
+//            circle = mMap.addCircle(new CircleOptions()
+//                    .center(currentLocation)
+//                    .fillColor(Color.RED)
+//                    .radius(20));
+//        }else{
+//            circleRadius += 5;
+//
+//        }
+    }
+
+    private Circle circle;
+
+    double circleRadius = 20;
+    CircleOptions circleOptions;
+
+    public void drawCircle(LatLng point){
+
     }
 
     int returnMarkerDrawable(int marker){

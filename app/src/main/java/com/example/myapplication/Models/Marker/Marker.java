@@ -8,14 +8,16 @@ public class Marker {
     private String lng;
     private String image;
     private int id;
+    private int rating;
 
-    public Marker(int marker, String description, String lat, String lng, String image, int id) {
+    public Marker(int marker, String description, String lat, String lng, String image, int id, int rating) {
         this.marker = marker;
         this.description = description;
         this.lat = lat;
         this.lng = lng;
         this.image = image;
         this.id = id;
+        this.rating = rating;
     }
 
     public static int CategorySwitchCase(String category){
@@ -85,5 +87,13 @@ public class Marker {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 }

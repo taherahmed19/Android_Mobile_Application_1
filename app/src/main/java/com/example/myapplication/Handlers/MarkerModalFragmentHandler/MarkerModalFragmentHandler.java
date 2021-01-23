@@ -1,5 +1,6 @@
 package com.example.myapplication.Handlers.MarkerModalFragmentHandler;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -16,6 +17,19 @@ public class MarkerModalFragmentHandler {
         this.markerModalFragment = markerModalFragment;
     }
 
+    public void configure(){
+        configureRating();
+        configureCategory();
+        configureDescription();
+        configureName();
+        configureCloseButton();
+    }
+
+    public void updateRatingValue(int rating){
+        TextView markerRating = (TextView) this.markerModalFragment.getView().findViewById(R.id.markerRating);
+        markerRating.setText(String.valueOf(rating));
+    }
+
     void configureCloseButton(){
         ImageButton modalCloseButton = (ImageButton) this.markerModalFragment.getView().findViewById(R.id.modalCloseButton);
         modalCloseButton.setOnClickListener(new View.OnClickListener() {
@@ -26,11 +40,10 @@ public class MarkerModalFragmentHandler {
         });
     }
 
-    public void configure(){
-        configureCategory();
-        configureDescription();
-        configureName();
-        configureCloseButton();
+    void configureRating(){
+        TextView markerRating = (TextView) this.markerModalFragment.getView().findViewById(R.id.markerRating);
+        String rating = String.valueOf(this.markerModalFragment.getMarker().getRating());
+        markerRating.setText(rating);
     }
 
     void configureCategory() {
@@ -70,7 +83,7 @@ public class MarkerModalFragmentHandler {
         String concatName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1) + " " + lastName.substring(0, 1).toUpperCase() + lastName.substring(1);
 
         TextView text = this.markerModalFragment.getView().findViewById(R.id.marker_user_name);
-        text.setText(concatName);
+        text.setText(concatName + " " + this.markerModalFragment.getMarker().getId());
     }
 
     void configureImage(){

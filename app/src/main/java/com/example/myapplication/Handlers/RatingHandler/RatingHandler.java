@@ -5,20 +5,39 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
+import com.example.myapplication.HttpRequest.HttpRatings.HttpRatings;
+import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.R;
 
 public class RatingHandler {
 
     MarkerModalFragment markerModalFragment;
+    Marker marker;
+
     boolean isUpvoteClicked;
     boolean isDownvoteClicked;
+    int rating;
+    int ratingTemp;
 
-    public RatingHandler(MarkerModalFragment markerModalFragment) {
+    public RatingHandler(MarkerModalFragment markerModalFragment, Marker marker) {
         this.markerModalFragment = markerModalFragment;
+        this.isUpvoteClicked = false;
+        this.isDownvoteClicked = false;
+        this.rating = marker.getRating();
+        this.ratingTemp = rating;
+        this.marker = marker;
     }
 
     public void configure(){
         configureRatingButtons();
+    }
+
+    public void setRating(){
+        this.rating = ratingTemp;
+    }
+
+    public int getRating() {
+        return rating;
     }
 
     void configureRatingButtons(){
@@ -32,7 +51,8 @@ public class RatingHandler {
                 upVoteButton.setImageDrawable(markerModalFragment.getResources().getDrawable(R.drawable.ic_upvote_arrow_clicked));
                 downVoteButton.setImageDrawable(markerModalFragment.getResources().getDrawable(R.drawable.ic_downvote_arrow));
 
-                Log.d("Print", "Upvote clicked " + isUpvoteClicked + " " + isDownvoteClicked);
+                ratingTemp++;
+                submitMarkerRating(isUpvoteClicked);
             }
         });
 
@@ -43,11 +63,15 @@ public class RatingHandler {
                 downVoteButton.setImageDrawable(markerModalFragment.getResources().getDrawable(R.drawable.ic_downvote_arrow_clicked));
                 upVoteButton.setImageDrawable(markerModalFragment.getResources().getDrawable(R.drawable.ic_upvote_arrow));
 
-                Log.d("Print", "Upvote clicked " + isDownvoteClicked + " " + isUpvoteClicked);
-
+                ratingTemp--;
+                submitMarkerRating(isUpvoteClicked);
             }
         });
+    }
 
+    void submitMarkerRating(boolean isUpVote){
+        HttpRatings httpRatings = new HttpRatings(this.markerModalFragment.getContext(), marker.getId(), isUpVote, this.markerModalFragment);
+        httpRatings.execute("https://10.0.2.2:443/api/getmarkers");
     }
 
     void isUpVoteClicked(){

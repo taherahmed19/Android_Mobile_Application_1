@@ -6,4 +6,6 @@
 
     <string name="webservice_insert_post_endpoint">https://10.0.2.2:443/api/insertPost?userId={0}&amp;marker={1}&amp;description={2}&amp;lat={3}&amp;lng={4}</string>
 
+
+    <string name="webservice_update_marker_rating">https://10.0.2.2:443/api/insertRating?markerId={0}&amp;isUpVote={1}</string>
 </resources>

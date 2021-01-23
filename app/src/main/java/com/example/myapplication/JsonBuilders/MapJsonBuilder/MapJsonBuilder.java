@@ -65,8 +65,9 @@ public class MapJsonBuilder {
             String lat = JsonUtil.getString(data.getJSONObject(i), "Lat");
             String lng = JsonUtil.getString(data.getJSONObject(i), "Lng");
             String image = JsonUtil.getString(data.getJSONObject(i), "Image");
+            int rating = JsonUtil.getInt(data.getJSONObject(i), "Rating");
 
-            markers.add(new Marker(marker, description, lat, lng, image, id));
+            markers.add(new Marker(marker, description, lat, lng, image, id, rating));
 
             Location location = new Location("");
             location.setLatitude(Double.parseDouble(data.getJSONObject(i).getString("Lat")));

@@ -76,7 +76,6 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
         super.onActivityResult(requestCode, resultCode, data);
         this.mapFragmentHandler.showSpinner();
 
-
         LatLng latLng = this.mapFragmentHandler.handleResult(requestCode, resultCode, data);
         this.mapFragmentHandler.handleSavedLocation(latLng);
     }

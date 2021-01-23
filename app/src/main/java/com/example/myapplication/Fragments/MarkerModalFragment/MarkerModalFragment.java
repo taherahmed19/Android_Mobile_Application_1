@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.myapplication.Handlers.MarkerModalFragmentHandler.MarkerModalFragmentHandler;
 import com.example.myapplication.Handlers.RatingHandler.RatingHandler;
+import com.example.myapplication.Interfaces.RatingsListener.RatingsListener;
 import com.example.myapplication.R;
 import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
@@ -22,7 +23,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.Random;
 
-public class MarkerModalFragment extends Fragment {
+public class MarkerModalFragment extends Fragment implements RatingsListener {
 
     MarkerModalFragmentHandler markerModalFragmentHandler;
     RatingHandler ratingHandler;
@@ -31,7 +32,7 @@ public class MarkerModalFragment extends Fragment {
     public MarkerModalFragment(Marker marker) {
         this.marker = marker;
         this.markerModalFragmentHandler = new MarkerModalFragmentHandler(this);
-        this.ratingHandler = new RatingHandler(this);
+        this.ratingHandler = new RatingHandler(this, marker);
     }
 
     @Override
@@ -55,5 +56,15 @@ public class MarkerModalFragment extends Fragment {
 
     public Marker getMarker() {
         return marker;
+    }
+
+    @Override
+    public void updateModalRating(boolean response) {
+        if(response){
+            this.ratingHandler.setRating();
+            this.markerModalFragmentHandler.updateRatingValue(this.ratingHandler.getRating());
+        }else{
+            //print error fragment
+        }
     }
 }

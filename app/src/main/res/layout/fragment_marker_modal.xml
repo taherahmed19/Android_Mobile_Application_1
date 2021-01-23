@@ -141,6 +141,7 @@ You can now view this by returning to the Feed. Other users will also be able to
             </ImageButton>
 
             <TextView
+                android:id="@+id/markerRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
