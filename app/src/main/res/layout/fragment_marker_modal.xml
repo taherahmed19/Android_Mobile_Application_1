@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/markerModal"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/markerModal">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -90,12 +90,13 @@
 
                     </LinearLayout>
 
-                    <ImageView
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/mediaViewPager"
                         android:layout_width="match_parent"
                         android:layout_height="200sp"
                         android:layout_marginBottom="10sp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/sunset_beach"/>
+                        android:scaleType="fitXY">
+                    </androidx.viewpager.widget.ViewPager>
 
                     <TextView
                         android:id="@+id/modalCategory"

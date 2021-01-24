@@ -93,7 +93,7 @@ public class MapFragmentHandler  {
             public boolean onMarkerClick(com.google.android.gms.maps.model.Marker marker) {
                 if(!marker.getTag().equals(fragmentActivity.getString(R.string.default_constant))){
                     Marker item = (Marker)marker.getTag();
-                    MarkerModalFragment markerModalFragment = new MarkerModalFragment(item);
+                    MarkerModalFragment markerModalFragment = new MarkerModalFragment(item, viewPager);
                     FragmentTransition.Transition(fragmentActivity.getSupportFragmentManager(), markerModalFragment, R.anim.right_animations, R.anim.left_animation,
                             R.id.mapModalContainer, "");
 

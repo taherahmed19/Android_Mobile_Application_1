@@ -1,10 +1,11 @@
-package com.example.myapplication.HttpRequest.HttpRatings;
+package com.example.myapplication.HttpRequest.HttpMarkerDelete;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.example.myapplication.Interfaces.MarkerListener.MarkerListener;
 import com.example.myapplication.Interfaces.RatingsListener.RatingsListener;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.SSL.SSL;
@@ -16,29 +17,28 @@ import java.text.MessageFormat;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class HttpRatings extends AsyncTask<String , Void ,String> {
-
+public class HttpMarkerDelete extends AsyncTask<Void , Void ,String> {
 
     HttpsURLConnection urlConnection;
     URL url;
     int responseCode;
+
     Context context;
     String markerId;
-    boolean isUpVote;
-    RatingsListener ratingsListener;
+    MarkerListener markerListener;
 
-    public HttpRatings(Context context, int markerId, boolean isUpVote, RatingsListener ratingsListener){
+    public HttpMarkerDelete(Context context, int markerId, MarkerListener markerListener){
         this.context = context;
         this.markerId = String.valueOf(markerId);
-        this.isUpVote = isUpVote;
-        this.ratingsListener = ratingsListener;
+        this.markerListener = markerListener;
     }
 
     @Override
-    protected String doInBackground(String... strings) {
+    protected String doInBackground(Void... voids) {
         SSL.AllowSSLCertificates();
 
         String apiRequest = this.createApiQuery();
+        Log.d("Print", "Delete marker api request " + apiRequest);
 
         try {
             String response = handleRequest(apiRequest);
@@ -84,11 +84,12 @@ public class HttpRatings extends AsyncTask<String , Void ,String> {
 
     @Override
     protected void onPostExecute(String str) {
-        boolean ratingUpdated = Boolean.parseBoolean(str);
-        ratingsListener.updateModalRating(ratingUpdated);
+        boolean postDeleted = Boolean.parseBoolean(str);
+        markerListener.deleteUserPost(postDeleted);
     }
 
     String createApiQuery(){
-        return MessageFormat.format(this.context.getResources().getString(R.string.webservice_update_marker_rating), this.markerId, this.isUpVote);
+        return MessageFormat.format(this.context.getResources().getString(R.string.webservice_delete_marker), this.markerId);
     }
+
 }

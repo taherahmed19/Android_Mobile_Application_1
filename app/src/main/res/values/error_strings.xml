@@ -9,4 +9,10 @@
     <string name="form_error_title">Post invalid</string>
     <string name="form_error_body">Please retry submitting your post.</string>
 
+    <string name="post_delete_title">Unavailable</string>
+    <string name="post_delete_body">Unable to delete post. Please try again.</string>
+
+    <string name="post_rating_title">Unavailable</string>
+    <string name="post_rating_body">Unable to add rating. Please try again.</string>
+
 </resources>
