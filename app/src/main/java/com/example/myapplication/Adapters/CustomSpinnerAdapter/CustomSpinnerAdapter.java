@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,11 +32,9 @@ public class CustomSpinnerAdapter extends ArrayAdapter<SpinnerItem> {
         }
 
         SpinnerItem item = getItem(position);
-        ImageView dropdownImage = convertView.findViewById(R.id.spinnerImage);
         TextView dropdownText = convertView.findViewById(R.id.spinnerText);
 
         if(item != null){
-            dropdownImage.setImageResource(item.getImage());
             dropdownText.setText(item.getName());
         }
 
@@ -49,12 +48,12 @@ public class CustomSpinnerAdapter extends ArrayAdapter<SpinnerItem> {
         }
 
         SpinnerItem item = getItem(position);
-        ImageView image = convertView.findViewById((R.id.spinnerImage));
         TextView text = convertView.findViewById((R.id.spinnerText));
+        LinearLayout customSpinnerItem = convertView.findViewById(R.id.customSpinnerItem);
 
         if(item != null){
-            image.setImageResource(item.getImage());
             text.setText(item.getName());
+            customSpinnerItem.setBackgroundResource(R.drawable.bottom_border);
         }
 
         return convertView;
@@ -63,27 +62,27 @@ public class CustomSpinnerAdapter extends ArrayAdapter<SpinnerItem> {
     public static ArrayList<SpinnerItem> CreateMarkerSpinnerItems(Context context){
         ArrayList<SpinnerItem> list = new ArrayList<>();
 
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_1), R.drawable.ic_marker));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_2), R.drawable.ic_marker_green));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_3), R.drawable.ic_marker_blue));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_4), R.drawable.ic_marker_purple));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_5), R.drawable.ic_marker_purple));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_6), R.drawable.ic_marker_purple));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_7), R.drawable.ic_marker_purple));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_8), R.drawable.ic_marker_purple));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_9), R.drawable.ic_marker_purple));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_10), R.drawable.ic_marker_purple));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_11), R.drawable.ic_marker_purple));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_12), R.drawable.ic_marker_purple));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_13), R.drawable.ic_marker_purple));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_14), R.drawable.ic_marker_purple));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_15), R.drawable.ic_marker_purple));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_16), R.drawable.ic_marker_purple));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_17), R.drawable.ic_marker_purple));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_18), R.drawable.ic_marker_purple));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_19), R.drawable.ic_marker_purple));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_20), R.drawable.ic_marker_purple));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_21), R.drawable.ic_marker_purple));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_1)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_2)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_3)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_4)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_5)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_6)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_7)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_8)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_9)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_10)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_11)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_12)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_13)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_14)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_15)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_16)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_17)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_18)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_19)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_20)));
+        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_21)));
 
         return list;
     }

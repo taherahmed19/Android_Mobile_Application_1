@@ -33,6 +33,8 @@ public class MainActivityHandler {
         configureDrawerLayout();
         configureHeaderMenuButton();
         configureNavigation();
+
+        Log.d("Print", "User ID " + LoginPreferenceData.getUserId(this.mainActivity));
     }
 
     public void handleNavMenuItemListener(MenuItem item){

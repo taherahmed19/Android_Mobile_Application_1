@@ -20,7 +20,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50sp"
                 android:background="@drawable/modal_bottom_border"
                 android:padding="10sp">
 
@@ -30,6 +30,20 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_routing_search_close"></ImageButton>
+
+                <Button
+                    android:id="@+id/markerDeleteButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="Delete"
+                    android:textSize="18sp"
+                    android:textAllCaps="false"
+                    android:textColor="#F44336"
+                    android:background="@color/transparent"
+                    android:visibility="invisible">
+
+                </Button>
             </RelativeLayout>
 
             <ScrollView

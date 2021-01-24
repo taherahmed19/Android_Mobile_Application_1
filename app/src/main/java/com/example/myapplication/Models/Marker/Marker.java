@@ -7,16 +7,18 @@ public class Marker {
     private String lat;
     private String lng;
     private String image;
+    private int userId;
     private int id;
     private int rating;
 
-    public Marker(int marker, String description, String lat, String lng, String image, int id, int rating) {
+    public Marker(int userId, int marker, String description, String lat, String lng, String image, int id, int rating) {
         this.marker = marker;
         this.description = description;
         this.lat = lat;
         this.lng = lng;
         this.image = image;
         this.id = id;
+        this.userId = userId;
         this.rating = rating;
     }
 
@@ -95,5 +97,13 @@ public class Marker {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

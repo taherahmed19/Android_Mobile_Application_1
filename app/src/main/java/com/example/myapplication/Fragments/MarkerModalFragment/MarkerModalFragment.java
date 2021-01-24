@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,9 +63,15 @@ public class MarkerModalFragment extends Fragment implements RatingsListener {
     public void updateModalRating(boolean response) {
         if(response){
             this.ratingHandler.setRating();
+            this.ratingHandler.saveSettingsSharedPreference();
             this.markerModalFragmentHandler.updateRatingValue(this.ratingHandler.getRating());
         }else{
             //print error fragment
         }
+    }
+
+    @Override
+    public void saveModalRatingState(int rating) {
+        this.markerModalFragmentHandler.updateRatingValue(rating);
     }
 }

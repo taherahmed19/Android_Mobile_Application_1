@@ -1,7 +1,9 @@
 package com.example.myapplication.Handlers.MarkerModalFragmentHandler;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ public class MarkerModalFragmentHandler {
         configureDescription();
         configureName();
         configureCloseButton();
+        configureDeleteButton();
     }
 
     public void updateRatingValue(int rating){
@@ -81,12 +84,27 @@ public class MarkerModalFragmentHandler {
         String lastName = LoginPreferenceData.getUserLastName(this.markerModalFragment.getContext());
 
         String concatName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1) + " " + lastName.substring(0, 1).toUpperCase() + lastName.substring(1);
+        String userPost = "Your post";
 
         TextView text = this.markerModalFragment.getView().findViewById(R.id.marker_user_name);
-        text.setText(concatName + " " + this.markerModalFragment.getMarker().getId());
+
+        if(this.markerModalFragment.getMarker().getUserId() == LoginPreferenceData.getUserId(this.markerModalFragment.getContext())){
+            text.setText(userPost);
+        }else{
+            text.setText(concatName);
+        }
+
     }
 
     void configureImage(){
 
+    }
+
+    void configureDeleteButton(){
+        Button markerDeleteButton = (Button) this.markerModalFragment.getView().findViewById(R.id.markerDeleteButton);
+
+        if(this.markerModalFragment.getMarker().getUserId() == LoginPreferenceData.getUserId(this.markerModalFragment.getContext())){
+            markerDeleteButton.setVisibility(View.VISIBLE);
+        }
     }
 }

@@ -54,7 +54,6 @@ public class CustomFilterSpinnerAdapter extends ArrayAdapter<SpinnerItem> {
 
             if(item != null){
                 confirmation.setImageResource(item.getConfirmation());
-                image.setImageResource(item.getImage());
                 text.setText(item.getName());
             }
         }

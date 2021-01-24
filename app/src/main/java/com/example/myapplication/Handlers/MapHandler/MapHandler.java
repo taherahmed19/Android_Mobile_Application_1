@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import com.example.myapplication.Interfaces.MapListener.MapListener;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.R;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Utils.Tools.Tools;
 import com.example.myapplication.Models.Marker.Marker;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -95,9 +96,7 @@ public class MapHandler implements OnMapReadyCallback {
     }
 
     void addCustomMarker(int i, ArrayList<Marker> markers) {
-        int markerColour = this.returnMarkerDrawable(markers.get(i).getMarker());
-        final Drawable circleDrawable = fragmentActivity.getResources().getDrawable(markerColour);
-        final BitmapDescriptor markerIcon = Tools.getMarkerIconFromDrawable(circleDrawable);
+        final BitmapDescriptor markerIcon = this.returnMarkerIcon(markers.get(i).getUserId());
 
         com.google.android.gms.maps.model.Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(Double.parseDouble(markers.get(i).getLat()), Double.parseDouble(markers.get(i).getLng())))
@@ -175,22 +174,13 @@ public class MapHandler implements OnMapReadyCallback {
 
     }
 
-    int returnMarkerDrawable(int marker){
-        int markerColour = 0;
+    BitmapDescriptor returnMarkerIcon(int userId){
+        BitmapDescriptor markerColour = null;
 
-        switch (marker){
-            case 1:
-                markerColour = R.drawable.ic_marker_green_maps;
-                break;
-            case 2:
-                markerColour = R.drawable.ic_marker_blue_maps;
-                break;
-            case 3:
-                markerColour = R.drawable.ic_marker_purple_maps;
-                break;
-            default:
-                markerColour = R.drawable.ic_marker;
-                break;
+        if(userId == LoginPreferenceData.getUserId(this.fragmentActivity)){
+            markerColour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+       }else{
+            markerColour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
         }
 
         return markerColour;

@@ -158,10 +158,9 @@ public class FormFragmentHandler {
                 int marker = -1;
 
                 if(spinner.getSelectedItemPosition() == 0){
-                    marker = (int)(BitmapDescriptorFactory.HUE_RED);
                 }else{
                     SpinnerItem spinnerItem = (SpinnerItem)spinner.getSelectedItem();
-                    marker = Tools.MarkerPicker(spinnerItem.getName().toLowerCase());
+                    marker = (int)(BitmapDescriptorFactory.HUE_RED);
                 }
 
                 Intent intent = new Intent(formFragment.getActivity(), LocationSelectorActivity.class);

@@ -59,6 +59,7 @@ public class MapJsonBuilder {
 
     void addMarker(int i, JSONArray data){
         try{
+            int userId = JsonUtil.getInt(data.getJSONObject(i), "UserId");
             int id = JsonUtil.getInt(data.getJSONObject(i), "Id");
             int marker = JsonUtil.getInt(data.getJSONObject(i), "Marker");
             String description = JsonUtil.getString(data.getJSONObject(i), "Description");
@@ -67,7 +68,7 @@ public class MapJsonBuilder {
             String image = JsonUtil.getString(data.getJSONObject(i), "Image");
             int rating = JsonUtil.getInt(data.getJSONObject(i), "Rating");
 
-            markers.add(new Marker(marker, description, lat, lng, image, id, rating));
+            markers.add(new Marker(userId, marker, description, lat, lng, image, id, rating));
 
             Location location = new Location("");
             location.setLatitude(Double.parseDouble(data.getJSONObject(i).getString("Lat")));
