@@ -120,8 +120,7 @@ public class MarkerModalFragmentHandler {
 
         mediaViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             public void onPageScrollStateChanged(int state) {}
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
             public void onPageSelected(int position) {
                 for(int i = 0; i < adapter.getCount(); i++){

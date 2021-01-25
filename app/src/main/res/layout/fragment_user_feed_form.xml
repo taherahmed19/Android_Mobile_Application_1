@@ -272,9 +272,8 @@
 
                 </RelativeLayout>
 
-
-
                 <RelativeLayout
+                    android:id="@+id/imageButton"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:background="@drawable/input_border">
@@ -288,6 +287,13 @@
                         android:background="@android:color/transparent">
 
                     </ImageButton>
+
+                    <ImageView
+                        android:id="@+id/postImageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    </ImageView>
 
                 </RelativeLayout>
             </LinearLayout>

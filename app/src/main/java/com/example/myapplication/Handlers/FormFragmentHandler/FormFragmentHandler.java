@@ -1,22 +1,35 @@
 package com.example.myapplication.Handlers.FormFragmentHandler;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.example.myapplication.Activities.LocationSelectorActivity.LocationSelectorActivity;
 import com.example.myapplication.Adapters.CustomSpinnerAdapter.CustomSpinnerAdapter;
 import com.example.myapplication.Fragments.FormFragment.FormFragment;
 import com.example.myapplication.HttpRequest.HttpFeed.HttpFeed;
+import com.example.myapplication.HttpRequest.HttpMedia.HttpMedia;
 import com.example.myapplication.Interfaces.FeedSubmitListener.FeedSubmitListener;
 import com.example.myapplication.Models.FormFragmentSpinner.FormFragmentSpinner;
 import com.example.myapplication.HttpRequest.FormStaticMap.FormStaticMap;
@@ -30,9 +43,20 @@ import com.example.myapplication.Validators.FormFragmentValidator.FormFragmentVa
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class FormFragmentHandler {
 
@@ -58,6 +82,7 @@ public class FormFragmentHandler {
         configureDescriptionText();
         configureGeolocationButton();
         configureLocationButton();
+        configureMedia();
         configureFormCloseButton();
         configureSubmitButton();
         configureSpinner();
@@ -223,6 +248,75 @@ public class FormFragmentHandler {
 
         isConfiguredStaticMap = true;
     }
+
+    private static final int CAMERA_REQUEST = 1888;
+    private static final int MY_CAMERA_PERMISSION_CODE = 100;
+    void configureMedia(){
+        RelativeLayout imageButton = (RelativeLayout) this.formFragment.getView().findViewById(R.id.imageButton);
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (formFragment.getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                {
+                    formFragment.requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
+                    Log.d("Print", "Requesting permission ");
+                }
+                else
+                {
+                    Log.d("Print", "Requesting intent ");
+                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    formFragment.startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                }
+            }
+        });
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
+        if (requestCode == MY_CAMERA_PERMISSION_CODE)
+        {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                Log.d("Print", "Permission granted");
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                this.formFragment.startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            }
+            else
+            {
+                Log.d("Print", "Permission denied");
+
+            }
+        }
+    }
+
+    public void onActivityResultCamera(int requestCode, int resultCode, Intent data){
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK)
+        {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+
+            ImageView postImageView = (ImageView) this.formFragment.getView().findViewById(R.id.postImageView);
+            postImageView.setImageBitmap(photo);
+
+            File f = new File(this.formFragment.getContext().getCacheDir(), "filename");
+            try {
+                f.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] imageBytes = baos.toByteArray();
+            String encodedImage = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+
+            Log.d("Print", "Base64Image:" + encodedImage);
+
+//            HttpMedia httpMedia = new HttpMedia(this.formFragment.getContext(), encodedImage);
+//            httpMedia.execute("");
+        }
+    }
+
+
 
     void configureFormCloseButton(){
         final TextView formClose = (TextView) formFragment.getView().findViewById(R.id.formClose);
