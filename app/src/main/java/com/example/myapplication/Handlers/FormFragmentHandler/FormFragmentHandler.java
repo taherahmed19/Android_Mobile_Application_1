@@ -2,6 +2,7 @@ package com.example.myapplication.Handlers.FormFragmentHandler;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -43,11 +44,15 @@ import com.example.myapplication.Validators.FormFragmentValidator.FormFragmentVa
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,6 +73,7 @@ public class FormFragmentHandler {
     FormFragmentValidator formFragmentValidator;
 
     boolean isConfiguredStaticMap;
+    String encodedImage;
 
     public FormFragmentHandler(FormFragment formFragment, FeedSubmitListener feedSubmitListener) {
         this.formFragmentSpinner = new FormFragmentSpinner(formFragment);
@@ -99,8 +105,26 @@ public class FormFragmentHandler {
 
         LatLng chosenLocation = (LatLng)geolocationButton.getTag();
 
-        HttpFeed httpFeed = new HttpFeed(this.formFragment.getContext(), userID, category, description, chosenLocation ,feedSubmitListener);
+        HttpMedia httpFeed = new HttpMedia(this.formFragment.getContext(), userID, category, description, chosenLocation ,feedSubmitListener, this.encodedImage);
         httpFeed.execute("");
+    }
+
+    public void onActivityResultCamera(int requestCode, int resultCode, Intent data){
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK)
+        {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+
+            ImageView postImageView = (ImageView) this.formFragment.getView().findViewById(R.id.postImageView);
+            postImageView.setImageBitmap(photo);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] imageBytes = baos.toByteArray();
+            this.encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
+//            HttpMedia httpMedia = new HttpMedia(this.formFragment.getContext(), encodedImage);
+//            httpMedia.execute("");
+        }
     }
 
     public void onActivityResultConfigure(double lat, double lng){
@@ -288,35 +312,6 @@ public class FormFragmentHandler {
             }
         }
     }
-
-    public void onActivityResultCamera(int requestCode, int resultCode, Intent data){
-        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK)
-        {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-
-            ImageView postImageView = (ImageView) this.formFragment.getView().findViewById(R.id.postImageView);
-            postImageView.setImageBitmap(photo);
-
-            File f = new File(this.formFragment.getContext().getCacheDir(), "filename");
-            try {
-                f.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] imageBytes = baos.toByteArray();
-            String encodedImage = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
-
-            Log.d("Print", "Base64Image:" + encodedImage);
-
-//            HttpMedia httpMedia = new HttpMedia(this.formFragment.getContext(), encodedImage);
-//            httpMedia.execute("");
-        }
-    }
-
-
 
     void configureFormCloseButton(){
         final TextView formClose = (TextView) formFragment.getView().findViewById(R.id.formClose);

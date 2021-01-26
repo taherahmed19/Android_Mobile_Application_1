@@ -14,6 +14,9 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -33,10 +36,11 @@ public class HttpFeed extends AsyncTask<String , Void ,String> {
     int category;
     String description;
     LatLng chosenLocation;
+    String encodedImage;
 
     FeedSubmitListener feedSubmitListener;
 
-    public HttpFeed(Context context, int userId, int category, String description, LatLng chosenLocation, FeedSubmitListener feedSubmitListener){
+    public HttpFeed(Context context, int userId, int category, String description, LatLng chosenLocation, FeedSubmitListener feedSubmitListener, String encodedImage){
         this.server_response = "";
         this.context = context;
         this.userId = userId;
@@ -44,6 +48,7 @@ public class HttpFeed extends AsyncTask<String , Void ,String> {
         this.description = description;
         this.chosenLocation = chosenLocation;
         this.feedSubmitListener = feedSubmitListener;
+        this.encodedImage = encodedImage;
     }
 
     @Override
@@ -75,10 +80,18 @@ public class HttpFeed extends AsyncTask<String , Void ,String> {
         try {
             url = new URL(apiRequest);
             urlConnection = (HttpsURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("POST");
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
 
-            responseCode = urlConnection.getResponseCode();
+            BufferedOutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+            writer.write(this.encodedImage);
+            writer.flush();
+            writer.close();
+            out.close();
 
+            urlConnection.connect();
+            responseCode = urlConnection.getResponseCode();
             if(responseCode == HttpURLConnection.HTTP_OK){
                 response =  Tools.readStream(urlConnection.getInputStream());
             }
@@ -91,6 +104,7 @@ public class HttpFeed extends AsyncTask<String , Void ,String> {
 
     void handleJSONResponse(String jsonString){
         try {
+            Log.d("Print", "Response += " + jsonString);
             JSONObject jsonObject = new JSONObject(jsonString);
             boolean validPost = jsonObject.getBoolean("validPost");
 
@@ -102,9 +116,8 @@ public class HttpFeed extends AsyncTask<String , Void ,String> {
     }
 
     String createApiQuery(){
-        return MessageFormat.format(this.context.getResources().getString(R.string.webservice_insert_post_endpoint),
-                this.userId, this.category, this.description, String.valueOf(this.chosenLocation.latitude), String.valueOf(this.chosenLocation.longitude));
+        return "";
+//        return MessageFormat.format(this.context.getResources().getString(R.string.webservice_insert_post_endpoint),
+//                this.userId, this.category, this.description, String.valueOf(this.chosenLocation.latitude), String.valueOf(this.chosenLocation.longitude));
     }
-
-
 }
