@@ -90,10 +90,17 @@
 
                     </LinearLayout>
 
-                    <androidx.viewpager.widget.ViewPager
-                        android:id="@+id/mediaViewPager"
+                    <ImageView
+                        android:id="@+id/markerImage"
                         android:layout_width="match_parent"
                         android:layout_height="200sp"
+                        android:layout_marginBottom="10sp"
+                        android:scaleType="fitXY" />
+
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/mediaViewPager"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:layout_marginBottom="10sp"
                         android:scaleType="fitXY">
                     </androidx.viewpager.widget.ViewPager>

@@ -6,17 +6,17 @@ public class Marker {
     private String description;
     private String lat;
     private String lng;
-    private String image;
+    private String encodedImage;
     private int userId;
     private int id;
     private int rating;
 
-    public Marker(int userId, int marker, String description, String lat, String lng, String image, int id, int rating) {
+    public Marker(int userId, int marker, String description, String lat, String lng, String encodedImage, int id, int rating) {
         this.marker = marker;
         this.description = description;
         this.lat = lat;
         this.lng = lng;
-        this.image = image;
+        this.encodedImage = encodedImage;
         this.id = id;
         this.userId = userId;
         this.rating = rating;
@@ -75,12 +75,12 @@ public class Marker {
         this.lng = lng;
     }
 
-    public String getImage() {
-        return image;
+    public String getEncodedImage() {
+        return encodedImage;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setEncodedImage(String encodedImage) {
+        this.encodedImage = encodedImage;
     }
 
     public int getId() {

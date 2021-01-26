@@ -2,6 +2,10 @@ package com.example.myapplication.Handlers.MarkerModalFragmentHandler;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -19,6 +23,7 @@ import com.example.myapplication.Models.MediaItem.MediaItem;
 import com.example.myapplication.Models.VideoItem.VideoItem;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
+import com.squareup.picasso.Picasso;
 
 public class MarkerModalFragmentHandler {
 
@@ -107,6 +112,15 @@ public class MarkerModalFragmentHandler {
     }
 
     void configureMedia(){
+        String encodedImage = this.markerModalFragment.getMarker().getEncodedImage();
+        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+        Bitmap image = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+        ImageView markerImage = (ImageView) this.markerModalFragment.getView().findViewById(R.id.markerImage);
+        markerImage.setImageBitmap(image);
+    }
+
+    void configureMediaTest(){
         MediaItem[] mediaUrls = new MediaItem[]{
                 new ImageItem(new ImageView(this.markerModalFragment.getContext()), "https://cdn.pixabay.com/photo/2016/11/11/23/34/cat-1817970_960_720.jpg"),
                 new VideoItem(new VideoView(this.markerModalFragment.getContext()), "http://videocdn.bodybuilding.com/video/mp4/62000/62792m.mp4"),
