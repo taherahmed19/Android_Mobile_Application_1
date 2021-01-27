@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="180sp"
+    android:paddingLeft="20sp"
+    android:paddingRight="20sp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Image"
+            android:textSize="20sp"
+            android:textColor="#424242"
+            android:layout_marginBottom="25sp"
+            android:textStyle="bold">
+        </TextView>
+
+        <Button
+            android:id="@+id/openCameraBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:text="Camera"
+            android:background="@color/transparent"
+            android:textAlignment="textStart"
+            android:layout_marginBottom="20sp"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textColor="#777777">
+        </Button>
+
+        <Button
+            android:id="@+id/openGalleryBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:text="Gallery"
+            android:background="@color/transparent"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textColor="#777777">
+        </Button>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

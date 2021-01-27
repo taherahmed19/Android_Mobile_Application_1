@@ -72,7 +72,13 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
             this.formFragmentHandler.onActivityResultConfigure(lat, lng);
         }
 
-        this.formFragmentHandler.onActivityResultCamera(requestCode, resultCode, data);
+        if(requestCode == FormFragmentHandler.CAMERA_REQUEST){
+            this.formFragmentHandler.onActivityResultCamera(requestCode, resultCode, data);
+        }
+
+        if(requestCode == FormFragmentHandler.GALLERY_REQUEST){
+            this.formFragmentHandler.onActivityResultGallery(requestCode, resultCode, data);
+        }
     }
 
     @Override

@@ -1,15 +1,19 @@
 package com.example.myapplication.Handlers.MarkerModalFragmentHandler;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -23,6 +27,8 @@ import com.example.myapplication.Models.MediaItem.MediaItem;
 import com.example.myapplication.Models.VideoItem.VideoItem;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
+import com.example.myapplication.Utils.Tools.Tools;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
 
 public class MarkerModalFragmentHandler {
@@ -110,7 +116,6 @@ public class MarkerModalFragmentHandler {
         }
 
     }
-
     void configureMedia(){
         String encodedImage = this.markerModalFragment.getMarker().getEncodedImage();
         byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
@@ -118,6 +123,22 @@ public class MarkerModalFragmentHandler {
 
         ImageView markerImage = (ImageView) this.markerModalFragment.getView().findViewById(R.id.markerImage);
         markerImage.setImageBitmap(image);
+
+        Dialog dialog = new Dialog(this.markerModalFragment.getContext());
+        dialog.setContentView(R.layout.image_dialog);
+
+        PhotoView dialogImage = (PhotoView) dialog.findViewById(R.id.dialogImage);
+        dialogImage.setImageBitmap(image);
+
+        markerImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("Print", "bitmap height " + image.getHeight() + " image view height " + dialogImage.getHeight());
+
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
     }
 
     void configureMediaTest(){

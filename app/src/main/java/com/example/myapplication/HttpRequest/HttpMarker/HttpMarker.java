@@ -1,9 +1,8 @@
-package com.example.myapplication.HttpRequest.HttpMedia;
+package com.example.myapplication.HttpRequest.HttpMarker;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.example.myapplication.Interfaces.FeedSubmitListener.FeedSubmitListener;
 import com.example.myapplication.R;
@@ -18,11 +17,10 @@ import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.MessageFormat;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class HttpMedia extends AsyncTask<String , Void ,String> {
+public class HttpMarker extends AsyncTask<String , Void ,String> {
 
     HttpsURLConnection urlConnection;
     URL url;
@@ -39,12 +37,7 @@ public class HttpMedia extends AsyncTask<String , Void ,String> {
 
     FeedSubmitListener feedSubmitListener;
 
-    public HttpMedia(Context context, String encodedImage) {
-        this.context = context;
-        this.encodedImage = encodedImage;
-    }
-
-    public HttpMedia(Context context, int userId, int category, String description, LatLng chosenLocation, FeedSubmitListener feedSubmitListener, String encodedImage){
+    public HttpMarker(Context context, int userId, int category, String description, LatLng chosenLocation, FeedSubmitListener feedSubmitListener, String encodedImage){
         this.server_response = "";
         this.context = context;
         this.userId = userId;
