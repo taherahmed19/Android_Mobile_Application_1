@@ -59,7 +59,8 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_add"
                     android:background="@drawable/map_search_button"
-                    android:layout_marginBottom="20sp">
+                    android:layout_marginBottom="20sp"
+                    >
                 </ImageButton>
 
                 <ImageButton
@@ -72,7 +73,7 @@
             </LinearLayout>
 
             <ImageButton
-                android:id="@+id/viewSwitch"
+                android:id="@+id/mapLocationResetBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"

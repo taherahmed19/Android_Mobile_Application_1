@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
@@ -77,7 +78,7 @@ public class LocationSelectorActivityHandler {
     }
 
     void configureSubmitButton(){
-        final Button locationSubmit = (Button) locationSelectorActivity.findViewById(R.id.locationSubmit);
+        final ImageButton locationSubmit = (ImageButton) locationSelectorActivity.findViewById(R.id.locationSubmit);
 
         locationSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +93,7 @@ public class LocationSelectorActivityHandler {
     }
 
     void configureReturnButton(){
-        final TextView returnButton = (TextView) locationSelectorActivity.findViewById(R.id.returnButton);
+        final ImageButton returnButton = (ImageButton) locationSelectorActivity.findViewById(R.id.returnButton);
 
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override

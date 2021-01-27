@@ -23,14 +23,12 @@
             android:padding="10sp"
             android:background="#00D4D4">
 
-            <TextView
-                android:layout_width="match_parent"
+            <ImageView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Square"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_centerVertical="true"/>
+                android:src="@drawable/globe">
+
+            </ImageView>
 
             <ImageButton
                 android:id="@+id/userMenu"

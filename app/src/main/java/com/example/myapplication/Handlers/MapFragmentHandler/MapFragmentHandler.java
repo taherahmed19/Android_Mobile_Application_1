@@ -3,6 +3,7 @@ package com.example.myapplication.Handlers.MapFragmentHandler;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -192,27 +193,18 @@ public class MapFragmentHandler  {
             @Override
             public void onClick(View view) {
                 FormFragment fragment = new FormFragment(mapFragment.getFragmentManager(), viewPager);
-                FragmentTransaction transition = FragmentTransition.Transition(mapFragment.getFragmentManager(), fragment, R.anim.right_animations, R.anim.left_animation, R.id.userFeedFormPointer, "");
+                FragmentTransaction transition = FragmentTransition.Transition(mapFragment.getFragmentManager(), fragment, R.anim.right_animations, R.anim.left_animation, R.id.mapFeedSearchPointer, "");
             }
         });
     }
 
     void configureSwitchButton(){
-        final ImageButton viewSwitch = (ImageButton) mapFragment.getView().findViewById(R.id.viewSwitch);
+        final ImageButton mapLocationResetBtn = (ImageButton) mapFragment.getView().findViewById(R.id.mapLocationResetBtn);
 
-        viewSwitch.setOnClickListener(new View.OnClickListener() {
+        mapLocationResetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int currentFragment = viewPager.getCurrentItem();
-
-                switch (currentFragment){
-                    case 0:
-                        viewPager.setCurrentItem(1);
-                        break;
-                    case 1:
-                        viewPager.setCurrentItem(0);
-                        break;
-                }
+                mapHandler.moveCameraToCurrentLocation();
             }
         });
     }

@@ -24,13 +24,13 @@ public class CurrentLocation {
     FusedLocationProviderClient fusedLocationProviderClient;
     LocationRequest locationRequest;
 
-    CurrentLocationListener exampleInterface;
+    CurrentLocationListener currentLocationListener;
 
     public CurrentLocation(Activity context) {
         this.context = context;
     }
 
-    public CurrentLocation(Activity context, CurrentLocationListener exampleInterface) {
+    public CurrentLocation(Activity context, CurrentLocationListener currentLocationListener) {
         this.context = context;
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
@@ -40,14 +40,14 @@ public class CurrentLocation {
         locationRequest.setFastestInterval(500);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-        this.exampleInterface = exampleInterface;
+        this.currentLocationListener = currentLocationListener;
     }
 
     LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
-            exampleInterface.updateUserLocation(locationResult.getLastLocation());
+            currentLocationListener.updateUserLocation(locationResult.getLastLocation());
         }
     };
 

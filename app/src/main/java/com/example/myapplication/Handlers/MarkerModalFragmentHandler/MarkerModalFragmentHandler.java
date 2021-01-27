@@ -10,10 +10,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -127,15 +129,26 @@ public class MarkerModalFragmentHandler {
         Dialog dialog = new Dialog(this.markerModalFragment.getContext());
         dialog.setContentView(R.layout.image_dialog);
 
+        ImageButton dialogClose = (ImageButton) dialog.findViewById(R.id.dialogClose);
+        dialogClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
         PhotoView dialogImage = (PhotoView) dialog.findViewById(R.id.dialogImage);
         dialogImage.setImageBitmap(image);
+
+        Window window = dialog.getWindow();
+        window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
         markerImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("Print", "bitmap height " + image.getHeight() + " image view height " + dialogImage.getHeight());
 
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
                 dialog.show();
             }
         });

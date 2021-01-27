@@ -18,6 +18,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -354,7 +355,7 @@ public class FormFragmentHandler {
     }
 
     void configureFormCloseButton(){
-        final TextView formClose = (TextView) formFragment.getView().findViewById(R.id.formClose);
+        final ImageButton formClose = (ImageButton) formFragment.getView().findViewById(R.id.formClose);
         formClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -367,7 +368,7 @@ public class FormFragmentHandler {
     }
 
     void configureSubmitButton(){
-        Button mapFeedSubmit = (Button) formFragment.getView().findViewById(R.id.mapFeedSubmit);
+        ImageButton mapFeedSubmit = (ImageButton) formFragment.getView().findViewById(R.id.mapFeedSubmit);
         mapFeedSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

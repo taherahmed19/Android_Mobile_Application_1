@@ -39,10 +39,9 @@ public class MapHandler implements OnMapReadyCallback {
     FragmentManager fragmentManager;
     ArrayList<com.google.android.gms.maps.model.Marker> googleMarkers;
     CurrentLocation currentLocation;
-
     com.google.android.gms.maps.model.Marker userLocationMarker;
     boolean cameraInitPos = false;
-
+    LatLng location;
     MapListener mapListener;
 
     public MapHandler(SupportMapFragment supportMapFragment, FragmentActivity fragmentActivity, FragmentManager fragmentManager, MapListener mapListener) {
@@ -73,8 +72,6 @@ public class MapHandler implements OnMapReadyCallback {
         mapListener.handleMapClick(mMap);
         mapListener.handleMarkerClick(mMap, fragmentActivity);
     }
-
-
 
     public void addDataSetMarkers(ArrayList<Marker> markers) {
         for (int i = 0; i < markers.size(); i++) {
@@ -142,6 +139,7 @@ public class MapHandler implements OnMapReadyCallback {
     * */
     public void setUserLocationGoogleMarker(Location location) {
         LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+        this.location = currentLocation;
 
         if (!cameraInitPos) {
             if (mMap != null) {
@@ -153,6 +151,7 @@ public class MapHandler implements OnMapReadyCallback {
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.latitude, currentLocation.longitude), 17));
                 cameraInitPos = true;
             }
+
         }
 //        if(circle == null) {
 //            circle = mMap.addCircle(new CircleOptions()
@@ -163,6 +162,17 @@ public class MapHandler implements OnMapReadyCallback {
 //            circleRadius += 5;
 //
 //        }
+    }
+
+    public void moveCameraToCurrentLocation(){
+        if (mMap != null) {
+            if (ActivityCompat.checkSelfPermission(fragmentActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(fragmentActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            mMap.setMyLocationEnabled(true);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.location, 17));
+        }
     }
 
     private Circle circle;
@@ -213,5 +223,9 @@ public class MapHandler implements OnMapReadyCallback {
         }
 
         return null;
+    }
+
+    public LatLng getLocation() {
+        return location;
     }
 }
