@@ -74,23 +74,8 @@ public class MarkerModalFragmentHandler {
 
     void configureCategory() {
         TextView modalCategory = this.markerModalFragment.getView().findViewById(R.id.modalCategory);
-        String category = "";
-        int markerType = this.markerModalFragment.getMarker().getMarker();
-
-        switch (markerType) {
-            case 1:
-                category = "Environment";
-                break;
-            case 2:
-                category = "Weather";
-                break;
-            case 3:
-                category = "People";
-                break;
-            default:
-                category = "None";
-                break;
-        }
+        String category = this.markerModalFragment.getMarker().getCategory();
+        category = category.substring(0, 1).toUpperCase() + category.substring(1);
 
         modalCategory.setText(category);
     }

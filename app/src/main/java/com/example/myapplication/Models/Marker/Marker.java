@@ -2,7 +2,7 @@ package com.example.myapplication.Models.Marker;
 
 public class Marker {
 
-    private int marker;
+    private String category;
     private String description;
     private String lat;
     private String lng;
@@ -11,8 +11,8 @@ public class Marker {
     private int id;
     private int rating;
 
-    public Marker(int userId, int marker, String description, String lat, String lng, String encodedImage, int id, int rating) {
-        this.marker = marker;
+    public Marker(int userId, String category, String description, String lat, String lng, String encodedImage, int id, int rating) {
+        this.category = category;
         this.description = description;
         this.lat = lat;
         this.lng = lng;
@@ -43,12 +43,12 @@ public class Marker {
         return categoryItem;
     }
 
-    public int getMarker() {
-        return marker;
+    public String getCategory() {
+        return category;
     }
 
-    public void setMarker(int marker) {
-        this.marker = marker;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getDescription() {

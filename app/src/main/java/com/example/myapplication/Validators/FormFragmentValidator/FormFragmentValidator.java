@@ -44,9 +44,8 @@ public class FormFragmentValidator {
         SpinnerItem item = (SpinnerItem) spinner.getSelectedItem();
 
         String category = item.getName().toLowerCase();
-        int categoryItem = Marker.CategorySwitchCase(category);
 
-        if(categoryItem == 0){
+        if(spinner.getSelectedItemPosition() == 0){
             addErrorDrawable(spinner);
             fragmentElements.showSpinnerErrorMessage();
 
@@ -55,6 +54,7 @@ public class FormFragmentValidator {
             removeErrorDrawable(spinner);
             fragmentElements.removeSpinnerErrorMessage();
         }
+
 
         return true;
     }

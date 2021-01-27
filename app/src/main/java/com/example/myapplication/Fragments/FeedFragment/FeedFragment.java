@@ -59,7 +59,7 @@ public class FeedFragment extends Fragment {
     public void renderFeed(ArrayList<Marker> markers){
         for(int i = 0; i < markers.size(); i++){
             Marker marker = markers.get(i);
-            userAlertsFragmentElements.createFeedItem(marker.getMarker(), marker.getDescription(), marker.getLat(), marker.getLng());
+//            userAlertsFragmentElements.createFeedItem(marker.getMarker(), marker.getDescription(), marker.getLat(), marker.getLng());
         }
     }
 

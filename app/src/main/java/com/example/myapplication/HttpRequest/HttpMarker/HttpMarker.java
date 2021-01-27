@@ -3,6 +3,7 @@ package com.example.myapplication.HttpRequest.HttpMarker;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.example.myapplication.Interfaces.FeedSubmitListener.FeedSubmitListener;
 import com.example.myapplication.R;
@@ -31,13 +32,13 @@ public class HttpMarker extends AsyncTask<String , Void ,String> {
 
     String server_response;
     int userId;
-    int category;
+    String category;
     String description;
     LatLng chosenLocation;
 
     FeedSubmitListener feedSubmitListener;
 
-    public HttpMarker(Context context, int userId, int category, String description, LatLng chosenLocation, FeedSubmitListener feedSubmitListener, String encodedImage){
+    public HttpMarker(Context context, int userId, String category, String description, LatLng chosenLocation, FeedSubmitListener feedSubmitListener, String encodedImage){
         this.server_response = "";
         this.context = context;
         this.userId = userId;
@@ -77,11 +78,13 @@ public class HttpMarker extends AsyncTask<String , Void ,String> {
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("userId", this.userId);
-            jsonObject.put("marker", this.category);
+            jsonObject.put("category", this.category);
             jsonObject.put("description", this.description);
             jsonObject.put("lat", String.valueOf(this.chosenLocation.latitude));
             jsonObject.put("lng", String.valueOf(this.chosenLocation.longitude));
             jsonObject.put("encodedString", this.encodedImage);
+
+            Log.d("Print", "body " + jsonObject.toString());
 
             BufferedOutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
@@ -116,6 +119,7 @@ public class HttpMarker extends AsyncTask<String , Void ,String> {
 
     @Override
     protected void onPostExecute(String responseString) {
+        Log.d("Print", "Response  string " + responseString);
         handleJSONResponse(responseString);
     }
 

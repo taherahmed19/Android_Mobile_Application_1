@@ -85,13 +85,15 @@ public class FormFragmentHandler {
     public void submit(){
         Spinner spinner = (Spinner) formFragment.getView().findViewById(R.id.formSpinner);
         SpinnerItem item = (SpinnerItem) spinner.getSelectedItem();
-        int category = Marker.CategorySwitchCase(item.getName().toLowerCase());
+        String category = item.getName().toLowerCase();
         EditText mapFeedDescription = (EditText) formFragment.getView().findViewById(R.id.mapFeedDescription);
         String description = Tools.encodeString(mapFeedDescription.getText().toString());
         Button geolocationButton = (Button) formFragment.getView().findViewById(R.id.geolocationButton);
         int userID = LoginPreferenceData.getUserId(formFragment.getActivity().getApplicationContext());
 
         LatLng chosenLocation = (LatLng)geolocationButton.getTag();
+
+        Log.d("Print", "Category = " + category);
 
         HttpMarker httpMarker = new HttpMarker(this.formFragment.getContext(), userID, category, description, chosenLocation ,feedSubmitListener, this.encodedImage);
         httpMarker.execute("");
@@ -100,6 +102,7 @@ public class FormFragmentHandler {
     public void onActivityResultCamera(int requestCode, int resultCode, Intent data){
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK)
         {
+            dialog.dismiss();
             Bitmap photo = (Bitmap) data.getExtras().get("data");
 
             ImageView postImageView = (ImageView) this.formFragment.getView().findViewById(R.id.postImageView);
@@ -116,6 +119,7 @@ public class FormFragmentHandler {
         {
             if(data != null){
                 try {
+                    dialog.dismiss();
                     Bitmap photo = MediaStore.Images.Media.getBitmap(this.formFragment.getActivity().getContentResolver(), data.getData());
 
                     ImageView postImageView = (ImageView) this.formFragment.getView().findViewById(R.id.postImageView);
@@ -297,9 +301,10 @@ public class FormFragmentHandler {
             }
         });
     }
+    Dialog dialog;
 
     void openCameraDialog(){
-        Dialog dialog = new Dialog(this.formFragment.getContext());
+        dialog = new Dialog(this.formFragment.getContext());
         dialog.setContentView(R.layout.camera_dialog);
         dialog.show();
 
