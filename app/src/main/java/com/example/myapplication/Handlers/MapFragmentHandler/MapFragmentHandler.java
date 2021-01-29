@@ -74,7 +74,7 @@ public class MapFragmentHandler  {
     }
 
     public void requestMap(Settings settings){
-        this.mapHandler = new MapHandler(supportMapFragment, mapFragment.getActivity(), mapFragment.getChildFragmentManager(), mapListenerInstance);
+        this.mapHandler = new MapHandler(supportMapFragment, mapFragment.getActivity(), mapFragment.getChildFragmentManager(), mapListenerInstance, mapFragment.getContext());
 
         this.httpMap = new HttpMap(mapFragment.getActivity(), mapFragment.getChildFragmentManager(), supportMapFragment, mapFragment, loadingSpinner, settings, customMarkerListener);
         this.httpMap.execute("https://10.0.2.2:443/api/getmarkers");
@@ -109,6 +109,9 @@ public class MapFragmentHandler  {
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng loc) {
+                Log.d("Print", "clicked " + loc);
+
+
                 return;
             }
         });

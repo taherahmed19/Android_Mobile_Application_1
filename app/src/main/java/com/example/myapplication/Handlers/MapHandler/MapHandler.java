@@ -1,10 +1,10 @@
 package com.example.myapplication.Handlers.MapHandler;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.util.Log;
 
@@ -12,11 +12,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.myapplication.Fragments.CustomMarkerBottomSheetDialog.CustomMarkerBottomSheetDialog;
 import com.example.myapplication.Interfaces.MapListener.MapListener;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
-import com.example.myapplication.Utils.Tools.Tools;
 import com.example.myapplication.Models.Marker.Marker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 
@@ -43,12 +44,25 @@ public class MapHandler implements OnMapReadyCallback {
     boolean cameraInitPos = false;
     LatLng location;
     MapListener mapListener;
+    Context context;
 
     public MapHandler(SupportMapFragment supportMapFragment, FragmentActivity fragmentActivity, FragmentManager fragmentManager, MapListener mapListener) {
         this.fragmentActivity = fragmentActivity;
         this.fragmentManager = fragmentManager;
         this.googleMarkers = new ArrayList<>();
         this.mapListener = mapListener;
+
+        if (mMap == null) {
+            supportMapFragment.getMapAsync(this);
+        }
+    }
+
+    public MapHandler(SupportMapFragment supportMapFragment, FragmentActivity fragmentActivity, FragmentManager fragmentManager, MapListener mapListener, Context context) {
+        this.fragmentActivity = fragmentActivity;
+        this.fragmentManager = fragmentManager;
+        this.googleMarkers = new ArrayList<>();
+        this.mapListener = mapListener;
+        this.context = context;
 
         if (mMap == null) {
             supportMapFragment.getMapAsync(this);
@@ -68,8 +82,8 @@ public class MapHandler implements OnMapReadyCallback {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(savedLatLng.latitude, savedLatLng.longitude), 17));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
         }
-
-        mapListener.handleMapClick(mMap);
+        //mapListener.handleMapClick(mMap);
+        configureRadiusMarker();
         mapListener.handleMarkerClick(mMap, fragmentActivity);
     }
 
@@ -151,17 +165,8 @@ public class MapHandler implements OnMapReadyCallback {
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.latitude, currentLocation.longitude), 17));
                 cameraInitPos = true;
             }
-
         }
-//        if(circle == null) {
-//            circle = mMap.addCircle(new CircleOptions()
-//                    .center(currentLocation)
-//                    .fillColor(Color.RED)
-//                    .radius(20));
-//        }else{
-//            circleRadius += 5;
-//
-//        }
+
     }
 
     public void moveCameraToCurrentLocation(){
@@ -176,13 +181,6 @@ public class MapHandler implements OnMapReadyCallback {
     }
 
     private Circle circle;
-
-    double circleRadius = 20;
-    CircleOptions circleOptions;
-
-    public void drawCircle(LatLng point){
-
-    }
 
     BitmapDescriptor returnMarkerIcon(int userId){
         BitmapDescriptor markerColour = null;
@@ -208,6 +206,38 @@ public class MapHandler implements OnMapReadyCallback {
             mapStateEditor.putString("latitude", latitude);
             mapStateEditor.apply();
         }
+    }
+
+    void configureRadiusMarker(){
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+//                if(circle == null) {
+//                    circle = mMap.addCircle(new CircleOptions()
+//                            .center(latLng)
+//                            .fillColor(Color.RED)
+//                            .radius(20));
+//                }
+
+                CustomMarkerBottomSheetDialog customMarkerBottomSheetDialog = new CustomMarkerBottomSheetDialog(context, mMap, latLng);
+            }
+        });
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                float[] distance = new float[2];
+
+                Location.distanceBetween(latLng.latitude, latLng.longitude,
+                        circle.getCenter().latitude, circle.getCenter().longitude, distance);
+
+                if( distance[0] > circle.getRadius()  ){
+                    Log.d("Print", latLng.toString() + " outside");
+                } else {
+                    Log.d("Print", latLng.toString() + " inside");
+                }
+            }
+        });
     }
 
     LatLng getMapCameraPosition(){
