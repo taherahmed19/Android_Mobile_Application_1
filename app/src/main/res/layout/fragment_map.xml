@@ -103,5 +103,6 @@
             android:id="@+id/mapModalContainer">
 
         </RelativeLayout>
+
     </FrameLayout>
 </RelativeLayout>

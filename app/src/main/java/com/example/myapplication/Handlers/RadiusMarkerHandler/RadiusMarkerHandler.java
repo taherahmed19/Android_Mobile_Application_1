@@ -1,6 +1,7 @@
 package com.example.myapplication.Handlers.RadiusMarkerHandler;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
@@ -13,6 +14,7 @@ public class RadiusMarkerHandler {
     private GoogleMap mMap;
     private LatLng latLng;
     private double oneMile = 1609.3;
+    private double INITIAL_RADIUS = 20;
 
     public RadiusMarkerHandler(GoogleMap mMap, LatLng latLng) {
         this.mMap = mMap;
@@ -27,7 +29,7 @@ public class RadiusMarkerHandler {
                     .fillColor(0x220000FF)
                     .strokeColor(Color.parseColor("#6699ff"))
                     .strokeWidth(5)
-                    .radius(20));
+                    .radius(INITIAL_RADIUS));
         }
     }
 

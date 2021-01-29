@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="310sp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet"
+    android:layout_gravity="bottom">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:background="#FFF"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:background="@drawable/modal_bottom_border"
+                android:padding="10sp">
+
+                <ImageButton
+                    android:id="@+id/radiusMarkerCloseButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_routing_search_close">
+
+                </ImageButton>
+
+                <Button
+                    android:id="@+id/markerDeleteButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="Save"
+                    android:textSize="18sp"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorAccent"
+                    android:background="@color/transparent">
+
+                </Button>
+
+            </RelativeLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:orientation="vertical"
+                    android:paddingLeft="30sp"
+                    android:paddingRight="30sp"
+                    android:paddingTop="10sp">
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Resize Marker"
+                            android:textSize="18sp"
+                            android:layout_marginBottom="5sp">
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/radiusMarkerSeekBarProgress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="100"
+                            android:textSize="16sp"
+                            android:layout_marginBottom="5sp"
+                            android:layout_alignParentRight="true">
+                        </TextView>
+
+                    </RelativeLayout>
+
+                    <SeekBar
+                        android:id="@+id/radiusMarkerSeekBar"
+                        android:max="100"
+                        android:progress="50"
+                        android:layout_width="match_parent"
+                        android:layout_height="30sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Notifications"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="10sp">
+                    </TextView>
+
+                    <GridLayout
+                        android:id="@+id/GridLayout1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:columnCount="2">
+
+                        <LinearLayout
+                            android:id="@+id/radiusMarkerEmailButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_gravity="fill"
+                            android:layout_columnWeight="1">
+                            <ImageButton
+                                android:background="@color/transparent"
+                                android:src="@drawable/ic_custom_bottom_email"
+                                android:layout_marginBottom="10sp"
+                                android:layout_height="match_parent"
+                                android:layout_width="match_parent"
+                                android:layout_gravity="center"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Email"
+                                android:textSize="15sp"
+                                android:layout_gravity="center">
+                            </TextView>
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/radiusMarkerInAppButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_gravity="fill"
+                            android:layout_columnWeight="1">
+                            <ImageButton
+                                android:background="@color/transparent"
+                                android:src="@drawable/ic_custom_bottom_in_app"
+                                android:layout_marginBottom="10sp"
+                                android:layout_height="match_parent"
+                                android:layout_width="match_parent"
+                                android:layout_gravity="center"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="In App"
+                                android:textSize="15sp"
+                                android:layout_gravity="center"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/radiusMarkerVoiceButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_gravity="fill"
+                            android:layout_columnWeight="1">
+                            <ImageButton
+                                android:background="@color/transparent"
+                                android:src="@drawable/ic_custom_bottom_voice"
+                                android:layout_height="match_parent"
+                                android:layout_width="match_parent"
+                                android:layout_gravity="center"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Voice"
+                                android:textSize="15sp"
+                                android:layout_gravity="center"/>
+                        </LinearLayout>
+
+                    </GridLayout>
+
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>
