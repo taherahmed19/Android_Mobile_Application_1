@@ -4,7 +4,10 @@ import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
+import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -24,8 +27,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
+import com.tomtom.online.sdk.common.util.StringUtils;
 
 import java.util.ArrayList;
 
@@ -80,9 +86,11 @@ public class MapHandler implements OnMapReadyCallback {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(savedLatLng.latitude, savedLatLng.longitude), 17));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
         }
+
         //mapListener.handleMapClick(mMap);
         configureRadiusMarker();
         mapListener.handleMarkerClick(mMap, fragmentActivity);
+        resetState();
     }
 
     public void addDataSetMarkers(ArrayList<Marker> markers) {
@@ -204,30 +212,51 @@ public class MapHandler implements OnMapReadyCallback {
         }
     }
 
+    CustomMarkerBottomSheetFragment customMarkerBottomSheetDialog;
+    void resetState(){
+        SharedPreferences settingsPreference = this.mapFragment.getContext().getSharedPreferences("Radius_Marker_Settings", 0);
+        boolean stateExists = settingsPreference.getBoolean("stateExists", false);
+        double radius = (double)settingsPreference.getFloat("radius", 0.0f);
+        double centerLat = (double)settingsPreference.getFloat("centerLat", 0.0f);
+        double centerLon = (double)settingsPreference.getFloat("centerLon", 0.0f);
+
+        if(stateExists){
+            customMarkerBottomSheetDialog = new CustomMarkerBottomSheetFragment(context, mMap, new LatLng(centerLat, centerLon), radius);
+        }
+    }
+
     void configureRadiusMarker(){
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                CustomMarkerBottomSheetFragment customMarkerBottomSheetDialog = new CustomMarkerBottomSheetFragment(context, mMap, latLng);
+                CustomMarkerBottomSheetFragment customMarkerBottomSheetDialog = new CustomMarkerBottomSheetFragment(context, mMap, latLng, 0);
                 FragmentTransition.OpenFragment(fragmentActivity.getSupportFragmentManager(), customMarkerBottomSheetDialog, R.id.mapFeedSearchPointer, "");
             }
         });
 
-//        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-//            @Override
-//            public void onMapClick(LatLng latLng) {
-//                float[] distance = new float[2];
-//
-//                Location.distanceBetween(latLng.latitude, latLng.longitude,
-//                        circle.getCenter().latitude, circle.getCenter().longitude, distance);
-//
-//                if( distance[0] > circle.getRadius()  ){
-//                    Log.d("Print", latLng.toString() + " outside");
-//                } else {
-//                    Log.d("Print", latLng.toString() + " inside");
-//                }
-//            }
-//        });
+        SharedPreferences settingsPreference = this.mapFragment.getContext().getSharedPreferences("Radius_Marker_Settings", 0);
+        boolean stateExists = settingsPreference.getBoolean("stateExists", false);
+        double radius = (double)settingsPreference.getFloat("radius", 0.0f);
+        double centerLat = (double)settingsPreference.getFloat("centerLat", 0.0f);
+        double centerLon = (double)settingsPreference.getFloat("centerLon", 0.0f);
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                if(customMarkerBottomSheetDialog != null){
+                    float[] distance = new float[2];
+                    Location.distanceBetween(latLng.latitude, latLng.longitude, centerLat, centerLon, distance);
+
+                    if(distance[0] > radius){
+                    } else {
+                        if(customMarkerBottomSheetDialog == null){
+                            CustomMarkerBottomSheetFragment customMarkerBottomSheetDialog = new CustomMarkerBottomSheetFragment(context, mMap, latLng, 0);
+                        }
+                        FragmentTransition.OpenFragment(fragmentActivity.getSupportFragmentManager(), customMarkerBottomSheetDialog, R.id.mapFeedSearchPointer, "");
+                    }
+                }
+            }
+        });
     }
 
     LatLng getMapCameraPosition(){

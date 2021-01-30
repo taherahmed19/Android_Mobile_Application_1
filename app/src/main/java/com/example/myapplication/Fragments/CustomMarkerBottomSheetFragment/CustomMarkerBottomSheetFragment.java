@@ -27,14 +27,24 @@ public class CustomMarkerBottomSheetFragment extends Fragment {
     GoogleMap mMap;
     LatLng latLng;
     RadiusMarkerHandler radiusMarkerHandler;
-
     CustomMarkerBottomSheetHandler customMarkerBottomSheetHandler;
+    public static double INITIAL_RADIUS = 50;
 
-    public CustomMarkerBottomSheetFragment(Context context, GoogleMap mMap, LatLng latLng) {
+    boolean createRadiusMarker;
+
+    public CustomMarkerBottomSheetFragment(Context context, GoogleMap mMap, LatLng latLng, double radius) {
         this.context = context;
         this.mMap = mMap;
         this.latLng = latLng;
-        this.radiusMarkerHandler = new RadiusMarkerHandler(mMap, latLng);
+        createRadiusMarker(radius);
+    }
+
+    public void createRadiusMarker(double radius){
+
+        if(radius == 0){
+            radius = INITIAL_RADIUS;
+        }
+        this.radiusMarkerHandler = new RadiusMarkerHandler(mMap, latLng, createRadiusMarker, radius);
     }
 
     @Override
@@ -57,6 +67,8 @@ public class CustomMarkerBottomSheetFragment extends Fragment {
         customMarkerBottomSheetHandler.configure();
     }
 
-
+    public void resetState() {
+        customMarkerBottomSheetHandler.resetState();
+    }
 
 }
