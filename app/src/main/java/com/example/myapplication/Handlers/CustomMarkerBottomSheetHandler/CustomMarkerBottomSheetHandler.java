@@ -122,9 +122,14 @@ public class CustomMarkerBottomSheetHandler {
     void configureCloseButton(){
         radiusMarkerCloseButton = (ImageButton) this.customMarkerBottomSheetFragment.getView().findViewById(R.id.radiusMarkerCloseButton);
         radiusMarkerCloseButton.setOnClickListener(new View.OnClickListener() {
+            SharedPreferences settingsPreference = customMarkerBottomSheetFragment.getContext().getSharedPreferences("Radius_Marker_Settings", 0);
+            boolean stateExists = settingsPreference.getBoolean("stateExists", false);
+
             @Override
             public void onClick(View view) {
-                radiusMarkerHandler.removeMarker();
+                if (!stateExists){
+                    radiusMarkerHandler.removeMarker();
+                }
                 customMarkerBottomSheetFragment.getActivity().getSupportFragmentManager().popBackStack();
             }
         });

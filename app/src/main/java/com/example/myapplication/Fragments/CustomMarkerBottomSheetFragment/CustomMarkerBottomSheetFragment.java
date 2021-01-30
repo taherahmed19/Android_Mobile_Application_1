@@ -1,6 +1,7 @@
 package com.example.myapplication.Fragments.CustomMarkerBottomSheetFragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 
 import android.os.Bundle;
@@ -65,6 +66,10 @@ public class CustomMarkerBottomSheetFragment extends Fragment {
 
         customMarkerBottomSheetHandler = new CustomMarkerBottomSheetHandler(this, mMap, latLng, radiusMarkerHandler);
         customMarkerBottomSheetHandler.configure();
+    }
+
+    public void remove(){
+        this.radiusMarkerHandler.getRadiusMarker().remove();
     }
 
     public void resetState() {
