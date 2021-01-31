@@ -2,6 +2,7 @@ package com.example.myapplication.Handlers.CustomMarkerBottomSheetHandler;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Build;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.FragmentManager;
 
+import com.example.myapplication.ExampleService;
 import com.example.myapplication.Fragments.CustomMarkerBottomSheetFragment.CustomMarkerBottomSheetFragment;
 import com.example.myapplication.Handlers.RadiusMarkerHandler.RadiusMarkerHandler;
 import com.example.myapplication.R;
@@ -60,9 +62,10 @@ public class CustomMarkerBottomSheetHandler {
         configureSaveButton();
         configureRemoveButton();
         resetNotificationsState();
+        configureServiceButtons();
     }
 
-    public void handleRadiusMarkerClick(CustomMarkerBottomSheetFragment customMarkerBottomSheetDialog, Context context, FragmentManager supportFragmentManager){
+    public void handleRadiusMarkerClick(CustomMarkerBottomSheetFragment customMarkerBottomSheetDialog, Context context, FragmentManager supportFragmentManager, LatLng latLng){
         SharedPreferences settingsPreference = Objects.requireNonNull(context).getSharedPreferences("Radius_Marker_Settings", 0);
         boolean stateExists = settingsPreference.getBoolean("stateExists", false);
         double radius = (double)settingsPreference.getFloat("radius", 0.0f);
@@ -279,4 +282,33 @@ public class CustomMarkerBottomSheetHandler {
         }
     }
 
+    void configureServiceButtons(){
+        Button startService = (Button) this.customMarkerBottomSheetFragment.getView().findViewById(R.id.startService);
+        startService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startService();
+            }
+        });
+
+        Button stopService = (Button) this.customMarkerBottomSheetFragment.getView().findViewById(R.id.stopService);
+        stopService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stopService();
+            }
+        });
+    }
+
+    void startService(){
+        Intent serviceIntent = new Intent(this.customMarkerBottomSheetFragment.getContext(), ExampleService.class);
+        serviceIntent.putExtra("inputExtra", "Some text");
+
+        Objects.requireNonNull(this.customMarkerBottomSheetFragment.getActivity()).startService(serviceIntent);
+    }
+
+    void stopService(){
+        Intent serviceIntent = new Intent(this.customMarkerBottomSheetFragment.getContext(), ExampleService.class);
+        Objects.requireNonNull(this.customMarkerBottomSheetFragment.getActivity()).stopService(serviceIntent);
+    }
 }

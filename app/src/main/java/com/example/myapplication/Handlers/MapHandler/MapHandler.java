@@ -4,16 +4,15 @@ import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
-import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.myapplication.Fragments.CustomMarkerBottomSheetFragment.CustomMarkerBottomSheetFragment;
+import com.example.myapplication.Fragments.MapFilterFragment.MapFilterFragment;
+import com.example.myapplication.Fragments.RadiusMarkerNotificationFragment.RadiusMarkerNotificationFragment;
 import com.example.myapplication.Interfaces.MapListener.MapListener;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.R;
@@ -27,11 +26,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.gson.Gson;
-import com.tomtom.online.sdk.common.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -93,6 +89,8 @@ public class MapHandler implements OnMapReadyCallback {
         configureRadiusMarker();
         mapListener.handleMarkerClick(mMap, fragmentActivity);
         resetRadiusMarkerState();
+
+        showDialog();
     }
 
     public void addDataSetMarkers(ArrayList<Marker> markers) {
@@ -242,7 +240,7 @@ public class MapHandler implements OnMapReadyCallback {
             @Override
             public void onMapClick(LatLng latLng) {
                 if(customMarkerBottomSheetDialog != null){
-                    customMarkerBottomSheetDialog.onRadiusMarkerClick(customMarkerBottomSheetDialog, fragmentActivity.getSupportFragmentManager());
+                    customMarkerBottomSheetDialog.onRadiusMarkerClick(customMarkerBottomSheetDialog, fragmentActivity.getSupportFragmentManager(), latLng);
                 }
             }
         });
@@ -265,5 +263,10 @@ public class MapHandler implements OnMapReadyCallback {
 
     public LatLng getLocation() {
         return location;
+    }
+
+    void showDialog(){
+//        FragmentTransition.Transition(mapFragment.getParentFragmentManager(), new RadiusMarkerNotificationFragment(),
+//                R.anim.radius_marker_notif_open_anim, R.anim.radius_marker_notif_close_anim, R.id.mapFeedSearchPointer, MapFilterFragment.TAG);
     }
 }

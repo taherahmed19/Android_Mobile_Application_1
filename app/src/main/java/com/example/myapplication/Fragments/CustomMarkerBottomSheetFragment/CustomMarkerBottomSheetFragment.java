@@ -68,8 +68,8 @@ public class CustomMarkerBottomSheetFragment extends Fragment {
         customMarkerBottomSheetHandler.configure();
     }
 
-    public void onRadiusMarkerClick(CustomMarkerBottomSheetFragment customMarkerBottomSheetDialog, FragmentManager supportFragmentManager){
-        this.customMarkerBottomSheetHandler.handleRadiusMarkerClick(customMarkerBottomSheetDialog, context, supportFragmentManager);
+    public void onRadiusMarkerClick(CustomMarkerBottomSheetFragment customMarkerBottomSheetDialog, FragmentManager supportFragmentManager, LatLng latLng){
+        this.customMarkerBottomSheetHandler.handleRadiusMarkerClick(customMarkerBottomSheetDialog, context, supportFragmentManager, latLng);
     }
 
     public void remove(){
