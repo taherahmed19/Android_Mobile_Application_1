@@ -34,6 +34,7 @@ import com.google.gson.Gson;
 import com.tomtom.online.sdk.common.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MapHandler implements OnMapReadyCallback {
 
@@ -48,6 +49,7 @@ public class MapHandler implements OnMapReadyCallback {
     MapListener mapListener;
     Context context;
     com.example.myapplication.Fragments.MapFragment.MapFragment mapFragment;
+    CustomMarkerBottomSheetFragment customMarkerBottomSheetDialog;
 
     public MapHandler(SupportMapFragment supportMapFragment, FragmentActivity fragmentActivity, FragmentManager fragmentManager, MapListener mapListener) {
         this.fragmentActivity = fragmentActivity;
@@ -90,7 +92,7 @@ public class MapHandler implements OnMapReadyCallback {
         //mapListener.handleMapClick(mMap);
         configureRadiusMarker();
         mapListener.handleMarkerClick(mMap, fragmentActivity);
-        resetState();
+        resetRadiusMarkerState();
     }
 
     public void addDataSetMarkers(ArrayList<Marker> markers) {
@@ -212,9 +214,8 @@ public class MapHandler implements OnMapReadyCallback {
         }
     }
 
-    CustomMarkerBottomSheetFragment customMarkerBottomSheetDialog;
-    void resetState(){
-        SharedPreferences settingsPreference = this.mapFragment.getContext().getSharedPreferences("Radius_Marker_Settings", 0);
+    void resetRadiusMarkerState(){
+        SharedPreferences settingsPreference = Objects.requireNonNull(this.mapFragment.getContext()).getSharedPreferences("Radius_Marker_Settings", 0);
         boolean stateExists = settingsPreference.getBoolean("stateExists", false);
         double radius = (double)settingsPreference.getFloat("radius", 0.0f);
         double centerLat = (double)settingsPreference.getFloat("centerLat", 0.0f);
@@ -230,7 +231,6 @@ public class MapHandler implements OnMapReadyCallback {
             @Override
             public void onMapLongClick(LatLng latLng) {
                 if(customMarkerBottomSheetDialog != null){
-                    mapFragment.getContext().getSharedPreferences("Radius_Marker_Settings", 0).edit().clear().apply();
                     customMarkerBottomSheetDialog.remove();
                 }
                 customMarkerBottomSheetDialog = new CustomMarkerBottomSheetFragment(context, mMap, latLng, 0);
@@ -242,23 +242,7 @@ public class MapHandler implements OnMapReadyCallback {
             @Override
             public void onMapClick(LatLng latLng) {
                 if(customMarkerBottomSheetDialog != null){
-                    SharedPreferences settingsPreference = mapFragment.getContext().getSharedPreferences("Radius_Marker_Settings", 0);
-                    boolean stateExists = settingsPreference.getBoolean("stateExists", false);
-                    double radius = (double)settingsPreference.getFloat("radius", 0.0f);
-                    double centerLat = (double)settingsPreference.getFloat("centerLat", 0.0f);
-                    double centerLon = (double)settingsPreference.getFloat("centerLon", 0.0f);
-
-
-                    float[] distance = new float[2];
-                    Location.distanceBetween(latLng.latitude, latLng.longitude, centerLat, centerLon, distance);
-
-                    if(distance[0] > radius){
-                    } else {
-                        if(customMarkerBottomSheetDialog == null){
-                            customMarkerBottomSheetDialog = new CustomMarkerBottomSheetFragment(context, mMap, latLng, 0);
-                        }
-                        FragmentTransition.OpenFragment(fragmentActivity.getSupportFragmentManager(), customMarkerBottomSheetDialog, R.id.mapFeedSearchPointer, "");
-                    }
+                    customMarkerBottomSheetDialog.onRadiusMarkerClick(customMarkerBottomSheetDialog, fragmentActivity.getSupportFragmentManager());
                 }
             }
         });

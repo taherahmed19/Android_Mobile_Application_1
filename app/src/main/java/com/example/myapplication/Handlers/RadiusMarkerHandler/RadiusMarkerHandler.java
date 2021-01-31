@@ -22,6 +22,11 @@ import java.util.Arrays;
 
 public class RadiusMarkerHandler {
 
+    private final int FILL_COLOUR = 0x220000FF;
+    private final int STROKE_WIDTH = 5;
+    private final String STROKE_COLOUR = "#6699ff";
+
+    private LatLng circlePerimeterPoint;
     private Circle radiusMarker;
     private GoogleMap mMap;
     private LatLng latLng;
@@ -29,7 +34,7 @@ public class RadiusMarkerHandler {
     private CircleOptions co;
     private double radius;
 
-    public RadiusMarkerHandler(GoogleMap mMap, LatLng latLng, boolean createRadiusMarker, double radius) {
+    public RadiusMarkerHandler(GoogleMap mMap, LatLng latLng, double radius) {
         this.mMap = mMap;
         this.latLng = latLng;
         this.radius = radius;
@@ -42,9 +47,9 @@ public class RadiusMarkerHandler {
         if(radiusMarker == null) {
             co = new CircleOptions();
             co.center(latLng);
-            co.fillColor(0x220000FF);
-            co.strokeColor(Color.parseColor("#6699ff"));
-            co.strokeWidth(5);
+            co.fillColor(FILL_COLOUR);
+            co.strokeColor(Color.parseColor(STROKE_COLOUR));
+            co.strokeWidth(STROKE_WIDTH);
             co.radius(radius);
             radiusMarker = mMap.addCircle(co);
         }
@@ -92,7 +97,6 @@ public class RadiusMarkerHandler {
         return circlePerimeterPoint;
     }
 
-    LatLng circlePerimeterPoint;
     public double calculateRadiusMarkerDistance(LatLng centre, double radius)
     {
         double EARTH_RADIUS = 6378100.0;

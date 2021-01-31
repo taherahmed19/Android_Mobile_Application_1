@@ -5,8 +5,11 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
+
+import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.Models.SpinnerItem.SpinnerItem;
 import com.example.myapplication.R;
@@ -27,9 +30,17 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class Tools {
+
+    public static DisplayMetrics ScreenDimensions(Fragment fragment){
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        Objects.requireNonNull(fragment.getActivity()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        return displayMetrics;
+    }
 
     public static BitmapDescriptor getMarkerIconFromDrawable(Drawable drawable) {
         Canvas canvas = new Canvas();

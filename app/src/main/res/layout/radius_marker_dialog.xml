@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="20sp"
+    android:paddingRight="20sp"
+    android:paddingTop="20sp"
+    android:paddingBottom="20sp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Are you sure you want to remove this radius marker?"
+            android:textSize="20sp"
+            android:textColor="#424242"
+            android:layout_marginBottom="25sp"
+            android:textStyle="normal">
+        </TextView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="right">
+
+            <Button
+                android:id="@+id/radiusMarkerDialogCloseButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:text="Cancel"
+                android:background="@color/transparent"
+                android:textAlignment="textStart"
+                android:layout_marginRight="20sp"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                android:textColor="#777777">
+            </Button>
+
+            <Button
+                android:id="@+id/radiusMarkerDialogRemoveButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:text="Remove"
+                android:background="@color/transparent"
+                android:textAlignment="textStart"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                android:textColor="#F44336">
+            </Button>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
