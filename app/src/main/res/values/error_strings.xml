@@ -15,4 +15,10 @@
     <string name="post_rating_title">Unavailable</string>
     <string name="post_rating_body">Unable to add rating. Please try again.</string>
 
+    <string name="radius_marker_delete_title">Error</string>
+    <string name="radius_marker_delete_body">Unable to delete radius marker. Please try again.</string>
+
+    <string name="radius_marker_set_title">Error</string>
+    <string name="radius_marker_set_body">Unable to add radius marker. Please try again.</string>
+
 </resources>

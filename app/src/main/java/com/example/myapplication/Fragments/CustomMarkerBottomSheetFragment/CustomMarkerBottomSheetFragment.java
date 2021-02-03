@@ -16,8 +16,11 @@ import android.widget.SeekBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.myapplication.Fragments.ErrorFragment.ErrorFragment;
 import com.example.myapplication.Handlers.CustomMarkerBottomSheetHandler.CustomMarkerBottomSheetHandler;
 import com.example.myapplication.Handlers.RadiusMarkerHandler.RadiusMarkerHandler;
+import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
+import com.example.myapplication.Interfaces.SetRadiusMarkerListener.SetRadiusMarkerListener;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,23 +35,16 @@ public class CustomMarkerBottomSheetFragment extends Fragment {
     Context context;
     GoogleMap mMap;
     LatLng latLng;
-    RadiusMarkerHandler radiusMarkerHandler;
     CustomMarkerBottomSheetHandler customMarkerBottomSheetHandler;
-    public static double INITIAL_RADIUS = 50;
 
-    public CustomMarkerBottomSheetFragment(Context context, GoogleMap mMap, LatLng latLng, double radius) {
+    public CustomMarkerBottomSheetFragment(Context context, GoogleMap mMap, LatLng latLng, double radius, RadiusMarkerHandler radiusMarkerHandler,
+                                           DeleteRadiusMarkerListener deleteRadiusMarkerListener, SetRadiusMarkerListener setRadiusMarkerListener,
+                                           FragmentManager fragmentManager) {
         this.context = context;
         this.mMap = mMap;
         this.latLng = latLng;
-        this.createRadiusMarker(radius);
-        this.customMarkerBottomSheetHandler = new CustomMarkerBottomSheetHandler(this, mMap, latLng, radiusMarkerHandler);
-    }
-
-    public void createRadiusMarker(double radius){
-        if(radius == 0){
-            radius = INITIAL_RADIUS;
-        }
-        this.radiusMarkerHandler = new RadiusMarkerHandler(mMap, latLng, radius);
+        this.customMarkerBottomSheetHandler = new CustomMarkerBottomSheetHandler(this, mMap, latLng, radiusMarkerHandler,
+                context, deleteRadiusMarkerListener, setRadiusMarkerListener, fragmentManager);
     }
 
     @Override
@@ -68,14 +64,21 @@ public class CustomMarkerBottomSheetFragment extends Fragment {
         customMarkerBottomSheetHandler.configure();
     }
 
-    public void onRadiusMarkerClick(CustomMarkerBottomSheetFragment customMarkerBottomSheetDialog, FragmentManager supportFragmentManager, LatLng latLng){
-        this.customMarkerBottomSheetHandler.handleRadiusMarkerClick(customMarkerBottomSheetDialog, context, supportFragmentManager, latLng);
+    public void openFragment(CustomMarkerBottomSheetFragment customMarkerBottomSheetDialog, FragmentManager fragmentManager){
+        if(!customMarkerBottomSheetDialog.isAdded()){
+            FragmentTransition.OpenFragment(fragmentManager, customMarkerBottomSheetDialog, R.id.mapFeedSearchPointer, "");
+        }
+    }
+
+    public void handleRadiusMarkerRemoval(boolean valid){
+        this.customMarkerBottomSheetHandler.handleRadiusMarkerRemoval(valid);
+    }
+
+    public void handleRadiusMarker(boolean valid){
+        this.customMarkerBottomSheetHandler.handleRadiusMarker(valid);
     }
 
     public void remove(){
-        //Objects.requireNonNull(context).getSharedPreferences("Radius_Marker_Settings", 0).edit().clear().apply();
-        this.radiusMarkerHandler.getRadiusMarker().remove();
+        this.customMarkerBottomSheetHandler.remove();
     }
-
-
 }

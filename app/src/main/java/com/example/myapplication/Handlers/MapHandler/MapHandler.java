@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import com.example.myapplication.Fragments.CustomMarkerBottomSheetFragment.CustomMarkerBottomSheetFragment;
 import com.example.myapplication.Fragments.MapFilterFragment.MapFilterFragment;
 import com.example.myapplication.Fragments.RadiusMarkerNotificationFragment.RadiusMarkerNotificationFragment;
+import com.example.myapplication.Handlers.MapOnClickHandler;
 import com.example.myapplication.Interfaces.MapListener.MapListener;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.R;
@@ -45,7 +46,6 @@ public class MapHandler implements OnMapReadyCallback {
     MapListener mapListener;
     Context context;
     com.example.myapplication.Fragments.MapFragment.MapFragment mapFragment;
-    CustomMarkerBottomSheetFragment customMarkerBottomSheetDialog;
 
     public MapHandler(SupportMapFragment supportMapFragment, FragmentActivity fragmentActivity, FragmentManager fragmentManager, MapListener mapListener) {
         this.fragmentActivity = fragmentActivity;
@@ -85,10 +85,10 @@ public class MapHandler implements OnMapReadyCallback {
             mMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
         }
 
-        //mapListener.handleMapClick(mMap);
-        configureRadiusMarker();
         mapListener.handleMarkerClick(mMap, fragmentActivity);
-        resetRadiusMarkerState();
+
+        MapOnClickHandler onClickHandler = new MapOnClickHandler(context, mMap, fragmentManager);
+        onClickHandler.configure();
 
         showDialog();
     }
@@ -210,40 +210,6 @@ public class MapHandler implements OnMapReadyCallback {
             mapStateEditor.putString("latitude", latitude);
             mapStateEditor.apply();
         }
-    }
-
-    void resetRadiusMarkerState(){
-        SharedPreferences settingsPreference = Objects.requireNonNull(this.mapFragment.getContext()).getSharedPreferences("Radius_Marker_Settings", 0);
-        boolean stateExists = settingsPreference.getBoolean("stateExists", false);
-        double radius = (double)settingsPreference.getFloat("radius", 0.0f);
-        double centerLat = (double)settingsPreference.getFloat("centerLat", 0.0f);
-        double centerLon = (double)settingsPreference.getFloat("centerLon", 0.0f);
-
-        if(stateExists){
-            customMarkerBottomSheetDialog = new CustomMarkerBottomSheetFragment(context, mMap, new LatLng(centerLat, centerLon), radius);
-        }
-    }
-
-    void configureRadiusMarker(){
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng latLng) {
-                if(customMarkerBottomSheetDialog != null){
-                    customMarkerBottomSheetDialog.remove();
-                }
-                customMarkerBottomSheetDialog = new CustomMarkerBottomSheetFragment(context, mMap, latLng, 0);
-                FragmentTransition.OpenFragment(fragmentActivity.getSupportFragmentManager(), customMarkerBottomSheetDialog, R.id.mapFeedSearchPointer, "");
-            }
-        });
-
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                if(customMarkerBottomSheetDialog != null){
-                    customMarkerBottomSheetDialog.onRadiusMarkerClick(customMarkerBottomSheetDialog, fragmentActivity.getSupportFragmentManager(), latLng);
-                }
-            }
-        });
     }
 
     LatLng getMapCameraPosition(){

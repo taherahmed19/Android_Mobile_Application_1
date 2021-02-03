@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:background="#FFF"
     android:orientation="vertical"
-    android:layout_marginBottom="55sp">
+    android:layout_marginBottom="55sp"
+    android:id="@+id/mapFragmentContainer">
 
     <FrameLayout
         android:layout_width="match_parent"

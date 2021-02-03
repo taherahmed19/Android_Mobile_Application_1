@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -17,10 +18,16 @@ import android.widget.TextView;
 
 import androidx.fragment.app.FragmentManager;
 
-import com.example.myapplication.ExampleService;
 import com.example.myapplication.Fragments.CustomMarkerBottomSheetFragment.CustomMarkerBottomSheetFragment;
+import com.example.myapplication.Fragments.ErrorFragment.ErrorFragment;
 import com.example.myapplication.Handlers.RadiusMarkerHandler.RadiusMarkerHandler;
+import com.example.myapplication.Handlers.RadiusMarkerHandler.RadiusMarkerStorage;
+import com.example.myapplication.HttpRequest.HttpDeleteRadiusMarker.HttpDeleteRadiusMarker;
+import com.example.myapplication.HttpRequest.HttpWriteRadiusMarker.HttpWriteRadiusMarker;
+import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
+import com.example.myapplication.Interfaces.SetRadiusMarkerListener.SetRadiusMarkerListener;
 import com.example.myapplication.R;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Utils.Tools.Tools;
 import com.google.android.gms.maps.GoogleMap;
@@ -45,11 +52,27 @@ public class CustomMarkerBottomSheetHandler {
     boolean inAppButtonClicked;
     boolean voiceButtonClicked;
 
-    public CustomMarkerBottomSheetHandler(CustomMarkerBottomSheetFragment customMarkerBottomSheetFragment, GoogleMap mMap, LatLng latLng, RadiusMarkerHandler radiusMarkerHandler) {
+    Context context;
+
+    RadiusMarkerStorage radiusMarkerStorage;
+    DeleteRadiusMarkerListener deleteRadiusMarkerListener;
+    SetRadiusMarkerListener setRadiusMarkerListener;
+
+    FragmentManager fragmentManager;
+
+    public CustomMarkerBottomSheetHandler(CustomMarkerBottomSheetFragment customMarkerBottomSheetFragment, GoogleMap mMap, LatLng latLng,
+                                          RadiusMarkerHandler radiusMarkerHandler, Context context,
+                                          DeleteRadiusMarkerListener deleteRadiusMarkerListener, SetRadiusMarkerListener setRadiusMarkerListener,
+                                          FragmentManager fragmentManager) {
         this.customMarkerBottomSheetFragment = customMarkerBottomSheetFragment;
         this.mMap = mMap;
         this.latLng = latLng;
         this.radiusMarkerHandler = radiusMarkerHandler;
+        this.context = context;
+        this.deleteRadiusMarkerListener = deleteRadiusMarkerListener;
+        this.setRadiusMarkerListener = setRadiusMarkerListener;
+        this.fragmentManager = fragmentManager;
+        this.radiusMarkerStorage = new RadiusMarkerStorage(radiusMarkerHandler, deleteRadiusMarkerListener, setRadiusMarkerListener, context);
         inAppButtonClicked = true;
         voiceButtonClicked = false;
     }
@@ -62,27 +85,45 @@ public class CustomMarkerBottomSheetHandler {
         configureSaveButton();
         configureRemoveButton();
         resetNotificationsState();
-        configureServiceButtons();
     }
 
-    public void handleRadiusMarkerClick(CustomMarkerBottomSheetFragment customMarkerBottomSheetDialog, Context context, FragmentManager supportFragmentManager, LatLng latLng){
+    public void handleRadiusMarkerRemoval(boolean valid){
+        if(valid){
+
+        }else{
+            ErrorFragment errorFragment = new ErrorFragment(customMarkerBottomSheetFragment,
+                    this.context.getResources().getString(R.string.radius_marker_delete_title),
+                    this.context.getResources().getString(R.string.radius_marker_delete_body));
+
+            FragmentTransition.OpenFragment(fragmentManager, errorFragment, R.id.mapFragmentContainer, "");
+        }
+    }
+
+    public void handleRadiusMarker(boolean valid){
+        if(valid){
+            radiusMarkerStorage.saveSharedPreference(inAppButtonClicked, voiceButtonClicked, latLng);
+            fragmentManager.popBackStack();
+        }else{
+            ErrorFragment errorFragment = new ErrorFragment(customMarkerBottomSheetFragment,
+                    customMarkerBottomSheetFragment.getResources().getString(R.string.radius_marker_set_title),
+                    customMarkerBottomSheetFragment.getResources().getString(R.string.radius_marker_set_body));
+
+            FragmentTransition.OpenFragment(fragmentManager, errorFragment, R.id.mapFragmentContainer, "");
+        }
+    }
+
+    public void remove(){
         SharedPreferences settingsPreference = Objects.requireNonNull(context).getSharedPreferences("Radius_Marker_Settings", 0);
         boolean stateExists = settingsPreference.getBoolean("stateExists", false);
-        double radius = (double)settingsPreference.getFloat("radius", 0.0f);
-        double centerLat = (double)settingsPreference.getFloat("centerLat", 0.0f);
-        double centerLon = (double)settingsPreference.getFloat("centerLon", 0.0f);
 
         if(stateExists){
-            float[] distance = new float[2];
-            Location.distanceBetween(latLng.latitude, latLng.longitude, centerLat, centerLon, distance);
+            radiusMarkerStorage.deleteRadiusMarkerDb();
+        }
 
-            if(distance[0] > radius){
-            } else {
-                if(customMarkerBottomSheetDialog == null){
-                    customMarkerBottomSheetDialog = new CustomMarkerBottomSheetFragment(context, mMap, latLng, 0);
-                }
-                FragmentTransition.OpenFragment(supportFragmentManager, customMarkerBottomSheetDialog, R.id.mapFeedSearchPointer, "");
-            }
+        Objects.requireNonNull(context).getSharedPreferences("Radius_Marker_Settings", 0).edit().clear().apply();
+        radiusMarkerHandler.removeMarker();
+        if(customMarkerBottomSheetFragment.isAdded()){
+            fragmentManager.popBackStack();
         }
     }
 
@@ -94,7 +135,7 @@ public class CustomMarkerBottomSheetHandler {
         int width = displayMetrics.widthPixels;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            radiusMarkerSeekBar.setMin(0);
+            radiusMarkerSeekBar.setMin(5);
             radiusMarkerSeekBar.setMax(width / 4);
             radiusMarkerSeekBar.setProgress((int)this.radiusMarkerHandler.getRadiusMarker().getRadius());
 
@@ -169,7 +210,7 @@ public class CustomMarkerBottomSheetHandler {
                     String progressText = initialMiles + " mi";
                     radiusMarkerSeekBarProgress.setText(progressText);
                 }
-                Objects.requireNonNull(customMarkerBottomSheetFragment.getActivity()).getSupportFragmentManager().popBackStack();
+                fragmentManager.popBackStack();
             }
         });
     }
@@ -181,6 +222,8 @@ public class CustomMarkerBottomSheetHandler {
 
         if(stateExists){
             radiusMarkerRemoveButton.setVisibility(View.VISIBLE);
+        }else{
+            radiusMarkerRemoveButton.setVisibility(View.INVISIBLE);
         }
 
         radiusMarkerRemoveButton.setOnClickListener(new View.OnClickListener() {
@@ -211,10 +254,13 @@ public class CustomMarkerBottomSheetHandler {
         radiusMarkerDialogRemoveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                radiusMarkerStorage.deleteRadiusMarkerDb();
                 dialog.dismiss();
-                Objects.requireNonNull(customMarkerBottomSheetFragment.getContext()).getSharedPreferences("Radius_Marker_Settings", 0).edit().clear().apply();
-                radiusMarkerHandler.getRadiusMarker().remove();
-                Objects.requireNonNull(customMarkerBottomSheetFragment.getActivity()).getSupportFragmentManager().popBackStack();
+                radiusMarkerHandler.removeMarker();
+                Objects.requireNonNull(context).getSharedPreferences("Radius_Marker_Settings", 0).edit().clear().apply();
+                if(customMarkerBottomSheetFragment.isAdded()){
+                    fragmentManager.popBackStack();
+                }
             }
         });
     }
@@ -225,22 +271,11 @@ public class CustomMarkerBottomSheetHandler {
         radiusMarkerSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveSharedPreference();
-                Objects.requireNonNull(customMarkerBottomSheetFragment.getActivity()).getSupportFragmentManager().popBackStack();
+                radiusMarkerStorage.writeRadiusMarkerDb();
+                radiusMarkerStorage.saveSharedPreference(inAppButtonClicked, voiceButtonClicked, latLng);
+                customMarkerBottomSheetFragment.getParentFragmentManager().popBackStack();
             }
         });
-    }
-
-    void saveSharedPreference(){
-        SharedPreferences settingsPreference = Objects.requireNonNull(this.customMarkerBottomSheetFragment.getContext()).getSharedPreferences("Radius_Marker_Settings", 0);
-        SharedPreferences.Editor preferenceEditor = settingsPreference.edit();
-        preferenceEditor.putBoolean("stateExists", true);
-        preferenceEditor.putBoolean("inAppNotifications", inAppButtonClicked);
-        preferenceEditor.putBoolean("voiceNotifications", voiceButtonClicked);
-        preferenceEditor.putFloat("radius", (float) radiusMarkerHandler.getRadiusMarker().getRadius());
-        preferenceEditor.putFloat("centerLat", (float) latLng.latitude);
-        preferenceEditor.putFloat("centerLon", (float) latLng.longitude);
-        preferenceEditor.apply();
     }
 
     void resetNotificationsState(){
@@ -280,35 +315,5 @@ public class CustomMarkerBottomSheetHandler {
             voiceButtonClicked = false;
             radiusMarkerVoiceButton.setBackgroundResource(0);
         }
-    }
-
-    void configureServiceButtons(){
-        Button startService = (Button) this.customMarkerBottomSheetFragment.getView().findViewById(R.id.startService);
-        startService.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startService();
-            }
-        });
-
-        Button stopService = (Button) this.customMarkerBottomSheetFragment.getView().findViewById(R.id.stopService);
-        stopService.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                stopService();
-            }
-        });
-    }
-
-    void startService(){
-        Intent serviceIntent = new Intent(this.customMarkerBottomSheetFragment.getContext(), ExampleService.class);
-        serviceIntent.putExtra("inputExtra", "Some text");
-
-        Objects.requireNonNull(this.customMarkerBottomSheetFragment.getActivity()).startService(serviceIntent);
-    }
-
-    void stopService(){
-        Intent serviceIntent = new Intent(this.customMarkerBottomSheetFragment.getContext(), ExampleService.class);
-        Objects.requireNonNull(this.customMarkerBottomSheetFragment.getActivity()).stopService(serviceIntent);
     }
 }

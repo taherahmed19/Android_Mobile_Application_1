@@ -1,10 +1,12 @@
-package com.example.myapplication.HttpRequest.HttpRatings;
+package com.example.myapplication.HttpRequest.HttpDeleteRadiusMarker;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.example.myapplication.Handlers.RadiusMarkerHandler.RadiusMarkerHandler;
+import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
 import com.example.myapplication.Interfaces.RatingsListener.RatingsListener;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.SSL.SSL;
@@ -16,21 +18,23 @@ import java.text.MessageFormat;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class HttpRatings extends AsyncTask<String , Void ,String> {
+public class HttpDeleteRadiusMarker extends AsyncTask<String , Void ,String> {
 
     HttpsURLConnection urlConnection;
     URL url;
     int responseCode;
     Context context;
-    String markerId;
-    boolean isUpVote;
-    RatingsListener ratingsListener;
+    DeleteRadiusMarkerListener deleteRadiusMarkerListener;
 
-    public HttpRatings(Context context, int markerId, boolean isUpVote, RatingsListener ratingsListener){
+    RadiusMarkerHandler radiusMarkerHandler;
+
+    int userId;
+
+    public HttpDeleteRadiusMarker(Context context, int userId, DeleteRadiusMarkerListener deleteRadiusMarkerListener,
+                                  RadiusMarkerHandler radiusMarkerHandler) {
         this.context = context;
-        this.markerId = String.valueOf(markerId);
-        this.isUpVote = isUpVote;
-        this.ratingsListener = ratingsListener;
+        this.userId = userId;
+        this.deleteRadiusMarkerListener = deleteRadiusMarkerListener;
     }
 
     @Override
@@ -38,6 +42,8 @@ public class HttpRatings extends AsyncTask<String , Void ,String> {
         SSL.AllowSSLCertificates();
 
         String apiRequest = this.createApiQuery();
+
+        Log.d("Print", "Api request " + apiRequest);
 
         try {
             String response = handleRequest(apiRequest);
@@ -83,11 +89,12 @@ public class HttpRatings extends AsyncTask<String , Void ,String> {
 
     @Override
     protected void onPostExecute(String str) {
-        boolean ratingUpdated = Boolean.parseBoolean(str);
-        ratingsListener.updateModalRating(ratingUpdated);
+        boolean valid = Boolean.parseBoolean(str);
+        deleteRadiusMarkerListener.handleRadiusMarkerRemoval(valid);
     }
 
     String createApiQuery(){
-        return MessageFormat.format(this.context.getResources().getString(R.string.webservice_update_marker_rating), this.markerId, this.isUpVote);
+        return MessageFormat.format(this.context.getResources().getString(R.string.webservice_delete_radius_marker), this.userId);
     }
+
 }
