@@ -73,8 +73,9 @@ public class CustomMarkerBottomSheetHandler {
         this.setRadiusMarkerListener = setRadiusMarkerListener;
         this.fragmentManager = fragmentManager;
         this.radiusMarkerStorage = new RadiusMarkerStorage(radiusMarkerHandler, deleteRadiusMarkerListener, setRadiusMarkerListener, context);
-        inAppButtonClicked = true;
-        voiceButtonClicked = false;
+        setNotificationsState();
+
+        Log.d("Print", inAppButtonClicked + " " + voiceButtonClicked);
     }
 
     public void configure(){
@@ -84,7 +85,7 @@ public class CustomMarkerBottomSheetHandler {
         configureVoiceButton();
         configureSaveButton();
         configureRemoveButton();
-        resetNotificationsState();
+        resetNotificationsBackgroundState();
     }
 
     public void handleRadiusMarkerRemoval(boolean valid){
@@ -167,7 +168,6 @@ public class CustomMarkerBottomSheetHandler {
 
     void configureInAppButton(){
         radiusMarkerInAppButton = (Button) Objects.requireNonNull(this.customMarkerBottomSheetFragment.getView()).findViewById(R.id.radiusMarkerInAppButton);
-        radiusMarkerInAppButton.setBackground(customMarkerBottomSheetFragment.getResources().getDrawable(R.drawable.custom_marker_bottom_background_clicked));
 
         radiusMarkerInAppButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,6 +209,9 @@ public class CustomMarkerBottomSheetHandler {
                     double initialMiles = radiusMarkerHandler.calculateRadiusMarkerDistance(new LatLng(centerLat, centerLon), radius);
                     String progressText = initialMiles + " mi";
                     radiusMarkerSeekBarProgress.setText(progressText);
+
+                    setNotificationsState();
+                    resetNotificationsBackgroundState();
                 }
                 fragmentManager.popBackStack();
             }
@@ -278,18 +281,23 @@ public class CustomMarkerBottomSheetHandler {
         });
     }
 
-    void resetNotificationsState(){
-        SharedPreferences settingsPreference = Objects.requireNonNull(this.customMarkerBottomSheetFragment.getContext()).getSharedPreferences("Radius_Marker_Settings", 0);
+    void setNotificationsState(){
+        SharedPreferences settingsPreference = Objects.requireNonNull(context).getSharedPreferences("Radius_Marker_Settings", 0);
         boolean inAppButtonState = settingsPreference.getBoolean("inAppNotifications", false);
         boolean voiceButtonState = settingsPreference.getBoolean("voiceNotifications", false);
 
         inAppButtonClicked = inAppButtonState;
         voiceButtonClicked = voiceButtonState;
+    }
 
-        if(inAppButtonState){
+    void resetNotificationsBackgroundState(){
+        if(inAppButtonClicked){
             radiusMarkerInAppButton.setBackground(customMarkerBottomSheetFragment.getResources().getDrawable(R.drawable.custom_marker_bottom_background_clicked));
         }else if(voiceButtonClicked){
             radiusMarkerVoiceButton.setBackground(customMarkerBottomSheetFragment.getResources().getDrawable(R.drawable.custom_marker_bottom_background_clicked));
+        }else{
+            inAppButtonClicked = true;
+            radiusMarkerInAppButton.setBackground(customMarkerBottomSheetFragment.getResources().getDrawable(R.drawable.custom_marker_bottom_background_clicked));
         }
     }
 

@@ -35,7 +35,7 @@ public class RadiusMarkerStorage {
         HttpWriteRadiusMarker httpWriteRadiusMarker = new HttpWriteRadiusMarker(context,
                 LoginPreferenceData.getUserId(context), 1,
                 String.valueOf(this.radiusMarkerHandler.getRadiusMarker().getCenter().latitude),
-                String.valueOf(this.radiusMarkerHandler.getRadiusMarker().getCenter().latitude),
+                String.valueOf(this.radiusMarkerHandler.getRadiusMarker().getCenter().longitude),
                 String.valueOf(this.radiusMarkerHandler.getRadiusMarker().getRadius()),
                 this.setRadiusMarkerListener);
         httpWriteRadiusMarker.execute();

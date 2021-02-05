@@ -1,4 +1,4 @@
-package com.example.myapplication.Handlers;
+package com.example.myapplication.Handlers.MapOnClickHandler;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,7 +7,6 @@ import android.util.Log;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.myapplication.Fragments.CustomMarkerBottomSheetFragment.CustomMarkerBottomSheetFragment;
-import com.example.myapplication.Fragments.ErrorFragment.ErrorFragment;
 import com.example.myapplication.Handlers.RadiusMarkerHandler.RadiusMarkerHandler;
 import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
 import com.example.myapplication.Interfaces.SetRadiusMarkerListener.SetRadiusMarkerListener;
@@ -75,6 +74,12 @@ public class MapOnClickHandler implements DeleteRadiusMarkerListener, SetRadiusM
             public void onMapClick(LatLng latLng) {
                 if(customMarkerBottomSheetDialog != null){
                     boolean clickedInsideArea = radiusMarkerHandler.handleRadiusMarkerClick(customMarkerBottomSheetDialog, context, fragmentManager, latLng);
+
+                    if(clickedInsideArea){
+                        Log.d("Print", latLng + " inside");
+                    }else{
+                        Log.d("Print", latLng + " outside");
+                    }
 
                     if(clickedInsideArea){
                         customMarkerBottomSheetDialog.openFragment(customMarkerBottomSheetDialog, fragmentManager);

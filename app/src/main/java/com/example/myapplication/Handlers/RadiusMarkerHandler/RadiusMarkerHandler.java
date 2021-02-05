@@ -80,9 +80,7 @@ public class RadiusMarkerHandler {
             float[] distance = new float[2];
             Location.distanceBetween(latLng.latitude, latLng.longitude, centerLat, centerLon, distance);
 
-            if(distance[0] <= radius){
-                return true;
-            }
+            return distance[0] <= radius;
         }
 
         return false;
