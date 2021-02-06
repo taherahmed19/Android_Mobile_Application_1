@@ -9,13 +9,16 @@ import android.location.Location;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.viewpager.widget.ViewPager;
 
+import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
 import com.example.myapplication.Handlers.MapOnClickHandler.MapOnClickHandler;
 import com.example.myapplication.Interfaces.MapListener.MapListener;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Models.Marker.Marker;
+import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -109,6 +112,17 @@ public class MapHandler implements OnMapReadyCallback {
     public void setMapLocation(LatLng latLng) {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latLng.latitude, latLng.longitude), 17));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
+    }
+
+    // send marker id lat lng and loop through markers list and find the correct marker
+    public void triggerMarkerWithinRadiusMarker(ArrayList<Marker> markers, int markerId, ViewPager viewPager){
+        for(Marker marker : markers) {
+            if(markerId == marker.getId()){
+                MarkerModalFragment markerModalFragment = new MarkerModalFragment(marker, viewPager);
+                FragmentTransition.Transition(fragmentActivity.getSupportFragmentManager(), markerModalFragment, R.anim.right_animations, R.anim.left_animation,
+                        R.id.mapModalContainer, "");
+            }
+        }
     }
 
     void addCustomMarker(int i, ArrayList<Marker> markers) {

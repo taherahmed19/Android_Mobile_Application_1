@@ -1,7 +1,10 @@
 package com.example.myapplication.Fragments.MapFragment;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -10,12 +13,14 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.example.myapplication.Adapters.LockableViewPager.LockableViewPager;
+import com.example.myapplication.Fragments.MainMapFragment.MainMapFragment;
 import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.MapFeedSearchAutocompleteFragment;
 import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
 import com.example.myapplication.Fragments.MapFilterFragment.MapFilterFragment;
@@ -34,7 +39,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MapFragment extends Fragment implements MapFeedSearchFragment.FragmentSearchListener, MapFeedSearchAutocompleteFragment.FragmentAutocompleteListener
                                                      , MapFilterFragment.FragmentMapFilterListener, CurrentLocationListener, MapListener, CustomMarkerListener {
@@ -43,6 +50,8 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     MapFragmentHandler mapFragmentHandler;
     LockableViewPager viewPager;
     CurrentLocation currentLocation;
+
+    int receiverMarkerId;
 
     public MapFragment(LockableViewPager viewPager) {
         this.viewPager = viewPager;
@@ -69,6 +78,12 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     @Override
     public void addMarkerData(ArrayList<Marker> markers) {
         this.mapFragmentHandler.addMarkerData(markers);
+        if(mapFragmentHandler != null){
+            if(markers != null){
+                //move camera location
+                mapFragmentHandler.triggerMarkerWithinRadiusMarker(markers, receiverMarkerId, viewPager);
+            }
+        }
     }
 
     @Override
@@ -151,6 +166,29 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     public void onStop() {
         super.onStop();
         currentLocation.stopLocationUpdates();
+
+        try{
+            Objects.requireNonNull(getActivity()).unregisterReceiver(receiver);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().registerReceiver(receiver, new IntentFilter(MapFragment.class.toString()));
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            receiverMarkerId = Integer.parseInt(intent.getExtras().getString("markerId"));
+
+            Log.d("Print", "onreceive = " + receiverMarkerId);
+        }
+
+    };
 
 }

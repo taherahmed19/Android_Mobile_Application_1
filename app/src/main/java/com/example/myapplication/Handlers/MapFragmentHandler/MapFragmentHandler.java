@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.myapplication.Adapters.LockableViewPager.LockableViewPager;
 import com.example.myapplication.Fragments.MapFilterFragment.MapFilterFragment;
@@ -94,6 +95,7 @@ public class MapFragmentHandler  {
             public boolean onMarkerClick(com.google.android.gms.maps.model.Marker marker) {
                 if(!marker.getTag().equals(fragmentActivity.getString(R.string.default_constant))){
                     Marker item = (Marker)marker.getTag();
+
                     MarkerModalFragment markerModalFragment = new MarkerModalFragment(item, viewPager);
                     FragmentTransition.Transition(fragmentActivity.getSupportFragmentManager(), markerModalFragment, R.anim.right_animations, R.anim.left_animation,
                             R.id.mapModalContainer, "");
@@ -105,16 +107,8 @@ public class MapFragmentHandler  {
         });
     }
 
-    public void setGoogleMapClickable(GoogleMap mMap){
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng loc) {
-                Log.d("Print", "clicked " + loc);
-
-
-                return;
-            }
-        });
+    public void triggerMarkerWithinRadiusMarker(ArrayList<Marker> markers, int markerId, ViewPager viewPager){
+        mapHandler.triggerMarkerWithinRadiusMarker(markers, markerId, viewPager);
     }
 
     public void handleSavedLocation(LatLng latLng){

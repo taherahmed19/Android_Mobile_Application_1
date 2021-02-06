@@ -1,7 +1,12 @@
 package com.example.myapplication.Fragments.MainMapFragment;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +19,8 @@ import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.Fragments.FeedFragment.FeedFragment;
 import com.example.myapplication.R;
 import com.example.myapplication.Fragments.MapFilterFragment.MapFilterFragment;
+
+import java.util.Objects;
 
 public class MainMapFragment extends Fragment {
     LockableViewPager viewPager;
@@ -51,7 +58,6 @@ public class MainMapFragment extends Fragment {
         viewPager.setAdapter(swiperAdapter);
         viewPager.setCurrentItem(0);
         viewPager.setSwipeable(false);
-
     }
 
 }
