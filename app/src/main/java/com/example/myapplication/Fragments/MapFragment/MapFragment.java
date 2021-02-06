@@ -52,9 +52,13 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     CurrentLocation currentLocation;
 
     int receiverMarkerId;
+    double receiverLat;
+    double receiverLng;
+    boolean received;
 
     public MapFragment(LockableViewPager viewPager) {
         this.viewPager = viewPager;
+        this.received = false;
     }
 
     @Override
@@ -68,7 +72,7 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
 
         this.mapFragmentHandler = new MapFragmentHandler(this, viewPager, this, this);
         this.supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
-        this.loadingSpinner = new LoadingSpinner((ProgressBar) getView().findViewById(R.id.feedLoadingSpinner));
+        this.loadingSpinner = new LoadingSpinner((ProgressBar) Objects.requireNonNull(getView()).findViewById(R.id.feedLoadingSpinner));
         this.mapFragmentHandler.configureElements();
 
         currentLocation = new CurrentLocation(getActivity(), this);
@@ -79,9 +83,8 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     public void addMarkerData(ArrayList<Marker> markers) {
         this.mapFragmentHandler.addMarkerData(markers);
         if(mapFragmentHandler != null){
-            if(markers != null){
-                //move camera location
-                mapFragmentHandler.triggerMarkerWithinRadiusMarker(markers, receiverMarkerId, viewPager);
+            if(markers != null && received){
+                mapFragmentHandler.triggerMarkerWithinRadiusMarker(markers, receiverMarkerId, viewPager, new LatLng(receiverLat, receiverLng));
             }
         }
     }
@@ -157,7 +160,7 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     @Override
     public void onStart() {
         super.onStart();
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             currentLocation.startLocationUpdates();
         }
     }
@@ -177,14 +180,17 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().registerReceiver(receiver, new IntentFilter(MapFragment.class.toString()));
+        Objects.requireNonNull(getActivity()).registerReceiver(receiver, new IntentFilter(MapFragment.class.toString()));
     }
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            receiverMarkerId = Integer.parseInt(intent.getExtras().getString("markerId"));
+            received = true;
+            receiverMarkerId = Integer.parseInt(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("markerId")));
+            receiverLat = Double.parseDouble(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("lat")));
+            receiverLng = Double.parseDouble(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("lng")));
 
             Log.d("Print", "onreceive = " + receiverMarkerId);
         }

@@ -10,6 +10,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/radiusMarkerNotifButton"
             android:layout_width="300sp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -31,6 +32,7 @@
             android:layout_marginRight="20sp">
 
             <TextView
+                android:id="@+id/radiusMarkerCategoryText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Environment"
@@ -40,12 +42,15 @@
             </TextView>
 
             <TextView
+                android:id="@+id/radiusMarkerDescriptionText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Some placeholder text here ..."
                 android:textSize="14sp"
                 android:textColor="#424242"
-                android:textStyle="normal">
+                android:textStyle="normal"
+                android:maxLines="1"
+                android:ellipsize="end">
             </TextView>
 
         </LinearLayout>

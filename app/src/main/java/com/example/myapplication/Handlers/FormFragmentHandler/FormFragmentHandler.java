@@ -284,8 +284,8 @@ public class FormFragmentHandler {
 
         setFormGeolocationTag(latLng.latitude, latLng.longitude);
 
-        FormStaticMap formStaticMap = new FormStaticMap(formLocationImage);
-        formStaticMap.execute(imageUrl);
+        //FormStaticMap formStaticMap = new FormStaticMap(formLocationImage);
+        //formStaticMap.execute(imageUrl);
 
         isConfiguredStaticMap = true;
     }

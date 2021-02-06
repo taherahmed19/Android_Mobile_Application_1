@@ -11,7 +11,9 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.myapplication.Fragments.MapFilterFragment.MapFilterFragment;
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
+import com.example.myapplication.Fragments.RadiusMarkerNotificationFragment.RadiusMarkerNotificationFragment;
 import com.example.myapplication.Handlers.MapOnClickHandler.MapOnClickHandler;
 import com.example.myapplication.Interfaces.MapListener.MapListener;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
@@ -91,8 +93,6 @@ public class MapHandler implements OnMapReadyCallback {
             MapOnClickHandler onClickHandler = new MapOnClickHandler(context, mMap, fragmentManager);
             onClickHandler.configure();
         }
-
-        showDialog();
     }
 
     public void addDataSetMarkers(ArrayList<Marker> markers) {
@@ -114,13 +114,13 @@ public class MapHandler implements OnMapReadyCallback {
         mMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
     }
 
-    // send marker id lat lng and loop through markers list and find the correct marker
-    public void triggerMarkerWithinRadiusMarker(ArrayList<Marker> markers, int markerId, ViewPager viewPager){
+    public void triggerMarkerWithinRadiusMarker(ArrayList<Marker> markers, int markerId, ViewPager viewPager,LatLng latLng){
         for(Marker marker : markers) {
             if(markerId == marker.getId()){
-                MarkerModalFragment markerModalFragment = new MarkerModalFragment(marker, viewPager);
-                FragmentTransition.Transition(fragmentActivity.getSupportFragmentManager(), markerModalFragment, R.anim.right_animations, R.anim.left_animation,
-                        R.id.mapModalContainer, "");
+                RadiusMarkerNotificationFragment notificationFragment = new RadiusMarkerNotificationFragment(fragmentActivity.getSupportFragmentManager(),
+                        this, marker, viewPager, latLng);
+                FragmentTransition.Transition(mapFragment.getParentFragmentManager(), notificationFragment,
+                        R.anim.radius_marker_notif_open_anim, R.anim.radius_marker_notif_close_anim, R.id.mapFeedSearchPointer, MapFilterFragment.TAG);
             }
         }
     }
@@ -242,10 +242,5 @@ public class MapHandler implements OnMapReadyCallback {
 
     public LatLng getLocation() {
         return location;
-    }
-
-    void showDialog(){
-//        FragmentTransition.Transition(mapFragment.getParentFragmentManager(), new RadiusMarkerNotificationFragment(),
-//                R.anim.radius_marker_notif_open_anim, R.anim.radius_marker_notif_close_anim, R.id.mapFeedSearchPointer, MapFilterFragment.TAG);
     }
 }

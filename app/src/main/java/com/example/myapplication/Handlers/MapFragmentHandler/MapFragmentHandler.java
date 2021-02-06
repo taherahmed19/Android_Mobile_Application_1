@@ -19,6 +19,7 @@ import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
 import com.example.myapplication.Fragments.FormFragment.FormFragment;
+import com.example.myapplication.Fragments.RadiusMarkerNotificationFragment.RadiusMarkerNotificationFragment;
 import com.example.myapplication.Handlers.MapFeedSearchFragmentHandler.MapFeedSearchFragmentHandler;
 import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.MapFeedSearchAutocompleteFragment;
 import com.example.myapplication.Handlers.MapHandler.MapHandler;
@@ -107,8 +108,8 @@ public class MapFragmentHandler  {
         });
     }
 
-    public void triggerMarkerWithinRadiusMarker(ArrayList<Marker> markers, int markerId, ViewPager viewPager){
-        mapHandler.triggerMarkerWithinRadiusMarker(markers, markerId, viewPager);
+    public void triggerMarkerWithinRadiusMarker(ArrayList<Marker> markers, int markerId, ViewPager viewPager, LatLng latLng){
+        mapHandler.triggerMarkerWithinRadiusMarker(markers, markerId, viewPager, latLng);
     }
 
     public void handleSavedLocation(LatLng latLng){
@@ -222,5 +223,9 @@ public class MapFragmentHandler  {
                         R.anim.right_animations, R.anim.left_animation, R.id.userFeedFormPointer, MapFilterFragment.TAG);
             }
         });
+    }
+
+    void showNotificationDialog(){
+
     }
 }
