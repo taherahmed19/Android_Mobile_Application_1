@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.MapFeedSearchAutocompleteFragment;
@@ -13,9 +14,19 @@ import com.example.myapplication.Handlers.MainActivityHandler.MainActivityHandle
 import com.example.myapplication.HttpRequest.HttpFirebaseToken.HttpFirebaseToken;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.installations.FirebaseInstallations;
+import com.google.firebase.installations.InstallationTokenResult;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 
 import java.util.Objects;
+
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -33,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.mainActivityHandler.configure();
 
         resetSharedPreference();
+
+        Log.d("Token ", FirebaseInstanceId.getInstance().getToken());
     }
 
     @Override

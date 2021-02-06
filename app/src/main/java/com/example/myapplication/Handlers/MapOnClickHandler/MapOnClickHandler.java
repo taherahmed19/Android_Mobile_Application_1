@@ -33,20 +33,22 @@ public class MapOnClickHandler implements DeleteRadiusMarkerListener, SetRadiusM
 
     public void configure(){
         resetRadiusMarkerState();
-        configureRadiusMarker();;
+        configureRadiusMarker();
     }
 
     void resetRadiusMarkerState(){
-        SharedPreferences settingsPreference = Objects.requireNonNull(context).getSharedPreferences("Radius_Marker_Settings", 0);
-        boolean stateExists = settingsPreference.getBoolean("stateExists", false);
-        double radius = (double)settingsPreference.getFloat("radius", 0.0f);
-        double centerLat = (double)settingsPreference.getFloat("centerLat", 0.0f);
-        double centerLon = (double)settingsPreference.getFloat("centerLon", 0.0f);
+        if(context != null){
+            SharedPreferences settingsPreference = Objects.requireNonNull(context).getSharedPreferences("Radius_Marker_Settings", 0);
+            boolean stateExists = settingsPreference.getBoolean("stateExists", false);
+            double radius = (double)settingsPreference.getFloat("radius", 0.0f);
+            double centerLat = (double)settingsPreference.getFloat("centerLat", 0.0f);
+            double centerLon = (double)settingsPreference.getFloat("centerLon", 0.0f);
 
-        if(stateExists){
-            radiusMarkerHandler = new RadiusMarkerHandler(mMap, new LatLng(centerLat, centerLon), radius);
-            customMarkerBottomSheetDialog = new CustomMarkerBottomSheetFragment(context, mMap, new LatLng(centerLat, centerLon), radius, radiusMarkerHandler,
-                    this, this, fragmentManager);
+            if(stateExists){
+                radiusMarkerHandler = new RadiusMarkerHandler(mMap, new LatLng(centerLat, centerLon), radius);
+                customMarkerBottomSheetDialog = new CustomMarkerBottomSheetFragment(context, mMap, new LatLng(centerLat, centerLon), radius, radiusMarkerHandler,
+                        this, this, fragmentManager);
+            }
         }
     }
 

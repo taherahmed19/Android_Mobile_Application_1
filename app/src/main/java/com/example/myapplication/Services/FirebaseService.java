@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.example.myapplication.HttpRequest.HttpFirebaseToken.HttpFirebaseToken;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -26,9 +27,10 @@ public class FirebaseService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-         String value = remoteMessage.getData().get("value");
-         String time = remoteMessage.getData().get("time");
+         String markerId = remoteMessage.getData().get("markerId");
+         String lat = remoteMessage.getData().get("lat");
+         String lng = remoteMessage.getData().get("lng");
 
-        Log.d("Print", "Remote message " + value + " " + time);
+        Log.d("Print", "Remote message " + lat + " " + lng + " = " + markerId);
     }
 }

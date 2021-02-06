@@ -80,10 +80,14 @@ public class MapHandler implements OnMapReadyCallback {
             mMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
         }
 
+        mapListener.handleMapClick(mMap);
         mapListener.handleMarkerClick(mMap, fragmentActivity);
 
-        MapOnClickHandler onClickHandler = new MapOnClickHandler(context, mMap, fragmentManager);
-        onClickHandler.configure();
+        //error with location activity
+        if(mapFragment != null){
+            MapOnClickHandler onClickHandler = new MapOnClickHandler(context, mMap, fragmentManager);
+            onClickHandler.configure();
+        }
 
         showDialog();
     }

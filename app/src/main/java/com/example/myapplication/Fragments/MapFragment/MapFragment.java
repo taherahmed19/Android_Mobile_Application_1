@@ -129,7 +129,6 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     * */
     @Override
     public void handleMapClick(GoogleMap googleMap) {
-        this.mapFragmentHandler.setGoogleMapClickable(googleMap);
     }
 
     /*
