@@ -1,4 +1,4 @@
-package com.example.myapplication.Services;
+package com.example.myapplication.Services.FirebaseService;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -6,6 +6,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.myapplication.Activities.LoginActivity.LoginActivity;
+import com.example.myapplication.Activities.MainActivity.MainActivity;
 import com.example.myapplication.Fragments.MainMapFragment.MainMapFragment;
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.HttpRequest.HttpFirebaseToken.HttpFirebaseToken;
@@ -19,18 +21,18 @@ public class FirebaseService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         Log.d("Print", "Firebase token " + token);
-        new Runnable() {
-            @Override
-            public void run() {
-                HttpFirebaseToken httpFirebaseToken = new HttpFirebaseToken(getApplicationContext(), LoginPreferenceData.getUserId(getApplicationContext()), token);
-                httpFirebaseToken.execute();
-            }
-        };
+        passTokenToActivity(token);
     }
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         passMessageToActivity(remoteMessage);
+    }
+
+    void passTokenToActivity(@NonNull String token){
+        Intent intent = new Intent(LoginActivity.class.toString());
+        intent.putExtra("token", token);
+        sendBroadcast(intent);
     }
 
     void passMessageToActivity(RemoteMessage remoteMessage){

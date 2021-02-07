@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -24,6 +26,7 @@ import com.example.myapplication.Fragments.MainMapFragment.MainMapFragment;
 import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.MapFeedSearchAutocompleteFragment;
 import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
 import com.example.myapplication.Fragments.MapFilterFragment.MapFilterFragment;
+import com.example.myapplication.Fragments.RadiusMarkerNotificationFragment.RadiusMarkerNotificationFragment;
 import com.example.myapplication.Handlers.MapFragmentHandler.MapFragmentHandler;
 import com.example.myapplication.Interfaces.CurrentLocationListener.CurrentLocationListener;
 import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
@@ -34,6 +37,7 @@ import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Models.Settings.Settings;
 import com.example.myapplication.R;
 import com.example.myapplication.Refactor.searchAutocomplete.Place;
+import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -42,6 +46,8 @@ import com.google.android.gms.maps.model.LatLng;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import static com.example.myapplication.Models.CurrentLocation.CurrentLocation.MY_PERMISSIONS_REQUEST_FINE_LOCATION;
 
 public class MapFragment extends Fragment implements MapFeedSearchFragment.FragmentSearchListener, MapFeedSearchAutocompleteFragment.FragmentAutocompleteListener
                                                      , MapFilterFragment.FragmentMapFilterListener, CurrentLocationListener, MapListener, CustomMarkerListener {
@@ -55,6 +61,7 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     double receiverLat;
     double receiverLng;
     boolean received;
+    ArrayList<Marker> markers;
 
     public MapFragment(LockableViewPager viewPager) {
         this.viewPager = viewPager;
@@ -81,9 +88,11 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
 
     @Override
     public void addMarkerData(ArrayList<Marker> markers) {
+        this.markers = markers;
         this.mapFragmentHandler.addMarkerData(markers);
         if(mapFragmentHandler != null){
             if(markers != null && received){
+                Log.d("Print", "onreceive = " + receiverMarkerId);
                 mapFragmentHandler.triggerMarkerWithinRadiusMarker(markers, receiverMarkerId, viewPager, new LatLng(receiverLat, receiverLng));
             }
         }
@@ -96,6 +105,21 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
 
         LatLng latLng = this.mapFragmentHandler.handleResult(requestCode, resultCode, data);
         this.mapFragmentHandler.handleSavedLocation(latLng);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_FINE_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+                }
+            }
+        }
+
+        currentLocation.startLocationUpdates();
     }
 
     public void showFeedMapContainer(){
@@ -160,9 +184,11 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     @Override
     public void onStart() {
         super.onStart();
-        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            currentLocation.startLocationUpdates();
-        }
+//        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+//            currentLocation.startLocationUpdates();
+//        }
+        Log.d("Print", "Start location updates ");
+        currentLocation.startLocationUpdates();
     }
 
     @Override
@@ -192,7 +218,9 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
             receiverLat = Double.parseDouble(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("lat")));
             receiverLng = Double.parseDouble(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("lng")));
 
-            Log.d("Print", "onreceive = " + receiverMarkerId);
+            RadiusMarkerNotificationFragment notificationFragment = new RadiusMarkerNotificationFragment(viewPager, mapFragmentHandler, markers, receiverMarkerId);
+            FragmentTransition.Transition(getParentFragmentManager(), notificationFragment,
+                    R.anim.radius_marker_notif_open_anim, R.anim.radius_marker_notif_close_anim, R.id.mapFeedSearchPointer, MapFilterFragment.TAG);
         }
 
     };

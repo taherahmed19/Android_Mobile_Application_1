@@ -53,7 +53,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".Services.FirebaseService"
+        <service android:name=".Services.FirebaseService.FirebaseService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>

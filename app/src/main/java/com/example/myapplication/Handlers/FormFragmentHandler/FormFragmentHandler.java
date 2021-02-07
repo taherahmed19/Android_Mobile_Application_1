@@ -87,13 +87,11 @@ public class FormFragmentHandler {
         SpinnerItem item = (SpinnerItem) spinner.getSelectedItem();
         String category = item.getName().toLowerCase();
         EditText mapFeedDescription = (EditText) formFragment.getView().findViewById(R.id.mapFeedDescription);
-        String description = Tools.encodeString(mapFeedDescription.getText().toString());
+        String description = mapFeedDescription.getText().toString();
         Button geolocationButton = (Button) formFragment.getView().findViewById(R.id.geolocationButton);
         int userID = LoginPreferenceData.getUserId(formFragment.getActivity().getApplicationContext());
 
         LatLng chosenLocation = (LatLng)geolocationButton.getTag();
-
-        Log.d("Print", "Category = " + category);
 
         HttpMarker httpMarker = new HttpMarker(this.formFragment.getContext(), userID, category, description, chosenLocation ,feedSubmitListener, this.encodedImage);
         httpMarker.execute("");

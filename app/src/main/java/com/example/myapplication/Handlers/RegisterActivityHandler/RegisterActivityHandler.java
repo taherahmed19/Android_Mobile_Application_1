@@ -11,6 +11,7 @@ import com.example.myapplication.Activities.MainActivity.MainActivity;
 import com.example.myapplication.Activities.RegisterActivity.RegisterActivity;
 import com.example.myapplication.Fragments.ConfirmFragment.ConfirmFragment;
 import com.example.myapplication.Fragments.ErrorFragment.ErrorFragment;
+import com.example.myapplication.HttpRequest.HttpFirebaseToken.HttpFirebaseToken;
 import com.example.myapplication.HttpRequest.HttpRegisterUser.HttpRegisterUser;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
@@ -44,6 +45,11 @@ public class RegisterActivityHandler {
             FragmentTransition.OpenFragment(this.registerActivity.getSupportFragmentManager(), confirmFragment, R.id.registerActivity, "");
 
             LoginPreferenceData.SaveLoginState(this.registerActivity, true, userId, userFirstName, userLastName, userEmail);
+
+            HttpFirebaseToken httpFirebaseToken = new HttpFirebaseToken(registerActivity.getApplicationContext(),
+                    LoginPreferenceData.getUserId(registerActivity.getApplicationContext()), registerActivity.getToken());
+            httpFirebaseToken.execute();
+
             enterApplication();
         }else{
             ErrorFragment errorFragment = new ErrorFragment(this.registerActivity, this.registerActivity.getString(R.string.registration_error_title),

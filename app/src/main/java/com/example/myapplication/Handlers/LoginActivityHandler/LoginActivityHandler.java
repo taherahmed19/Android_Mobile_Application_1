@@ -12,6 +12,7 @@ import com.example.myapplication.Activities.MainActivity.MainActivity;
 import com.example.myapplication.Activities.RegisterActivity.RegisterActivity;
 import com.example.myapplication.Fragments.ConfirmFragment.ConfirmFragment;
 import com.example.myapplication.Fragments.ErrorFragment.ErrorFragment;
+import com.example.myapplication.HttpRequest.HttpFirebaseToken.HttpFirebaseToken;
 import com.example.myapplication.HttpRequest.HttpLoginUser.HttpLoginUser;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
@@ -39,6 +40,12 @@ public class LoginActivityHandler {
             FragmentTransition.OpenFragment(this.loginActivity.getSupportFragmentManager(), confirmFragment, R.id.loginActivity, "");
 
             LoginPreferenceData.SaveLoginState(this.loginActivity, true, userId, userFirstName, userLastName, userEmail);
+
+            //send firebase token
+            HttpFirebaseToken httpFirebaseToken = new HttpFirebaseToken(loginActivity.getApplicationContext(),
+                    LoginPreferenceData.getUserId(loginActivity.getApplicationContext()), loginActivity.getToken());
+            httpFirebaseToken.execute();
+
             enterApplication();
         }else{
             ErrorFragment errorFragment = new ErrorFragment(this.loginActivity, this.loginActivity.getString(R.string.login_error_title),
@@ -95,6 +102,7 @@ public class LoginActivityHandler {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(loginActivity.getBaseContext(), RegisterActivity.class);
+                intent.putExtra("token", loginActivity.getToken());
                 loginActivity.startActivity(intent);
             }
         });

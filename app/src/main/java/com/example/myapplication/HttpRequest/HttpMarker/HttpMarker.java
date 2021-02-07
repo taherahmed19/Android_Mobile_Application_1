@@ -119,7 +119,6 @@ public class HttpMarker extends AsyncTask<String , Void ,String> {
 
     @Override
     protected void onPostExecute(String responseString) {
-        Log.d("Print", "Response  string " + responseString);
         handleJSONResponse(responseString);
     }
 
