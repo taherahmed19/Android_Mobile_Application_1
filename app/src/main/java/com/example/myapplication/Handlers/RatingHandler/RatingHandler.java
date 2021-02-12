@@ -144,7 +144,7 @@ public class RatingHandler {
 
     void submitMarkerRating(boolean isUpVote){
         HttpRatings httpRatings = new HttpRatings(this.markerModalFragment.getContext(), marker.getId(), isUpVote, this.markerModalFragment);
-        httpRatings.execute("https://10.0.2.2:443/api/getmarkers");
+        httpRatings.execute("");
     }
 
     void setUpVote(){

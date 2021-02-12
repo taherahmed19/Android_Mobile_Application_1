@@ -2,6 +2,8 @@ package com.example.myapplication.Models.Marker;
 
 public class Marker {
 
+    private String firstName;
+    private String lastName;
     private String category;
     private String description;
     private String lat;
@@ -11,7 +13,9 @@ public class Marker {
     private int id;
     private int rating;
 
-    public Marker(int userId, String category, String description, String lat, String lng, String encodedImage, int id, int rating) {
+    public Marker(int userId, String firstName, String lastName, String category, String description, String lat, String lng, String encodedImage, int id, int rating) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.category = category;
         this.description = description;
         this.lat = lat;
@@ -22,25 +26,20 @@ public class Marker {
         this.rating = rating;
     }
 
-    public static int CategorySwitchCase(String category){
-        int categoryItem = -1;
+    public String getFirstName() {
+        return firstName;
+    }
 
-        switch (category.toLowerCase()){
-            case "environment":
-                categoryItem = 1;
-                break;
-            case "weather":
-                categoryItem = 2;
-                break;
-            case "people":
-                categoryItem = 3;
-                break;
-            default:
-                categoryItem = 0;
-                break;
-        }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-        return categoryItem;
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getCategory() {

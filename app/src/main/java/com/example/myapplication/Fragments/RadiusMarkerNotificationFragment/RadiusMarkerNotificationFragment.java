@@ -28,28 +28,15 @@ public class RadiusMarkerNotificationFragment extends Fragment {
 
     RadiusMarkerNotificationHandler radiusMarkerNotificationHandler;
     FragmentManager fragmentManager;
-    MapHandler mapHandler;
-    Marker marker;
     ViewPager viewPager;
-    LatLng latLng;
-
-    public RadiusMarkerNotificationFragment(FragmentManager fragmentManager, MapHandler mapHandler, Marker marker, ViewPager viewPager, LatLng latLng) {
-        this.fragmentManager = fragmentManager;
-        this.mapHandler = mapHandler;
-        this.marker = marker;
-        this.viewPager = viewPager;
-        this.latLng = latLng;
-        this.radiusMarkerNotificationHandler = new RadiusMarkerNotificationHandler(this, fragmentManager, mapHandler, marker, viewPager, latLng);
-    }
-
-    MapFragmentHandler mapFragmentHandler;
-    ArrayList<Marker> markers;
+    Marker marker;
     int markerId;
-    public RadiusMarkerNotificationFragment(ViewPager viewPager, MapFragmentHandler mapFragmentHandler, ArrayList<Marker> markers, int markerId) {
+
+    public RadiusMarkerNotificationFragment(FragmentManager fragmentManager,ViewPager viewPager, Marker marker) {
+        this.fragmentManager = fragmentManager;
         this.viewPager = viewPager;
-        this.mapFragmentHandler = mapFragmentHandler;
-        this.markers = markers;
-        this.markerId = markerId;
+        this.marker = marker;
+        this.radiusMarkerNotificationHandler = new RadiusMarkerNotificationHandler(this, fragmentManager, marker, viewPager);
     }
 
     @Override
@@ -60,24 +47,18 @@ public class RadiusMarkerNotificationFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-     //   this.radiusMarkerNotificationHandler.configure();
+        this.radiusMarkerNotificationHandler.configure();
 
         LinearLayout radiusMarkerNotifButton = (LinearLayout) this.getView().findViewById(R.id.radiusMarkerNotifButton);
         radiusMarkerNotifButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewPager.getAdapter().notifyDataSetChanged();
+                getParentFragmentManager().popBackStack();
 
-                for(Marker marker : markers) {
-                    if(markerId == marker.getId()){
-                        getParentFragmentManager().popBackStack();
+                MarkerModalFragment markerModalFragment = new MarkerModalFragment(marker, viewPager);
+                FragmentTransition.Transition(fragmentManager, markerModalFragment, R.anim.right_animations, R.anim.left_animation,
+                        R.id.mapModalContainer, "");
 
-                        MarkerModalFragment markerModalFragment = new MarkerModalFragment(marker, viewPager);
-                        FragmentTransition.Transition(fragmentManager, markerModalFragment, R.anim.right_animations, R.anim.left_animation,
-                                R.id.mapModalContainer, "");
-                        mapHandler.setMapLocation(latLng);
-                    }
-                }
             }
         });
 

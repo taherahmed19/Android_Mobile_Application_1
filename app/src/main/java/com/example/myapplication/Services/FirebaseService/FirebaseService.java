@@ -2,6 +2,7 @@ package com.example.myapplication.Services.FirebaseService;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.util.Base64;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -36,16 +37,28 @@ public class FirebaseService extends FirebaseMessagingService {
     }
 
     void passMessageToActivity(RemoteMessage remoteMessage){
+        String userId = remoteMessage.getData().get("userId");
         String markerId = remoteMessage.getData().get("markerId");
+        String category = remoteMessage.getData().get("category");
+        String description = remoteMessage.getData().get("description");
         String lat = remoteMessage.getData().get("lat");
         String lng = remoteMessage.getData().get("lng");
+        String firstName = remoteMessage.getData().get("firstName");
+        String lastName = remoteMessage.getData().get("lastName");
+        String rating = remoteMessage.getData().get("rating");
 
-        Log.d("Print", "Remote message " + lat + " " + lng + " = " + markerId);
+        Log.d("Remote message", "");
 
         Intent intent = new Intent(MapFragment.class.toString());
+        intent.putExtra("userId", userId);
         intent.putExtra("markerId", markerId);
+        intent.putExtra("category", category);
+        intent.putExtra("description", description);
         intent.putExtra("lat", lat);
         intent.putExtra("lng", lng);
+        intent.putExtra("firstName", firstName);
+        intent.putExtra("lastName", lastName);
+        intent.putExtra("rating", rating);
         sendBroadcast(intent);
     }
 }

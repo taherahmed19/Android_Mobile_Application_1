@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.example.myapplication.Fragments.ErrorFragment.ErrorFragment;
 import com.example.myapplication.Handlers.MarkerModalFragmentHandler.MarkerModalFragmentHandler;
 import com.example.myapplication.Handlers.RatingHandler.RatingHandler;
+import com.example.myapplication.Interfaces.MarkerImageListener.MarkerImageListener;
 import com.example.myapplication.Interfaces.MarkerListener.MarkerListener;
 import com.example.myapplication.Interfaces.RatingsListener.RatingsListener;
 import com.example.myapplication.R;
@@ -29,7 +30,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.Objects;
 import java.util.Random;
 
-public class MarkerModalFragment extends Fragment implements RatingsListener, MarkerListener {
+public class MarkerModalFragment extends Fragment implements RatingsListener, MarkerListener, MarkerImageListener {
 
     MarkerModalFragmentHandler markerModalFragmentHandler;
     RatingHandler ratingHandler;
@@ -93,5 +94,10 @@ public class MarkerModalFragment extends Fragment implements RatingsListener, Ma
             ErrorFragment errorFragment = new ErrorFragment(this, this.getString(R.string.post_delete_title), this.getString(R.string.post_delete_body));
             FragmentTransition.OpenFragment(this.getChildFragmentManager(), errorFragment, R.id.markerModal, "");
         }
+    }
+
+    @Override
+    public void handleMarkerImage(String encodedString) {
+        this.markerModalFragmentHandler.handleMarkerImage(encodedString);
     }
 }

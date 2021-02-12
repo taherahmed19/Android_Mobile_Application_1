@@ -26,6 +26,7 @@ import com.example.myapplication.Fragments.MainMapFragment.MainMapFragment;
 import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.MapFeedSearchAutocompleteFragment;
 import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
 import com.example.myapplication.Fragments.MapFilterFragment.MapFilterFragment;
+import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
 import com.example.myapplication.Fragments.RadiusMarkerNotificationFragment.RadiusMarkerNotificationFragment;
 import com.example.myapplication.Handlers.MapFragmentHandler.MapFragmentHandler;
 import com.example.myapplication.Interfaces.CurrentLocationListener.CurrentLocationListener;
@@ -93,7 +94,7 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
         if(mapFragmentHandler != null){
             if(markers != null && received){
                 Log.d("Print", "onreceive = " + receiverMarkerId);
-                mapFragmentHandler.triggerMarkerWithinRadiusMarker(markers, receiverMarkerId, viewPager, new LatLng(receiverLat, receiverLng));
+               // mapFragmentHandler.triggerMarkerWithinRadiusMarker(markers, receiverMarkerId, viewPager, new LatLng(receiverLat, receiverLng));
             }
         }
     }
@@ -214,13 +215,25 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
         @Override
         public void onReceive(Context context, Intent intent) {
             received = true;
-            receiverMarkerId = Integer.parseInt(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("markerId")));
-            receiverLat = Double.parseDouble(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("lat")));
-            receiverLng = Double.parseDouble(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("lng")));
+            int userId = Integer.parseInt(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("userId")));
+            int markerId = Integer.parseInt(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("markerId")));
+            String category = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("category"));
+            String description = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("description"));
+            String lat = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("lat"));
+            String lng = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("lng"));
+            String firstName = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("firstName"));
+            String lastName = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("lastName"));
+            int rating = Integer.parseInt(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("rating")));
 
-            RadiusMarkerNotificationFragment notificationFragment = new RadiusMarkerNotificationFragment(viewPager, mapFragmentHandler, markers, receiverMarkerId);
+            Marker markerModel = new Marker(userId, firstName, lastName,
+                    category, description, lat, lng, null, markerId, rating);
+
+            mapFragmentHandler.triggerRadiusMarker(viewPager, markerModel);
+
+            RadiusMarkerNotificationFragment notificationFragment = new RadiusMarkerNotificationFragment(getParentFragmentManager(), viewPager, markerModel);
             FragmentTransition.Transition(getParentFragmentManager(), notificationFragment,
                     R.anim.radius_marker_notif_open_anim, R.anim.radius_marker_notif_close_anim, R.id.mapFeedSearchPointer, MapFilterFragment.TAG);
+
         }
 
     };

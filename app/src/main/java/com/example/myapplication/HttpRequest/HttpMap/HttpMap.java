@@ -3,6 +3,7 @@ package com.example.myapplication.HttpRequest.HttpMap;
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -80,6 +81,7 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
         SSL.AllowSSLCertificates();
 
         String apiRequest = strings[0];
+
         try {
             String response = handleRequest(apiRequest);
 

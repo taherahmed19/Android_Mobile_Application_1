@@ -6,13 +6,13 @@
 
     <string name="webservice_insert_post_endpoint">https://10.0.2.2:443/api/insertPost</string>
 
-
     <string name="webservice_update_marker_rating">https://10.0.2.2:443/api/insertRating?markerId={0}&amp;isUpVote={1}</string>
     <string name="webservice_delete_marker">https://10.0.2.2:443/api/deletemarker?markerId={0}</string>
 
+    <string name="webservice_marker_image">https://10.0.2.2:443/api/getmarkerimage?markerId={0}</string>
+
     <string name="webservice_write_radius_marker">https://10.0.2.2:443/api/setRadiusMarker/</string>
     <string name="webservice_delete_radius_marker">https://10.0.2.2:443/api/deleteRadiusMarker?userId={0}</string>
-
 
     <string name="webservice_save_firebase_token">https://10.0.2.2:443/api/saveFirebaseToken/</string>
 

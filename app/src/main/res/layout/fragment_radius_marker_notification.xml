@@ -45,7 +45,7 @@
                 android:id="@+id/radiusMarkerDescriptionText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Some placeholder text here ..."
+                android:text="A new marker has been posted..."
                 android:textSize="14sp"
                 android:textColor="#424242"
                 android:textStyle="normal"

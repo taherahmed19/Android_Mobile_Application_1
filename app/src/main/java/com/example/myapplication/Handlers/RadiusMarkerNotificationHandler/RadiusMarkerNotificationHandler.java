@@ -22,20 +22,25 @@ public class RadiusMarkerNotificationHandler {
     MapHandler mapHandler;
     Marker marker;
     ViewPager viewPager;
-    LatLng latLng;
 
-    public RadiusMarkerNotificationHandler(RadiusMarkerNotificationFragment radiusMarkerNotificationFragment,
-                                           FragmentManager fragmentManager, MapHandler mapHandler,
-                                           Marker marker, ViewPager viewPager, LatLng latLng) {
+//    public RadiusMarkerNotificationHandler(RadiusMarkerNotificationFragment radiusMarkerNotificationFragment,
+//                                           FragmentManager fragmentManager, MapHandler mapHandler,
+//                                           Marker marker, ViewPager viewPager, LatLng latLng) {
+//        this.radiusMarkerNotificationFragment = radiusMarkerNotificationFragment;
+//        this.fragmentManager = fragmentManager;
+//        this.mapHandler = mapHandler;
+//        this.marker = marker;
+//        this.viewPager = viewPager;
+//        this.latLng = latLng;
+//    }
+
+
+    public RadiusMarkerNotificationHandler(RadiusMarkerNotificationFragment radiusMarkerNotificationFragment, FragmentManager fragmentManager,
+                                           Marker marker, ViewPager viewPager) {
         this.radiusMarkerNotificationFragment = radiusMarkerNotificationFragment;
         this.fragmentManager = fragmentManager;
-        this.mapHandler = mapHandler;
         this.marker = marker;
         this.viewPager = viewPager;
-        this.latLng = latLng;
-    }
-
-    public RadiusMarkerNotificationHandler() {
     }
 
     public void configure(){
@@ -57,12 +62,12 @@ public class RadiusMarkerNotificationHandler {
         radiusMarkerNotifButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                radiusMarkerNotificationFragment.getParentFragmentManager().popBackStack();
+                fragmentManager.popBackStack();
 
                 MarkerModalFragment markerModalFragment = new MarkerModalFragment(marker, viewPager);
                 FragmentTransition.Transition(fragmentManager, markerModalFragment, R.anim.right_animations, R.anim.left_animation,
                         R.id.mapModalContainer, "");
-                mapHandler.setMapLocation(latLng);
+
             }
         });
     }

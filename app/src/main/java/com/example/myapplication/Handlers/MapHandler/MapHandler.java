@@ -88,8 +88,6 @@ public class MapHandler implements OnMapReadyCallback {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(savedLatLng.latitude, savedLatLng.longitude), 17));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
         }
-//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.513698411514255, -0.14868054538965225), 17));
-//        mMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
 
         mapListener.handleMapClick(mMap);
         mapListener.handleMarkerClick(mMap, fragmentActivity);
@@ -120,13 +118,25 @@ public class MapHandler implements OnMapReadyCallback {
         mMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
     }
 
+    public void triggerRadiusMarker(ViewPager viewPager, Marker markerModel){
+        final BitmapDescriptor markerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+
+        com.google.android.gms.maps.model.Marker marker = mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(Double.parseDouble(markerModel.getLat()),
+                        Double.parseDouble(markerModel.getLng())))
+                .icon(markerIcon));
+
+        marker.setTag(markerModel);
+
+        googleMarkers.add(marker);
+    }
+
     public void triggerMarkerWithinRadiusMarker(ArrayList<Marker> markers, int markerId, ViewPager viewPager,LatLng latLng){
         for(Marker marker : markers) {
             if(markerId == marker.getId()){
-                RadiusMarkerNotificationFragment notificationFragment = new RadiusMarkerNotificationFragment(fragmentActivity.getSupportFragmentManager(),
-                        this, marker, viewPager, latLng);
-                FragmentTransition.Transition(mapFragment.getParentFragmentManager(), notificationFragment,
-                        R.anim.radius_marker_notif_open_anim, R.anim.radius_marker_notif_close_anim, R.id.mapFeedSearchPointer, MapFilterFragment.TAG);
+                MarkerModalFragment markerModalFragment = new MarkerModalFragment(marker, viewPager);
+                FragmentTransition.Transition(fragmentManager, markerModalFragment, R.anim.right_animations, R.anim.left_animation,
+                        R.id.mapModalContainer, "");
             }
         }
     }
