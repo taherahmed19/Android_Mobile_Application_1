@@ -58,15 +58,8 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     LockableViewPager viewPager;
     CurrentLocation currentLocation;
 
-    int receiverMarkerId;
-    double receiverLat;
-    double receiverLng;
-    boolean received;
-    ArrayList<Marker> markers;
-
     public MapFragment(LockableViewPager viewPager) {
         this.viewPager = viewPager;
-        this.received = false;
     }
 
     @Override
@@ -89,14 +82,7 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
 
     @Override
     public void addMarkerData(ArrayList<Marker> markers) {
-        this.markers = markers;
         this.mapFragmentHandler.addMarkerData(markers);
-        if(mapFragmentHandler != null){
-            if(markers != null && received){
-                Log.d("Print", "onreceive = " + receiverMarkerId);
-               // mapFragmentHandler.triggerMarkerWithinRadiusMarker(markers, receiverMarkerId, viewPager, new LatLng(receiverLat, receiverLng));
-            }
-        }
     }
 
     @Override
@@ -188,17 +174,16 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
 //        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 //            currentLocation.startLocationUpdates();
 //        }
-        Log.d("Print", "Start location updates ");
         currentLocation.startLocationUpdates();
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroy() {
+        super.onDestroy();
         currentLocation.stopLocationUpdates();
 
         try{
-            Objects.requireNonNull(getActivity()).unregisterReceiver(receiver);
+            //Objects.requireNonNull(getActivity()).unregisterReceiver(receiver);
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -214,7 +199,9 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            received = true;
+
+            Log.d("Print ", "Received!");
+            int openNotification = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getInt("openNotification"));
             int userId = Integer.parseInt(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("userId")));
             int markerId = Integer.parseInt(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("markerId")));
             String category = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("category"));
@@ -228,12 +215,19 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
             Marker markerModel = new Marker(userId, firstName, lastName,
                     category, description, lat, lng, null, markerId, rating);
 
-            mapFragmentHandler.triggerRadiusMarker(viewPager, markerModel);
+            mapFragmentHandler.triggerMarkerOnMap(viewPager, markerModel);
 
-            RadiusMarkerNotificationFragment notificationFragment = new RadiusMarkerNotificationFragment(getParentFragmentManager(), viewPager, markerModel);
-            FragmentTransition.Transition(getParentFragmentManager(), notificationFragment,
-                    R.anim.radius_marker_notif_open_anim, R.anim.radius_marker_notif_close_anim, R.id.mapFeedSearchPointer, MapFilterFragment.TAG);
-
+            //refactor
+            if(openNotification == 0){
+                RadiusMarkerNotificationFragment notificationFragment = new RadiusMarkerNotificationFragment(getParentFragmentManager(), viewPager, markerModel);
+                FragmentTransition.Transition(getParentFragmentManager(), notificationFragment,
+                        R.anim.radius_marker_notif_open_anim, R.anim.radius_marker_notif_close_anim, R.id.mapFeedSearchPointer, RadiusMarkerNotificationFragment.class.toString());
+            }else{
+                //move camera to marker
+                MarkerModalFragment markerModalFragment = new MarkerModalFragment(markerModel, viewPager);
+                FragmentTransition.Transition(getParentFragmentManager(), markerModalFragment, R.anim.right_animations, R.anim.left_animation,
+                        R.id.mapModalContainer, "");
+            }
         }
 
     };

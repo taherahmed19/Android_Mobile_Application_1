@@ -34,7 +34,6 @@ public class RadiusMarkerHandler {
     private final int STROKE_WIDTH = 5;
     private final String STROKE_COLOUR = "#6699ff";
 
-    private LatLng circlePerimeterPoint;
     private Circle radiusMarker;
     private GoogleMap mMap;
     private LatLng latLng;
@@ -124,30 +123,5 @@ public class RadiusMarkerHandler {
         return radiusMarker;
     }
 
-    public LatLng getCirclePerimeterPoint() {
-        return circlePerimeterPoint;
-    }
 
-    public double calculateRadiusMarkerDistance(LatLng centre, double radius)
-    {
-        double EARTH_RADIUS = 6378100.0;
-        double lat = centre.latitude * Math.PI / 180.0;
-        double lon = centre.longitude * Math.PI / 180.0;
-
-        double latPoint = lat + (radius / EARTH_RADIUS) * Math.sin(0);
-        double lonPoint = lon + (radius / EARTH_RADIUS) * Math.cos(0) / Math.cos(lat);
-
-        circlePerimeterPoint = new LatLng(latPoint * 180.0 / Math.PI, lonPoint * 180.0 / Math.PI);
-
-        //mMap.addMarker(new MarkerOptions().position(circlePerimeterPoint));
-
-        float[] distance = new float[2];
-        Location.distanceBetween(circlePerimeterPoint.latitude, circlePerimeterPoint.longitude,
-                centre.latitude, centre.longitude, distance);
-
-        double distanceInMiles =  distance[0] * 0.000621371192;
-
-        //return distance in miles with two dp
-        return Math.floor(distanceInMiles * 100) / 100;
-    }
 }

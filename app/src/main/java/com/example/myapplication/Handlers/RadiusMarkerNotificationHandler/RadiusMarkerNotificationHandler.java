@@ -23,18 +23,6 @@ public class RadiusMarkerNotificationHandler {
     Marker marker;
     ViewPager viewPager;
 
-//    public RadiusMarkerNotificationHandler(RadiusMarkerNotificationFragment radiusMarkerNotificationFragment,
-//                                           FragmentManager fragmentManager, MapHandler mapHandler,
-//                                           Marker marker, ViewPager viewPager, LatLng latLng) {
-//        this.radiusMarkerNotificationFragment = radiusMarkerNotificationFragment;
-//        this.fragmentManager = fragmentManager;
-//        this.mapHandler = mapHandler;
-//        this.marker = marker;
-//        this.viewPager = viewPager;
-//        this.latLng = latLng;
-//    }
-
-
     public RadiusMarkerNotificationHandler(RadiusMarkerNotificationFragment radiusMarkerNotificationFragment, FragmentManager fragmentManager,
                                            Marker marker, ViewPager viewPager) {
         this.radiusMarkerNotificationFragment = radiusMarkerNotificationFragment;

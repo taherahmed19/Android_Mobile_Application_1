@@ -1,6 +1,7 @@
 package com.example.myapplication.Models.CurrentLocation;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.Manifest;
 import android.location.Location;
@@ -49,6 +50,17 @@ public class CurrentLocation {
         this.currentLocationListener = currentLocationListener;
     }
 
+    public CurrentLocation(Context context, CurrentLocationListener currentLocationListener) {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+
+        locationRequest = LocationRequest.create();
+        locationRequest.setInterval(500);
+        locationRequest.setFastestInterval(500);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        this.currentLocationListener = currentLocationListener;
+    }
+
     LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
@@ -63,16 +75,18 @@ public class CurrentLocation {
     }
 
     public void startLocationUpdates() {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+        if(context != null){
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
 
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(context,
-                        Manifest.permission.ACCESS_FINE_LOCATION)) {
-                } else {
-                    ActivityCompat.requestPermissions(context,
-                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                            MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(context,
+                            Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    } else {
+                        ActivityCompat.requestPermissions(context,
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+                    }
                 }
             }
         }

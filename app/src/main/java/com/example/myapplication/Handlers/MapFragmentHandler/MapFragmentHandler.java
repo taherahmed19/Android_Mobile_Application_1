@@ -108,12 +108,8 @@ public class MapFragmentHandler  {
         });
     }
 
-    public void triggerRadiusMarker(ViewPager viewPager, Marker markerModel){
-        mapHandler.triggerRadiusMarker(viewPager, markerModel);
-    }
-
-    public void triggerMarkerWithinRadiusMarker(ArrayList<Marker> markers, int markerId, ViewPager viewPager, LatLng latLng){
-        mapHandler.triggerMarkerWithinRadiusMarker(markers, markerId, viewPager, latLng);
+    public void triggerMarkerOnMap(ViewPager viewPager, Marker markerModel){
+        mapHandler.triggerMarkerOnMap(viewPager, markerModel);
     }
 
     public void handleSavedLocation(LatLng latLng){

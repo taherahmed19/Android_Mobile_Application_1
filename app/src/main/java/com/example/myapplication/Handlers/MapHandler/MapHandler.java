@@ -118,8 +118,8 @@ public class MapHandler implements OnMapReadyCallback {
         mMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
     }
 
-    public void triggerRadiusMarker(ViewPager viewPager, Marker markerModel){
-        final BitmapDescriptor markerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+    public void triggerMarkerOnMap(ViewPager viewPager, Marker markerModel){
+        final BitmapDescriptor markerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
 
         com.google.android.gms.maps.model.Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(Double.parseDouble(markerModel.getLat()),

@@ -28,6 +28,7 @@ import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRad
 import com.example.myapplication.Interfaces.SetRadiusMarkerListener.SetRadiusMarkerListener;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
+import com.example.myapplication.Utils.Distance.Distance;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Utils.Tools.Tools;
 import com.google.android.gms.maps.GoogleMap;
@@ -140,7 +141,7 @@ public class CustomMarkerBottomSheetHandler {
             radiusMarkerSeekBar.setMax(width / 4);
             radiusMarkerSeekBar.setProgress((int)this.radiusMarkerHandler.getRadiusMarker().getRadius());
 
-            double initialMiles = radiusMarkerHandler.calculateRadiusMarkerDistance(latLng, this.radiusMarkerHandler.getRadiusMarker().getRadius());
+            double initialMiles = Distance.CalculateRadiusMarkerDistance(latLng, this.radiusMarkerHandler.getRadiusMarker().getRadius());
             String progressText = initialMiles + " mi";
             radiusMarkerSeekBarProgress.setText(progressText);
         }
@@ -150,7 +151,7 @@ public class CustomMarkerBottomSheetHandler {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 seekBar.setProgress(progress);
 
-                double updatedMiles = radiusMarkerHandler.calculateRadiusMarkerDistance(latLng, progress);
+                double updatedMiles = Distance.CalculateRadiusMarkerDistance(latLng, progress);
                 String progressText = updatedMiles + " mi";
                 radiusMarkerSeekBarProgress.setText(progressText);
                 radiusMarkerHandler.updateMarkerRadius(progress);
@@ -206,7 +207,7 @@ public class CustomMarkerBottomSheetHandler {
                     radiusMarkerHandler.getRadiusMarker().setRadius(radius);
                     radiusMarkerSeekBar.setProgress((int)radius);
 
-                    double initialMiles = radiusMarkerHandler.calculateRadiusMarkerDistance(new LatLng(centerLat, centerLon), radius);
+                    double initialMiles = Distance.CalculateRadiusMarkerDistance(new LatLng(centerLat, centerLon), radius);
                     String progressText = initialMiles + " mi";
                     radiusMarkerSeekBarProgress.setText(progressText);
 
