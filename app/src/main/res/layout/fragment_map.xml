@@ -68,12 +68,15 @@
                 </ImageButton>
 
                 <ImageButton
-                    android:id="@+id/filterButton"
+                    android:id="@+id/mapSearchButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_filter"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:src="@drawable/ic_routing_search"
                     android:background="@drawable/map_search_button">
                 </ImageButton>
+
             </LinearLayout>
 
             <ImageButton
@@ -87,17 +90,6 @@
                 android:src="@drawable/ic_map_switch"
                 android:background="@drawable/map_search_button"
                 android:layout_margin="20sp"/>
-
-            <ImageButton
-                android:id="@+id/mapSearchButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="20sp"
-                android:src="@drawable/ic_routing_search"
-                android:background="@drawable/map_search_button">
-            </ImageButton>
 
         </RelativeLayout>
 

@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.myapplication.Adapters.LockableViewPager.LockableViewPager;
-import com.example.myapplication.Fragments.MapFilterFragment.MapFilterFragment;
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
@@ -71,7 +70,6 @@ public class MapFragmentHandler  {
         this.configureSpinner();
         this.configureMapSearchButton();
         this.configureNewPostButton();
-        this.configureFilterButton();
         this.configureSwitchButton();
     }
 
@@ -207,25 +205,4 @@ public class MapFragmentHandler  {
         });
     }
 
-    void configureFilterButton(){
-        ImageButton filterButton = (ImageButton) mapFragment.getView().findViewById(R.id.filterButton);
-        filterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                httpMap.saveMapCameraPosition();
-
-                MapFilterFragment fragment = (MapFilterFragment) mapFragment.getFragmentManager().findFragmentByTag(MapFilterFragment.TAG);
-                if (fragment == null) {
-                    fragment = new MapFilterFragment(mapFragment.getFragmentManager(), viewPager,  mapFragment);
-                }
-
-                FragmentTransaction transition = FragmentTransition.Transition(mapFragment.getFragmentManager(), fragment,
-                        R.anim.right_animations, R.anim.left_animation, R.id.userFeedFormPointer, MapFilterFragment.TAG);
-            }
-        });
-    }
-
-    void showNotificationDialog(){
-
-    }
 }

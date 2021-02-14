@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mapFragmentIntent.putExtra("rating", intent.getExtras().getString("rating"));
             sendBroadcast(mapFragmentIntent);
         }
-
     }
 
     void resetSharedPreference(){
@@ -80,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getApplicationContext().getSharedPreferences("Main_MapFeed_Map_State", 0).edit().clear().apply();
         getApplicationContext().getSharedPreferences("Map_Filter_Fragment", 0).edit().clear().apply();
         getApplicationContext().getSharedPreferences("Region_Geolocation_State", 0).edit().clear().apply();
-        getApplicationContext().getSharedPreferences("Map_Filter_Fragment_Settings", 0).edit().clear().apply();
     }
 
     void handleBackPressMapFragments(Fragment fragment){

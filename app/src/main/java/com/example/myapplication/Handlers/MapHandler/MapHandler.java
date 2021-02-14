@@ -13,7 +13,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.myapplication.Fragments.MapFilterFragment.MapFilterFragment;
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
 import com.example.myapplication.Fragments.RadiusMarkerNotificationFragment.RadiusMarkerNotificationFragment;
 import com.example.myapplication.Handlers.MapOnClickHandler.MapOnClickHandler;
@@ -80,6 +79,7 @@ public class MapHandler implements OnMapReadyCallback {
         mMap = googleMap;
         mMap.clear();
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        mMap.getUiSettings().setCompassEnabled(false);
         mMap.setTrafficEnabled(false);
 
         LatLng savedLatLng = this.getMapCameraPosition();

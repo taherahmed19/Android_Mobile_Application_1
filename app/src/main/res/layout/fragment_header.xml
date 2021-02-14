@@ -41,15 +41,6 @@
 
                 android:layout_alignParentLeft="true">
             </ImageButton>
-
-            <ImageButton
-                android:layout_width="30sp"
-                android:layout_height="30sp"
-                android:cropToPadding="false"
-                android:src="@drawable/ic_settings"
-                android:layout_alignParentRight="true"
-                android:background="@android:color/transparent">
-            </ImageButton>
         </RelativeLayout>
     </LinearLayout>
 

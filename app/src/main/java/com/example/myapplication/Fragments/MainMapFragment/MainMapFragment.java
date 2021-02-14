@@ -18,7 +18,6 @@ import com.example.myapplication.Adapters.SwiperAdapter.SwiperAdapter;
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.Fragments.FeedFragment.FeedFragment;
 import com.example.myapplication.R;
-import com.example.myapplication.Fragments.MapFilterFragment.MapFilterFragment;
 
 import java.util.Objects;
 
@@ -27,7 +26,6 @@ public class MainMapFragment extends Fragment {
     MapFragment mapFragment;
     FeedFragment feedFragment;
     SwiperAdapter swiperAdapter;
-    MapFilterFragment fragment;
 
     public MainMapFragment(){
         mapFragment = new MapFragment(viewPager);

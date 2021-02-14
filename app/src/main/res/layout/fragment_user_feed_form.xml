@@ -171,7 +171,6 @@
 
                 </RelativeLayout>
 
-
                 <EditText
                     android:id="@+id/mapFeedDescription"
                     android:layout_width="fill_parent"
@@ -182,6 +181,8 @@
                     android:paddingRight="10sp"
                     android:minLines="3"
                     android:scrollbarAlwaysDrawVerticalTrack="true"
+                    android:overScrollMode="always"
+                    android:scrollbarStyle="insideInset"
                     android:scrollbars="vertical"/>
 
                 <TextView

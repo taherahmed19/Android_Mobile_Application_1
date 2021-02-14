@@ -25,7 +25,6 @@ import com.example.myapplication.Adapters.LockableViewPager.LockableViewPager;
 import com.example.myapplication.Fragments.MainMapFragment.MainMapFragment;
 import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.MapFeedSearchAutocompleteFragment;
 import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
-import com.example.myapplication.Fragments.MapFilterFragment.MapFilterFragment;
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
 import com.example.myapplication.Fragments.RadiusMarkerNotificationFragment.RadiusMarkerNotificationFragment;
 import com.example.myapplication.Handlers.MapFragmentHandler.MapFragmentHandler;
@@ -51,7 +50,7 @@ import java.util.Objects;
 import static com.example.myapplication.Models.CurrentLocation.CurrentLocation.MY_PERMISSIONS_REQUEST_FINE_LOCATION;
 
 public class MapFragment extends Fragment implements MapFeedSearchFragment.FragmentSearchListener, MapFeedSearchAutocompleteFragment.FragmentAutocompleteListener
-                                                     , MapFilterFragment.FragmentMapFilterListener, CurrentLocationListener, MapListener, CustomMarkerListener {
+        , CurrentLocationListener, MapListener, CustomMarkerListener {
     SupportMapFragment supportMapFragment;
     LoadingSpinner loadingSpinner;
     MapFragmentHandler mapFragmentHandler;
@@ -136,15 +135,6 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     @Override
     public int checkSearchFieldLength() {
         return this.mapFragmentHandler.getMapFeedSearchFragment().searchFieldLength();
-    }
-
-    @Override
-    public void onSettingsUpdated(Settings settings) {
-        try{
-            this.mapFragmentHandler.requestMap(settings);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
     }
 
     @Override
