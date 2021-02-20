@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="webservice_register_endpoint">https://jellymaps.com/api/registeruser?firstname={0}&amp;lastname={1}&amp;email={2}&amp;password={3}</string>
+    <string name="webservice_login_endpoint">https://jellymaps.com/api/userSignIn?email={0}&amp;password={1}</string>
+
+    <string name="webservice_insert_post_endpoint">https://jellymaps.com/api/insertPost</string>
+
+    <string name="webservice_update_marker_rating">https://jellymaps.com/api/insertRating?markerId={0}&amp;isUpVote={1}</string>
+    <string name="webservice_delete_marker">https://jellymaps.com/api/deletemarker?markerId={0}</string>
+
+    <string name="webservice_marker_image">https://jellymaps.com/api/getmarkerimage?markerId={0}</string>
+    <string name="webservice_markers">https://jellymaps.com/api/getmarkers</string>
+
+    <string name="webservice_write_radius_marker">https://jellymaps.com/api/setRadiusMarker/</string>
+    <string name="webservice_delete_radius_marker">https://jellymaps.com/api/deleteRadiusMarker?userId={0}</string>
+
+    <string name="webservice_save_firebase_token">https://jellymaps.com/api/saveFirebaseToken/</string>
+
+</resources>

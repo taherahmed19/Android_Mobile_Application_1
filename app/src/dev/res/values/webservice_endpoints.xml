@@ -10,6 +10,7 @@
     <string name="webservice_delete_marker">https://10.0.2.2:443/api/deletemarker?markerId={0}</string>
 
     <string name="webservice_marker_image">https://10.0.2.2:443/api/getmarkerimage?markerId={0}</string>
+    <string name="webservice_markers">https://10.0.2.2:443/api/getmarkers</string>
 
     <string name="webservice_write_radius_marker">https://10.0.2.2:443/api/setRadiusMarker/</string>
     <string name="webservice_delete_radius_marker">https://10.0.2.2:443/api/deleteRadiusMarker?userId={0}</string>

@@ -47,19 +47,5 @@ public class RadiusMarkerNotificationFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         this.radiusMarkerNotificationHandler.configure();
-
-        LinearLayout radiusMarkerNotifButton = (LinearLayout) this.getView().findViewById(R.id.radiusMarkerNotifButton);
-        radiusMarkerNotifButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getParentFragmentManager().popBackStack();
-
-                MarkerModalFragment markerModalFragment = new MarkerModalFragment(marker, viewPager);
-                FragmentTransition.Transition(fragmentManager, markerModalFragment, R.anim.right_animations, R.anim.left_animation,
-                        R.id.mapModalContainer, "");
-
-            }
-        });
-
     }
 }

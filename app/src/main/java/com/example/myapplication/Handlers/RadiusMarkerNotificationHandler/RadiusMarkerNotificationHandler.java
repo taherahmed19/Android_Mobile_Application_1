@@ -19,7 +19,6 @@ public class RadiusMarkerNotificationHandler {
 
     RadiusMarkerNotificationFragment radiusMarkerNotificationFragment;
     FragmentManager fragmentManager;
-    MapHandler mapHandler;
     Marker marker;
     ViewPager viewPager;
 

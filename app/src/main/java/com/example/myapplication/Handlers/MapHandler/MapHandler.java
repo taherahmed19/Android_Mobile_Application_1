@@ -105,14 +105,6 @@ public class MapHandler implements OnMapReadyCallback {
         }
     }
 
-    public void startLocationUpdates() {
-        currentLocation.startLocationUpdates();
-    }
-
-    public void stopLocationUpdates() {
-        currentLocation.stopLocationUpdates();
-    }
-
     public void setMapLocation(LatLng latLng) {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latLng.latitude, latLng.longitude), 17));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
@@ -129,16 +121,6 @@ public class MapHandler implements OnMapReadyCallback {
         marker.setTag(markerModel);
 
         googleMarkers.add(marker);
-    }
-
-    public void triggerMarkerWithinRadiusMarker(ArrayList<Marker> markers, int markerId, ViewPager viewPager,LatLng latLng){
-        for(Marker marker : markers) {
-            if(markerId == marker.getId()){
-                MarkerModalFragment markerModalFragment = new MarkerModalFragment(marker, viewPager);
-                FragmentTransition.Transition(fragmentManager, markerModalFragment, R.anim.right_animations, R.anim.left_animation,
-                        R.id.mapModalContainer, "");
-            }
-        }
     }
 
     void addCustomMarker(int i, ArrayList<Marker> markers) {

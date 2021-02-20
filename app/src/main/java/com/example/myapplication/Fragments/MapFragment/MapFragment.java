@@ -168,12 +168,17 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        currentLocation.stopLocationUpdates();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-        currentLocation.stopLocationUpdates();
 
         try{
-            //Objects.requireNonNull(getActivity()).unregisterReceiver(receiver);
+            Objects.requireNonNull(getActivity()).unregisterReceiver(receiver);
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -182,7 +187,12 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     @Override
     public void onResume() {
         super.onResume();
-        Objects.requireNonNull(getActivity()).registerReceiver(receiver, new IntentFilter(MapFragment.class.toString()));
+
+        try{
+            Objects.requireNonNull(getActivity()).registerReceiver(receiver, new IntentFilter(MapFragment.class.toString()));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -190,8 +200,7 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Log.d("Print ", "Received!");
-            int openNotification = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getInt("openNotification"));
+            int openNotification = Objects.requireNonNull(intent.getExtras()).getInt("openNotification");
             int userId = Integer.parseInt(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("userId")));
             int markerId = Integer.parseInt(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("markerId")));
             String category = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("category"));
@@ -207,16 +216,15 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
 
             mapFragmentHandler.triggerMarkerOnMap(viewPager, markerModel);
 
-            //refactor
-            if(openNotification == 0){
+            if(openNotification == 1){
                 RadiusMarkerNotificationFragment notificationFragment = new RadiusMarkerNotificationFragment(getParentFragmentManager(), viewPager, markerModel);
                 FragmentTransition.Transition(getParentFragmentManager(), notificationFragment,
                         R.anim.radius_marker_notif_open_anim, R.anim.radius_marker_notif_close_anim, R.id.mapFeedSearchPointer, RadiusMarkerNotificationFragment.class.toString());
             }else{
-                //move camera to marker
                 MarkerModalFragment markerModalFragment = new MarkerModalFragment(markerModel, viewPager);
                 FragmentTransition.Transition(getParentFragmentManager(), markerModalFragment, R.anim.right_animations, R.anim.left_animation,
                         R.id.mapModalContainer, "");
+                mapFragmentHandler.setMapLocation(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)));
             }
         }
 

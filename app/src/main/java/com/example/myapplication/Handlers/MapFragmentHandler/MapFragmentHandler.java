@@ -47,12 +47,9 @@ public class MapFragmentHandler  {
     MapFeedSearchFragment mapFeedSearchFragment;
     LockableViewPager viewPager;
     LoadingSpinner loadingSpinner;
-
     SupportMapFragment supportMapFragment;
-
     HttpMap httpMap;
     MapHandler mapHandler;
-
     CustomMarkerListener customMarkerListener;
     MapListener mapListenerInstance;
 
@@ -86,6 +83,10 @@ public class MapFragmentHandler  {
 
     public void updateUserLocation(Location location) {
         this.mapHandler.setUserLocationGoogleMarker(location);
+    }
+
+    public void setMapLocation(LatLng latLng){
+        this.mapHandler.setMapLocation(latLng);
     }
 
     public void addMarkersListener(GoogleMap mMap, FragmentActivity fragmentActivity){

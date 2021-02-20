@@ -54,7 +54,7 @@ public class HttpMarker extends AsyncTask<String , Void ,String> {
         SSL.AllowSSLCertificates();
 
         String apiRequest = this.createApiQuery();
-
+        Log.d("Print2", apiRequest);
         try {
             String response = handleRequest(apiRequest);
 
@@ -107,6 +107,7 @@ public class HttpMarker extends AsyncTask<String , Void ,String> {
 
     @Override
     protected void onPostExecute(String response) {
+        Log.d("Print", "response? " + response);
         boolean valid = Boolean.parseBoolean(response);
         feedSubmitListener.handleSubmitStatusMessage(valid);
     }

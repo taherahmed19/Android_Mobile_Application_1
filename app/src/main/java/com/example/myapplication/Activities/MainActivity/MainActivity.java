@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.mainActivityHandler.configure();
 
         resetSharedPreference();
-
         onNewIntent(getIntent());
     }
 
@@ -58,9 +57,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onNewIntent(intent);
 
         if(intent.getExtras() != null){
-            Log.d("Print", "Send marker " + intent.getExtras().getString("userId") );
             Intent mapFragmentIntent = new Intent(MapFragment.class.toString());
-            mapFragmentIntent.putExtra("openNotification", 1);
+            mapFragmentIntent.putExtra("openNotification", intent.getExtras().getString("openNotification"));
             mapFragmentIntent.putExtra("userId", intent.getExtras().getString("userId"));
             mapFragmentIntent.putExtra("markerId", intent.getExtras().getString("markerId"));
             mapFragmentIntent.putExtra("category", intent.getExtras().getString("category"));

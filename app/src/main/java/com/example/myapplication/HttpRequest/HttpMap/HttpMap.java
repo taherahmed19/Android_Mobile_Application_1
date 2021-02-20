@@ -13,6 +13,7 @@ import com.example.myapplication.Fragments.FeedFragment.FeedFragment;
 import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
 import com.example.myapplication.JsonBuilders.MapJsonBuilder.MapJsonBuilder;
 import com.example.myapplication.Models.Settings.Settings;
+import com.example.myapplication.R;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
 import com.example.myapplication.Models.Marker.Marker;
@@ -80,7 +81,7 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
     protected String doInBackground(String... strings) {
         SSL.AllowSSLCertificates();
 
-        String apiRequest = strings[0];
+        String apiRequest = createApiQuery();
 
         try {
             String response = handleRequest(apiRequest);
@@ -140,19 +141,7 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
         }
     }
 
-//    //refactor
-    public void saveMapCameraPosition(){
-        if(mapHandler != null){
-            mapHandler.saveMapCameraPosition();
-        }
-    }
-
-    //refactor
-    public MapHandler getDatabaseMarkerMap() {
-        return mapHandler;
-    }
-
-    String createApiQuery(String input){
-        return "";
+    String createApiQuery(){
+        return this.fragmentActivity.getApplicationContext().getResources().getString(R.string.webservice_markers);
     }
 }

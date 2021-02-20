@@ -85,6 +85,7 @@ public class FormFragmentHandler {
     }
 
     public void submit(){
+        Log.d("Print","Clicked submit");
         Spinner spinner = (Spinner) formFragment.getView().findViewById(R.id.formSpinner);
         SpinnerItem item = (SpinnerItem) spinner.getSelectedItem();
         String category = item.getName().toLowerCase();

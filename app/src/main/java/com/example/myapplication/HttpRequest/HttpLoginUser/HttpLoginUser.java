@@ -53,6 +53,7 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
         SSL.AllowSSLCertificates();
 
         String apiRequest = this.createApiQuery();
+        Log.d("Print", "Login api req " + apiRequest);
         try {
             String response = handleRequest(apiRequest);
 
@@ -92,6 +93,7 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
     }
 
     void handleJSONResponse(String jsonString){
+        Log.d("Print", "Response str " + jsonString);
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
             validCredentials = jsonObject.getBoolean("validCredentials");

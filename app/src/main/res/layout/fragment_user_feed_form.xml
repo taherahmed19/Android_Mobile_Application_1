@@ -57,7 +57,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:src="@drawable/ic_routing_search_submit"
-                android:background="@android:color/transparent">
+                android:background="@android:color/transparent"
+                android:layout_marginRight="100sp">
             </ImageButton>
 
 
