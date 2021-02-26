@@ -3,6 +3,7 @@ package com.example.myapplication.Services.FirebaseService.FirebaseService;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,8 @@ import com.example.myapplication.Handlers.BackgroundNotificationHandler.Backgrou
 import com.example.myapplication.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.Objects;
 
 public class FirebaseService extends FirebaseMessagingService {
 
@@ -63,15 +66,15 @@ public class FirebaseService extends FirebaseMessagingService {
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
             Intent notificationIntent = new Intent(this, MainActivity.class);
-            addIntentExtras(notificationIntent, 0);
+            addIntentExtras(notificationIntent, isVoiceNotificationEnabled());
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
             PendingIntent intent = PendingIntent.getActivity(this, 100000, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             Notification notification = new NotificationCompat.Builder(this, App.CHANNEL_1_ID)
                     .setSmallIcon(R.drawable.ic_marker)
-                    .setContentTitle("title")
-                    .setContentText("description")
+                    .setContentTitle("New " + category + " marker")
+                    .setContentText(description)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                     .setContentIntent(intent)
@@ -84,13 +87,13 @@ public class FirebaseService extends FirebaseMessagingService {
                     new BackgroundNotificationHandler(this, category, description, lat, lng);
         }else{
             Intent intent = new Intent(MapFragment.class.toString());
-            addIntentExtras(intent, 1);
+            addIntentExtras(intent, isVoiceNotificationEnabled());
             sendBroadcast(intent);
         }
     }
 
-    void addIntentExtras(Intent intent, int notificationFlag){
-        intent.putExtra("openNotification", notificationFlag);
+    void addIntentExtras(Intent intent, boolean voiceEnabled){
+        intent.putExtra("voiceEnabled", voiceEnabled);
         intent.putExtra("userId", userId);
         intent.putExtra("markerId", markerId);
         intent.putExtra("category", category);
@@ -102,7 +105,8 @@ public class FirebaseService extends FirebaseMessagingService {
         intent.putExtra("rating", rating);
     }
 
-    void checkNotificationSettings(){
-
+    boolean isVoiceNotificationEnabled(){
+        SharedPreferences settingsPreference = this.getSharedPreferences("Radius_Marker_Settings", 0);
+        return settingsPreference.getBoolean("voiceNotifications", false);
     }
 }

@@ -35,5 +35,6 @@ public class TTSService implements TextToSpeech.OnInitListener {
         mTTS.setPitch(1);
         mTTS.setSpeechRate(1);
         mTTS.speak(message, TextToSpeech.QUEUE_FLUSH, null);
+
     }
 }

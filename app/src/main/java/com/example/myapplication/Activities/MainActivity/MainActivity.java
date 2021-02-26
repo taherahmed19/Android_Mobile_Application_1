@@ -15,6 +15,7 @@ import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.Handlers.MainActivityHandler.MainActivityHandler;
 import com.example.myapplication.R;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.Objects;
 
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(intent.getExtras() != null){
             Intent mapFragmentIntent = new Intent(MapFragment.class.toString());
-            mapFragmentIntent.putExtra("openNotification", intent.getExtras().getString("openNotification"));
+            mapFragmentIntent.putExtra("voiceEnabled", intent.getExtras().getBoolean("voiceEnabled"));
             mapFragmentIntent.putExtra("userId", intent.getExtras().getString("userId"));
             mapFragmentIntent.putExtra("markerId", intent.getExtras().getString("markerId"));
             mapFragmentIntent.putExtra("category", intent.getExtras().getString("category"));

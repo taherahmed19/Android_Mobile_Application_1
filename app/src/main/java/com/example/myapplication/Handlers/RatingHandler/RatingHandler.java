@@ -18,6 +18,7 @@ public class RatingHandler {
 
     boolean isUpVoteClicked;
     boolean isDownVoteClicked;
+    int originalRating;
     int rating;
     int ratingTemp;
     ImageButton upVoteButton;
@@ -28,6 +29,7 @@ public class RatingHandler {
         this.isUpVoteClicked = false;
         this.isDownVoteClicked = false;
         this.rating = marker.getRating();
+        this.originalRating = rating;
         this.ratingTemp = rating;
         this.marker = marker;
     }
@@ -77,12 +79,12 @@ public class RatingHandler {
                     isUpVoteClicked();
                     setUpVote();
 
-                    ratingTemp++;
+                    ratingTemp = originalRating + 1;
                     submitMarkerRating(isUpVoteClicked);
                 }else{
                     isUpVoteClicked();
                     removeVote();
-                    ratingTemp--;
+                    ratingTemp= originalRating;
                     submitMarkerRating(false);
                 }
 
@@ -96,12 +98,12 @@ public class RatingHandler {
                     isDownVoteClicked();
                     setDownVote();
 
-                    ratingTemp--;
+                    ratingTemp= originalRating -1;
                     submitMarkerRating(isUpVoteClicked);
                 }else{
                     isDownVoteClicked();
                     removeVote();
-                    ratingTemp++;
+                    ratingTemp = originalRating;
                     submitMarkerRating(true);
                 }
             }

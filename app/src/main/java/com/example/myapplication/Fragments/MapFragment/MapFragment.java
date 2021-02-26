@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.example.myapplication.Adapters.LockableViewPager.LockableViewPager;
+import com.example.myapplication.Application.App;
 import com.example.myapplication.Fragments.MainMapFragment.MainMapFragment;
 import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.MapFeedSearchAutocompleteFragment;
 import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
@@ -199,33 +200,48 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
 
         @Override
         public void onReceive(Context context, Intent intent) {
+        boolean voiceEnabled = Objects.requireNonNull(intent.getExtras()).getBoolean("voiceEnabled");
+     //   int openNotification = Objects.requireNonNull(intent.getExtras()).getInt("openNotification");
+        int userId = Integer.parseInt(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("userId")));
+        int markerId = Integer.parseInt(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("markerId")));
+        String category = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("category"));
+        String description = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("description"));
+        String lat = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("lat"));
+        String lng = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("lng"));
+        String firstName = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("firstName"));
+        String lastName = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("lastName"));
+        int rating = Integer.parseInt(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("rating")));
 
-            int openNotification = Objects.requireNonNull(intent.getExtras()).getInt("openNotification");
-            int userId = Integer.parseInt(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("userId")));
-            int markerId = Integer.parseInt(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("markerId")));
-            String category = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("category"));
-            String description = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("description"));
-            String lat = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("lat"));
-            String lng = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("lng"));
-            String firstName = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("firstName"));
-            String lastName = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("lastName"));
-            int rating = Integer.parseInt(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("rating")));
+        Marker markerModel = new Marker(userId, firstName, lastName,
+                category, description, lat, lng, null, markerId, rating);
 
-            Marker markerModel = new Marker(userId, firstName, lastName,
-                    category, description, lat, lng, null, markerId, rating);
+        mapFragmentHandler.triggerMarkerOnMap(viewPager, markerModel);
 
-            mapFragmentHandler.triggerMarkerOnMap(viewPager, markerModel);
+        //if voice enabled and app is visible
+        if(voiceEnabled && App.APP_VISIBLE){
+            //go to marker location
+            //create marker modal etc...
+            //TTS
+        }else if(!voiceEnabled && App.APP_VISIBLE){
+            //open radius marker notification fragment
+        }else if (voiceEnabled && !App.APP_VISIBLE){
+            // go to marker in background
+            // TTS
+        }else if (!voiceEnabled && !App.APP_VISIBLE){
+            // send marker modal fragment
+        }
 
-            if(openNotification == 1){
-                RadiusMarkerNotificationFragment notificationFragment = new RadiusMarkerNotificationFragment(getParentFragmentManager(), viewPager, markerModel);
-                FragmentTransition.Transition(getParentFragmentManager(), notificationFragment,
-                        R.anim.radius_marker_notif_open_anim, R.anim.radius_marker_notif_close_anim, R.id.mapFeedSearchPointer, RadiusMarkerNotificationFragment.class.toString());
-            }else{
-                MarkerModalFragment markerModalFragment = new MarkerModalFragment(markerModel, viewPager);
-                FragmentTransition.Transition(getParentFragmentManager(), markerModalFragment, R.anim.right_animations, R.anim.left_animation,
-                        R.id.mapModalContainer, "");
-                mapFragmentHandler.setMapLocation(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)));
-            }
+
+        if(openNotification == 1){
+            RadiusMarkerNotificationFragment notificationFragment = new RadiusMarkerNotificationFragment(getParentFragmentManager(), viewPager, markerModel);
+            FragmentTransition.Transition(getParentFragmentManager(), notificationFragment,
+                    R.anim.radius_marker_notif_open_anim, R.anim.radius_marker_notif_close_anim, R.id.mapFeedSearchPointer, RadiusMarkerNotificationFragment.class.toString());
+        }else{
+            MarkerModalFragment markerModalFragment = new MarkerModalFragment(markerModel, viewPager);
+            FragmentTransition.Transition(getParentFragmentManager(), markerModalFragment, R.anim.right_animations, R.anim.left_animation,
+                    R.id.mapModalContainer, "");
+            mapFragmentHandler.setMapLocation(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)));
+        }
         }
 
     };
