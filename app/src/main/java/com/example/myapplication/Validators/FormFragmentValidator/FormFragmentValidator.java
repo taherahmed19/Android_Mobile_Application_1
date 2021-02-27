@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -89,11 +90,15 @@ public class FormFragmentValidator {
         return false;
     }
 
+    public boolean imageSelected(RelativeLayout imageButton, String encodedImage){
+        if(encodedImage.length() > 0){
+            removeErrorDrawable(imageButton);
+            fragmentElements.removeImageErrorMessage();
+        }else{
+            addErrorDrawable(imageButton);
+            fragmentElements.showImageErrorMessage();
+        }
 
-    public void setFragmentElements(FormFragmentHandler fragmentElements) {
-        this.fragmentElements = fragmentElements;
+        return encodedImage.length() > 0;
     }
-
-    void validateGeolocation(){ }
-    void validateImage(){ }
 }

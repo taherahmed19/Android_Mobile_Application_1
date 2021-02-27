@@ -253,7 +253,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="250sp"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 >
 
@@ -261,7 +261,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -269,22 +268,12 @@
                         android:textSize="20sp"
                         android:textColor="#000"
                         android:layout_marginBottom="10sp"/>
-
-<!--                    <ImageButton-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_alignParentRight="true"-->
-<!--                        android:layout_alignParentTop="true"-->
-<!--                        android:background="@drawable/feed_form_error_background"-->
-<!--                        android:src="@drawable/ic_feed_form_error">-->
-<!--                    </ImageButton>-->
-
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:id="@+id/imageButton"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="200sp"
                     android:background="@drawable/input_border">
 
                     <ImageButton
@@ -294,7 +283,6 @@
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
                         android:background="@android:color/transparent">
-
                     </ImageButton>
 
                     <ImageView
@@ -304,8 +292,16 @@
                         android:scaleType="fitXY">
 
                     </ImageView>
-
                 </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/imageError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/form_image_error"
+                    android:textColor="#B9E91E1E"
+                    android:visibility="invisible">
+                </TextView>
             </LinearLayout>
 
         </LinearLayout>

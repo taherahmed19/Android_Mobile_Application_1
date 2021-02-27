@@ -64,6 +64,7 @@ public class FormFragmentHandler {
     FormFragmentValidator formFragmentValidator;
     boolean isConfiguredStaticMap;
     String encodedImage;
+    Dialog dialog;
 
     public FormFragmentHandler(FormFragment formFragment, FeedSubmitListener feedSubmitListener) {
         this.formFragmentSpinner = new FormFragmentSpinner(formFragment);
@@ -71,6 +72,7 @@ public class FormFragmentHandler {
         this.feedSubmitListener = feedSubmitListener;
         this.isConfiguredStaticMap = false;
         this.formFragmentValidator = new FormFragmentValidator(this);
+        this.encodedImage = "";
     }
 
     public void configure(){
@@ -103,14 +105,22 @@ public class FormFragmentHandler {
     public void onActivityResultCamera(int requestCode, int resultCode, Intent data){
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK)
         {
-            dialog.dismiss();
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            if(data != null) {
+                try {
+                    dialog.dismiss();
+                    Bitmap photo = (Bitmap) data.getExtras().get("data");
 
-            ImageView postImageView = (ImageView) this.formFragment.getView().findViewById(R.id.postImageView);
-            postImageView.setImageBitmap(photo);
+                    ImageView postImageView = (ImageView) this.formFragment.getView().findViewById(R.id.postImageView);
+                    postImageView.setImageBitmap(photo);
 
-            if (photo != null) {
-                encodeImage(photo);
+                    if (photo != null) {
+                        encodeImage(photo);
+                    }
+
+                    removeImageErrorMessage();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -129,12 +139,12 @@ public class FormFragmentHandler {
                     if(photo != null){
                         encodeImage(photo);
                     }
+
+                    removeImageErrorMessage();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-        }else if (resultCode == Activity.RESULT_CANCELED)  {
-            Toast.makeText(formFragment.getActivity(), "Canceled", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -161,6 +171,11 @@ public class FormFragmentHandler {
         spinnerError.setVisibility(View.VISIBLE);
     }
 
+    public void showImageErrorMessage(){
+        TextView imageError = (TextView) formFragment.getView().findViewById(R.id.imageError);
+        imageError.setVisibility(View.VISIBLE);
+    }
+
     public void removeDescriptionErrorMessage(){
         TextView descriptionError = (TextView) formFragment.getView().findViewById(R.id.descriptionError);
         descriptionError.setVisibility(View.INVISIBLE);
@@ -169,6 +184,11 @@ public class FormFragmentHandler {
     public void removeSpinnerErrorMessage(){
         TextView spinnerError = (TextView) formFragment.getView().findViewById(R.id.spinnerError);
         spinnerError.setVisibility(View.INVISIBLE);
+    }
+
+    public void removeImageErrorMessage(){
+        TextView imageError = (TextView) formFragment.getView().findViewById(R.id.imageError);
+        imageError.setVisibility(View.INVISIBLE);
     }
 
     public boolean isConfiguredStaticMap() {
@@ -317,7 +337,6 @@ public class FormFragmentHandler {
             }
         });
     }
-    Dialog dialog;
 
     void openCameraDialog(){
         dialog = new Dialog(this.formFragment.getContext());
@@ -422,10 +441,13 @@ public class FormFragmentHandler {
     boolean validate(){
         EditText mapFeedDescription = (EditText) formFragment.getView().findViewById(R.id.mapFeedDescription);
         Spinner spinner = formFragment.getView().findViewById(R.id.formSpinner);
+        RelativeLayout imageButton = (RelativeLayout) formFragment.getView().findViewById(R.id.imageButton);
+
         boolean validSpinnerItem = formFragmentValidator.spinnerFocusChange(spinner);
         boolean validDescription = formFragmentValidator.descriptionFocusChange(mapFeedDescription);
+        boolean validImage = formFragmentValidator.imageSelected(imageButton, encodedImage);
 
-        return validSpinnerItem && validDescription;
+        return validSpinnerItem && validDescription && validImage;
     }
 
 }

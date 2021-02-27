@@ -4,7 +4,7 @@
     <!-- Map Feed Form Error Messages -->
     <string name="form_category_error">Please select a valid category</string>
     <string name="form_description_error">Please enter a valid description</string>
-
+    <string name="form_image_error">Please take a picture or select one from your Gallery</string>
 
     <string name="form_error_title">Post invalid</string>
     <string name="form_error_body">Please retry submitting your post.</string>
