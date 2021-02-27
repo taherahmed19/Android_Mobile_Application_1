@@ -6,7 +6,9 @@
     tools:context=".Refactor.RoutingSearchAutocompleteFragment"
     android:background="#FFF"
     android:id="@+id/searchAutocompleteContainer"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:clickable="true"
+    android:focusable="true">
 
 
     <LinearLayout

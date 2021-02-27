@@ -59,8 +59,8 @@
 
                 <ImageButton
                     android:id="@+id/newPost"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="45sp"
+                    android:layout_height="45sp"
                     android:src="@drawable/ic_add"
                     android:background="@drawable/map_search_button"
                     android:layout_marginBottom="20sp"
@@ -68,28 +68,40 @@
                 </ImageButton>
 
                 <ImageButton
-                    android:id="@+id/mapSearchButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:src="@drawable/ic_routing_search"
-                    android:background="@drawable/map_search_button">
+                    android:id="@+id/mapRefreshBtn"
+                    android:layout_width="45sp"
+                    android:layout_height="45sp"
+                    android:src="@drawable/ic_map_switch"
+                    android:background="@drawable/map_search_button"
+                    android:layout_marginBottom="20sp"
+                    >
                 </ImageButton>
 
             </LinearLayout>
 
             <ImageButton
                 android:id="@+id/mapLocationResetBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45sp"
+                android:layout_height="45sp"
                 android:textSize="18sp"
                 android:layout_alignParentLeft="true"
                 android:textColor="#000"
                 android:textStyle="bold"
-                android:src="@drawable/ic_map_switch"
+                android:src="@drawable/ic_map_gps"
                 android:background="@drawable/map_search_button"
                 android:layout_margin="20sp"/>
+
+            <ImageButton
+                android:id="@+id/mapSearchButton"
+                android:layout_width="45sp"
+                android:layout_height="45sp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/ic_routing_search"
+                android:background="@drawable/map_search_button"
+                android:layout_margin="20sp">
+            </ImageButton>
+
 
         </RelativeLayout>
 

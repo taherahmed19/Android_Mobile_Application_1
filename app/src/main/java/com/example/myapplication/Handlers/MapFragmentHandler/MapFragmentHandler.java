@@ -36,6 +36,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -68,6 +69,7 @@ public class MapFragmentHandler  {
         this.configureMapSearchButton();
         this.configureNewPostButton();
         this.configureSwitchButton();
+        this.configureMapRefreshButton();
     }
 
     public void requestMap(Settings settings){
@@ -202,6 +204,17 @@ public class MapFragmentHandler  {
             @Override
             public void onClick(View view) {
                 mapHandler.moveCameraToCurrentLocation();
+            }
+        });
+    }
+
+    void configureMapRefreshButton(){
+        final ImageButton mapRefreshBtn = (ImageButton) mapFragment.getView().findViewById(R.id.mapRefreshBtn);
+
+        mapRefreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
             }
         });
     }

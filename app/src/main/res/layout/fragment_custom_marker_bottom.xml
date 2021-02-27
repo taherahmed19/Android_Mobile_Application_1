@@ -5,7 +5,9 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bottom_sheet"
-    android:layout_gravity="bottom">
+    android:layout_gravity="bottom"
+    android:clickable="true"
+    android:focusable="true">
 
     <RelativeLayout
         android:layout_width="match_parent"

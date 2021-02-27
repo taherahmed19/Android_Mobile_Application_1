@@ -111,7 +111,7 @@ public class MapHandler implements OnMapReadyCallback {
     }
 
     public void triggerMarkerOnMap(ViewPager viewPager, Marker markerModel){
-        final BitmapDescriptor markerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+        final BitmapDescriptor markerIcon = returnMarkerIcon(markerModel.getUserId());
 
         com.google.android.gms.maps.model.Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(Double.parseDouble(markerModel.getLat()),

@@ -4,9 +4,11 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -66,7 +68,7 @@ public class FirebaseService extends FirebaseMessagingService {
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
             Intent notificationIntent = new Intent(this, MainActivity.class);
-            addIntentExtras(notificationIntent, isVoiceNotificationEnabled());
+            addIntentExtras(notificationIntent, 0, isVoiceNotificationEnabled());
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
             PendingIntent intent = PendingIntent.getActivity(this, 100000, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -82,17 +84,15 @@ public class FirebaseService extends FirebaseMessagingService {
 
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
             notificationManager.notify(1, notification);
-
-            BackgroundNotificationHandler backgroundNotificationHandler =
-                    new BackgroundNotificationHandler(this, category, description, lat, lng);
         }else{
             Intent intent = new Intent(MapFragment.class.toString());
-            addIntentExtras(intent, isVoiceNotificationEnabled());
+            addIntentExtras(intent, 1, isVoiceNotificationEnabled());
             sendBroadcast(intent);
         }
     }
 
-    void addIntentExtras(Intent intent, boolean voiceEnabled){
+    void addIntentExtras(Intent intent, int openNotification, boolean voiceEnabled){
+        intent.putExtra("openNotification", openNotification);
         intent.putExtra("voiceEnabled", voiceEnabled);
         intent.putExtra("userId", userId);
         intent.putExtra("markerId", markerId);

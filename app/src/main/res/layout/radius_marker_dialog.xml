@@ -5,7 +5,9 @@
     android:paddingLeft="20sp"
     android:paddingRight="20sp"
     android:paddingTop="20sp"
-    android:paddingBottom="20sp">
+    android:paddingBottom="20sp"
+    android:clickable="true"
+    android:focusable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,9 +40,8 @@
                 android:background="@color/transparent"
                 android:textAlignment="textStart"
                 android:layout_marginRight="20sp"
-                android:textAllCaps="false"
                 android:textSize="18sp"
-                android:textColor="#777777">
+                android:textColor="#33DDFF">
             </Button>
 
             <Button
@@ -52,7 +53,6 @@
                 android:text="Remove"
                 android:background="@color/transparent"
                 android:textAlignment="textStart"
-                android:textAllCaps="false"
                 android:textSize="18sp"
                 android:textColor="#F44336">
             </Button>

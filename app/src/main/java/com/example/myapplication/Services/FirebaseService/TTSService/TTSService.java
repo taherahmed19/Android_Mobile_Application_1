@@ -9,11 +9,11 @@ import java.util.Locale;
 public class TTSService implements TextToSpeech.OnInitListener {
 
     private TextToSpeech mTTS;
-    private String message;
+    private String[] messages;
 
-    public TTSService(Context context, String message) {
+    public TTSService(Context context, String[] messages) {
         this.mTTS = new TextToSpeech(context, this);
-        this.message = message;
+        this.messages = messages;
     }
 
     @Override
@@ -22,19 +22,22 @@ public class TTSService implements TextToSpeech.OnInitListener {
             int result = mTTS.setLanguage(Locale.UK);
             if (result == TextToSpeech.LANG_MISSING_DATA
                     || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                Log.e("TTS", "Language not supported");
             } else {
                 speak();
             }
         } else {
-            Log.e("TTS", "Initialization failed");
         }
     }
 
     void speak(){
         mTTS.setPitch(1);
         mTTS.setSpeechRate(1);
-        mTTS.speak(message, TextToSpeech.QUEUE_FLUSH, null);
+
+        for (String message : this.messages) {
+            mTTS.speak(message, TextToSpeech.QUEUE_ADD, null);
+            mTTS.playSilence(500, TextToSpeech.QUEUE_ADD, null);
+        }
+
 
     }
 }

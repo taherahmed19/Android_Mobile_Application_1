@@ -41,19 +41,23 @@
 
         <activity
             android:name=".Activities.MainActivity.MainActivity"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustNothing"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".Activities.RegisterActivity.RegisterActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".Activities.LoginActivity.LoginActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".Activities.BlankActivity.BlankActivity"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -61,7 +65,8 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".Services.FirebaseService.FirebaseService.FirebaseService">
+        <service android:name=".Services.FirebaseService.FirebaseService.FirebaseService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>

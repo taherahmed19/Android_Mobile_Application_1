@@ -18,6 +18,7 @@ public class BackgroundNotificationHandler implements CurrentLocationListener {
     private double lat;
     private double lng;
     private LatLng currentLatLng;
+    private boolean runTTS;
 
     public BackgroundNotificationHandler(Context context, String category, String description, String lat, String lng) {
         this.context = context;
@@ -25,6 +26,7 @@ public class BackgroundNotificationHandler implements CurrentLocationListener {
         this.description = description;
         this.lat = Double.parseDouble(lat);
         this.lng = Double.parseDouble(lng);
+        this.runTTS = false;
         CurrentLocation currentLocation = new CurrentLocation(this.context, this);
         currentLocation.startLocationUpdates();
     }
@@ -32,20 +34,24 @@ public class BackgroundNotificationHandler implements CurrentLocationListener {
     @Override
     public void updateUserLocation(Location location) {
         this.currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-        runTTS();
+
+        if(!runTTS){
+            runTTS();
+            runTTS = true;
+        }
     }
 
     public void runTTS(){
-        String message = createMessage();
-        TTSService ttsService = new TTSService(context, message);
+        String[] messages = createMessage();
+        new TTSService(context, messages);
     }
 
-    String createMessage(){
-        String markerMessageTitle = "A new " + category + " marker has been added to your radius area.";
-        String markerMessageBody = "With the details " + description;
+    String[] createMessage(){
+        String markerMessageTitle = "A new " + category + " marker has been added to your radius area, ";
+        String markerMessageBody = "With the details " + description + ", ";
         String distanceBetweenMarkerAndUser = "The marker is " + calculateDistance() + " metres from your current location";
 
-        return markerMessageTitle + markerMessageBody + distanceBetweenMarkerAndUser;
+        return new String[]{markerMessageTitle, markerMessageBody, distanceBetweenMarkerAndUser};
     }
 
     String calculateDistance(){

@@ -37,9 +37,6 @@ public class LoginActivityHandler {
 
     public void handleSignInAttempt(boolean valid, int userId, String userFirstName, String userLastName, String userEmail) {
         if(valid){
-            ConfirmFragment confirmFragment = new ConfirmFragment(this.loginActivity, this.loginActivity.getString(R.string.login_confirm_title), this.loginActivity.getString(R.string.login_confirm_body));
-            FragmentTransition.OpenFragment(this.loginActivity.getSupportFragmentManager(), confirmFragment, R.id.loginActivity, "");
-
             LoginPreferenceData.SaveLoginState(this.loginActivity, true, userId, userFirstName, userLastName, userEmail);
 
             //send firebase token
