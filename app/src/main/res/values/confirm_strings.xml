@@ -4,5 +4,6 @@
     <string name="form_confirm_title">Post Submitted!</string>
     <string name="form_confirm_body">Your post is valid and can be see by all users</string>
 
+    <string name="form_confirm_radius_marker_removed">Previous radius marker has been removed</string>
 
 </resources>

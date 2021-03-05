@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.Fragments.ErrorFragment.ErrorFragment;
 import com.example.myapplication.Handlers.MarkerModalFragmentHandler.MarkerModalFragmentHandler;
@@ -75,8 +76,7 @@ public class MarkerModalFragment extends Fragment implements RatingsListener, Ma
             this.ratingHandler.saveSettingsSharedPreference();
             this.markerModalFragmentHandler.updateRatingValue(this.ratingHandler.getRating());
         }else{
-            ErrorFragment errorFragment = new ErrorFragment(this, this.getString(R.string.post_rating_title), this.getString(R.string.post_rating_body));
-            FragmentTransition.OpenFragment(this.getChildFragmentManager(), errorFragment, R.id.markerModal, "");
+            Toast.makeText(getContext(), getContext().getString(R.string.post_rating_body), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -91,8 +91,7 @@ public class MarkerModalFragment extends Fragment implements RatingsListener, Ma
             Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
             getParentFragmentManager().popBackStack();
         }else{
-            ErrorFragment errorFragment = new ErrorFragment(this, this.getString(R.string.post_delete_title), this.getString(R.string.post_delete_body));
-            FragmentTransition.OpenFragment(this.getChildFragmentManager(), errorFragment, R.id.markerModal, "");
+            Toast.makeText(getContext(), getContext().getString(R.string.post_delete_body), Toast.LENGTH_LONG).show();
         }
     }
 

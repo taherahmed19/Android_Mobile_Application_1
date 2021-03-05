@@ -23,7 +23,6 @@
             android:paddingBottom="10sp"
             android:background="@drawable/routing_search_bottom_border">
 
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

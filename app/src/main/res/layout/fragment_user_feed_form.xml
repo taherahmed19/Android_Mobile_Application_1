@@ -216,39 +216,26 @@
                     android:orientation="horizontal">
 
                         <Button
-                            android:id="@+id/geolocationButton"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:text="@string/form_current_location"
-                            android:textSize="16sp"
-                            android:gravity="center_vertical"
-                            android:textAllCaps="false"
-                            android:background="@android:color/transparent"
-                            android:textColor="#AAAAAA"
-                            android:textStyle="normal"
-                            />
-
-                        <Button
                             android:id="@+id/locationButton"
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:background="@drawable/button_border_2"
-                            android:text="Change Location"
+                            android:text="Set location"
                             android:textColor="#FFF"
                             android:textAllCaps="false"
                             android:textSize="16dp">
 
                         </Button>
                 </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/formLocationImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="100sp">
-                </ImageView>
-
+                <TextView
+                    android:id="@+id/locationError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/form_location_error"
+                    android:textColor="#B9E91E1E"
+                    android:visibility="invisible">
+                </TextView>
             </LinearLayout>
 
             <LinearLayout

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.myapplication.Activities.LoginActivity.LoginActivity;
 import com.example.myapplication.Activities.MainActivity.MainActivity;
@@ -46,10 +47,7 @@ public class LoginActivityHandler {
 
             enterApplication();
         }else{
-            ErrorFragment errorFragment = new ErrorFragment(this.loginActivity, this.loginActivity.getString(R.string.login_error_title),
-                    this.loginActivity.getString(R.string.login_error_body));
-
-            FragmentTransition.OpenFragment(this.loginActivity.getSupportFragmentManager(), errorFragment, R.id.loginActivity, "");
+            Toast.makeText(loginActivity.getApplicationContext(), loginActivity.getApplicationContext().getString(R.string.login_error_body), Toast.LENGTH_LONG).show();
         }
     }
 

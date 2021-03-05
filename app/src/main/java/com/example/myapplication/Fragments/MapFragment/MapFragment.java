@@ -45,11 +45,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Objects;
-
-import static com.example.myapplication.Models.CurrentLocation.CurrentLocation.MY_PERMISSIONS_REQUEST_FINE_LOCATION;
 
 public class MapFragment extends Fragment implements MapFeedSearchFragment.FragmentSearchListener, MapFeedSearchAutocompleteFragment.FragmentAutocompleteListener
         , CurrentLocationListener, MapListener, CustomMarkerListener {
@@ -96,15 +96,7 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        if (requestCode == MY_PERMISSIONS_REQUEST_FINE_LOCATION) {
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            } else {
-            }
-        }
-
+    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
         currentLocation.startLocationUpdates();
     }
 
@@ -161,15 +153,13 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     @Override
     public void onStart() {
         super.onStart();
-//        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//            currentLocation.startLocationUpdates();
-//        }
         currentLocation.startLocationUpdates();
     }
 
     @Override
     public void onStop() {
         super.onStop();
+
         currentLocation.stopLocationUpdates();
     }
 

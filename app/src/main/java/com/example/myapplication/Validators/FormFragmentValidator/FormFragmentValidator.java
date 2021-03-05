@@ -6,6 +6,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -16,13 +17,14 @@ import com.example.myapplication.Models.FormFragmentSpinner.FormFragmentSpinner;
 import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Models.SpinnerItem.SpinnerItem;
 import com.example.myapplication.R;
+import com.google.android.gms.maps.model.LatLng;
 
 public class FormFragmentValidator {
 
-    FormFragmentHandler fragmentElements;
+    FormFragmentHandler formFragmentHandler;
 
-    public FormFragmentValidator(FormFragmentHandler fragmentElements) {
-        this.fragmentElements = fragmentElements;
+    public FormFragmentValidator(FormFragmentHandler formFragmentHandler) {
+        this.formFragmentHandler = formFragmentHandler;
     }
 
     public void removeErrorDrawable(View view){
@@ -48,12 +50,12 @@ public class FormFragmentValidator {
 
         if(spinner.getSelectedItemPosition() == 0){
             addErrorDrawable(spinner);
-            fragmentElements.showSpinnerErrorMessage();
+            formFragmentHandler.showSpinnerErrorMessage();
 
             return false;
         }else{
             removeErrorDrawable(spinner);
-            fragmentElements.removeSpinnerErrorMessage();
+            formFragmentHandler.removeSpinnerErrorMessage();
         }
 
 
@@ -65,11 +67,11 @@ public class FormFragmentValidator {
 
         if(TextUtils.isEmpty(description)){
             addErrorDrawable(mapFeedDescription);
-            fragmentElements.showDescriptionErrorMessage();
+            formFragmentHandler.showDescriptionErrorMessage();
             return false;
         }else{
             removeErrorDrawable(mapFeedDescription);
-            fragmentElements.removeDescriptionErrorMessage();
+            formFragmentHandler.removeDescriptionErrorMessage();
         }
 
         return true;
@@ -80,11 +82,11 @@ public class FormFragmentValidator {
 
         if(!TextUtils.isEmpty(description) && description.length() > 0){
             removeErrorDrawable(mapFeedDescription);
-            fragmentElements.removeDescriptionErrorMessage();
+            formFragmentHandler.removeDescriptionErrorMessage();
             return true;
         }else{
             addErrorDrawable(mapFeedDescription);
-            fragmentElements.showDescriptionErrorMessage();
+            formFragmentHandler.showDescriptionErrorMessage();
         }
 
         return false;
@@ -93,12 +95,22 @@ public class FormFragmentValidator {
     public boolean imageSelected(RelativeLayout imageButton, String encodedImage){
         if(encodedImage.length() > 0){
             removeErrorDrawable(imageButton);
-            fragmentElements.removeImageErrorMessage();
+            formFragmentHandler.removeImageErrorMessage();
         }else{
             addErrorDrawable(imageButton);
-            fragmentElements.showImageErrorMessage();
+            formFragmentHandler.showImageErrorMessage();
         }
 
         return encodedImage.length() > 0;
+    }
+
+    public boolean locationSelected(Button button, LatLng chosenLocation){
+        if(chosenLocation != null){
+            formFragmentHandler.removeLocationErrorMessage();
+        }else{
+            formFragmentHandler.showLocationErrorMessage();
+        }
+
+        return chosenLocation == null;
     }
 }

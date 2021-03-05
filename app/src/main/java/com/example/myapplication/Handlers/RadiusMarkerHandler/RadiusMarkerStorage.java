@@ -2,6 +2,7 @@ package com.example.myapplication.Handlers.RadiusMarkerHandler;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import com.example.myapplication.Fragments.CustomMarkerBottomSheetFragment.CustomMarkerBottomSheetFragment;
 import com.example.myapplication.Fragments.ErrorFragment.ErrorFragment;
@@ -29,6 +30,7 @@ public class RadiusMarkerStorage {
         this.deleteRadiusMarkerListener = deleteRadiusMarkerListener;
         this.setRadiusMarkerListener = setRadiusMarkerListener;
         this.context = context;
+        this.removeExistingData();
     }
 
     public void writeRadiusMarkerDb(){
@@ -57,5 +59,19 @@ public class RadiusMarkerStorage {
         preferenceEditor.putFloat("centerLat", (float) latLng.latitude);
         preferenceEditor.putFloat("centerLon", (float) latLng.longitude);
         preferenceEditor.apply();
+    }
+
+    public void clearSharedPreference(){
+        context.getSharedPreferences("Radius_Marker_Settings", 0).edit().clear().apply();
+    }
+
+    void removeExistingData(){
+        SharedPreferences settingsPreference = Objects.requireNonNull(context).getSharedPreferences("Radius_Marker_Settings", 0);
+        boolean stateExists = settingsPreference.getBoolean("stateExists", false);
+
+        if(stateExists){
+            deleteRadiusMarkerDb();
+            clearSharedPreference();
+        }
     }
 }

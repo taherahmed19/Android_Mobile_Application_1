@@ -7,6 +7,7 @@ import android.graphics.Point;
 import android.location.Location;
 import android.util.Log;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
 
@@ -122,6 +123,4 @@ public class RadiusMarkerHandler {
     public Circle getRadiusMarker() {
         return radiusMarker;
     }
-
-
 }

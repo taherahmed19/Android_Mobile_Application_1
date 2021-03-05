@@ -78,12 +78,6 @@ public class MapOnClickHandler implements DeleteRadiusMarkerListener, SetRadiusM
                     boolean clickedInsideArea = radiusMarkerHandler.handleRadiusMarkerClick(customMarkerBottomSheetDialog, context, fragmentManager, latLng);
 
                     if(clickedInsideArea){
-                        Log.d("Print", latLng + " inside");
-                    }else{
-                        Log.d("Print", latLng + " outside");
-                    }
-
-                    if(clickedInsideArea){
                         customMarkerBottomSheetDialog.openFragment(customMarkerBottomSheetDialog, fragmentManager);
                     }
                 }

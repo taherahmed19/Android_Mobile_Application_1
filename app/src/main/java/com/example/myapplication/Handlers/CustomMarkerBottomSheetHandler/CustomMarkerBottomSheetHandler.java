@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
 
@@ -58,7 +59,6 @@ public class CustomMarkerBottomSheetHandler {
     RadiusMarkerStorage radiusMarkerStorage;
     DeleteRadiusMarkerListener deleteRadiusMarkerListener;
     SetRadiusMarkerListener setRadiusMarkerListener;
-
     FragmentManager fragmentManager;
 
     public CustomMarkerBottomSheetHandler(CustomMarkerBottomSheetFragment customMarkerBottomSheetFragment, GoogleMap mMap, LatLng latLng,
@@ -75,8 +75,6 @@ public class CustomMarkerBottomSheetHandler {
         this.fragmentManager = fragmentManager;
         this.radiusMarkerStorage = new RadiusMarkerStorage(radiusMarkerHandler, deleteRadiusMarkerListener, setRadiusMarkerListener, context);
         setNotificationsState();
-
-        Log.d("Print", inAppButtonClicked + " " + voiceButtonClicked);
     }
 
     public void configure(){
@@ -90,14 +88,8 @@ public class CustomMarkerBottomSheetHandler {
     }
 
     public void handleRadiusMarkerRemoval(boolean valid){
-        if(valid){
-
-        }else{
-            ErrorFragment errorFragment = new ErrorFragment(customMarkerBottomSheetFragment,
-                    this.context.getResources().getString(R.string.radius_marker_delete_title),
-                    this.context.getResources().getString(R.string.radius_marker_delete_body));
-
-            FragmentTransition.OpenFragment(fragmentManager, errorFragment, R.id.mapFragmentContainer, "");
+        if(!valid){
+            Toast.makeText(context, context.getString(R.string.radius_marker_delete_body), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -106,11 +98,8 @@ public class CustomMarkerBottomSheetHandler {
             radiusMarkerStorage.saveSharedPreference(inAppButtonClicked, voiceButtonClicked, latLng);
             fragmentManager.popBackStack();
         }else{
-            ErrorFragment errorFragment = new ErrorFragment(customMarkerBottomSheetFragment,
-                    customMarkerBottomSheetFragment.getResources().getString(R.string.radius_marker_set_title),
-                    customMarkerBottomSheetFragment.getResources().getString(R.string.radius_marker_set_body));
-
-            FragmentTransition.OpenFragment(fragmentManager, errorFragment, R.id.mapFragmentContainer, "");
+            radiusMarkerHandler.removeMarker();
+            Toast.makeText(context, context.getString(R.string.radius_marker_set_body), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -120,9 +109,10 @@ public class CustomMarkerBottomSheetHandler {
 
         if(stateExists){
             radiusMarkerStorage.deleteRadiusMarkerDb();
+            radiusMarkerStorage.clearSharedPreference();
+            Toast.makeText(context, context.getString(R.string.form_confirm_radius_marker_removed), Toast.LENGTH_LONG).show();
         }
 
-        Objects.requireNonNull(context).getSharedPreferences("Radius_Marker_Settings", 0).edit().clear().apply();
         radiusMarkerHandler.removeMarker();
         if(customMarkerBottomSheetFragment.isAdded()){
             fragmentManager.popBackStack();

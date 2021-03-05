@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.myapplication.Activities.MainActivity.MainActivity;
 import com.example.myapplication.Activities.RegisterActivity.RegisterActivity;
@@ -41,9 +42,6 @@ public class RegisterActivityHandler {
 
     public void handleRegistrationAttempt(boolean valid, int userId, String userFirstName, String userLastName, String userEmail){
         if(valid){
-            ConfirmFragment confirmFragment = new ConfirmFragment(this.registerActivity, this.registerActivity.getString(R.string.registration_confirm_title), this.registerActivity.getString(R.string.registration_confirm_body));
-            FragmentTransition.OpenFragment(this.registerActivity.getSupportFragmentManager(), confirmFragment, R.id.registerActivity, "");
-
             LoginPreferenceData.SaveLoginState(this.registerActivity, true, userId, userFirstName, userLastName, userEmail);
 
             HttpFirebaseToken httpFirebaseToken = new HttpFirebaseToken(registerActivity.getApplicationContext(),
@@ -52,10 +50,7 @@ public class RegisterActivityHandler {
 
             enterApplication();
         }else{
-            ErrorFragment errorFragment = new ErrorFragment(this.registerActivity, this.registerActivity.getString(R.string.registration_error_title),
-                    this.registerActivity.getString(R.string.registration_error_body));
-
-            FragmentTransition.OpenFragment(this.registerActivity.getSupportFragmentManager(), errorFragment, R.id.registerActivity, "");
+            Toast.makeText(registerActivity.getApplicationContext(), registerActivity.getApplicationContext().getString(R.string.registration_error_body), Toast.LENGTH_LONG).show();
         }
     }
 

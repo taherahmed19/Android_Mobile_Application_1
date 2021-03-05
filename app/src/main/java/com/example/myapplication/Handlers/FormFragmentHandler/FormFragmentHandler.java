@@ -65,6 +65,7 @@ public class FormFragmentHandler {
     boolean isConfiguredStaticMap;
     String encodedImage;
     Dialog dialog;
+    LatLng chosenLocation;
 
     public FormFragmentHandler(FormFragment formFragment, FeedSubmitListener feedSubmitListener) {
         this.formFragmentSpinner = new FormFragmentSpinner(formFragment);
@@ -78,28 +79,11 @@ public class FormFragmentHandler {
     public void configure(){
         configureMarkerSpinner();
         configureDescriptionText();
-        configureGeolocationButton();
         configureLocationButton();
         configureMedia();
         configureFormCloseButton();
         configureSubmitButton();
         configureSpinner();
-    }
-
-    public void submit(){
-        Log.d("Print","Clicked submit");
-        Spinner spinner = (Spinner) formFragment.getView().findViewById(R.id.formSpinner);
-        SpinnerItem item = (SpinnerItem) spinner.getSelectedItem();
-        String category = item.getName().toLowerCase();
-        EditText mapFeedDescription = (EditText) formFragment.getView().findViewById(R.id.mapFeedDescription);
-        String description = mapFeedDescription.getText().toString();
-        Button geolocationButton = (Button) formFragment.getView().findViewById(R.id.geolocationButton);
-        int userID = LoginPreferenceData.getUserId(formFragment.getActivity().getApplicationContext());
-
-        LatLng chosenLocation = (LatLng)geolocationButton.getTag();
-
-        HttpMarker httpMarker = new HttpMarker(this.formFragment.getContext(), userID, category, description, chosenLocation ,feedSubmitListener, this.encodedImage);
-        httpMarker.execute("");
     }
 
     public void onActivityResultCamera(int requestCode, int resultCode, Intent data){
@@ -148,6 +132,18 @@ public class FormFragmentHandler {
         }
     }
 
+    void submitForm(){
+        Spinner spinner = (Spinner) formFragment.getView().findViewById(R.id.formSpinner);
+        SpinnerItem item = (SpinnerItem) spinner.getSelectedItem();
+        String category = item.getName().toLowerCase();
+        EditText mapFeedDescription = (EditText) formFragment.getView().findViewById(R.id.mapFeedDescription);
+        String description = mapFeedDescription.getText().toString();
+        int userID = LoginPreferenceData.getUserId(formFragment.getActivity().getApplicationContext());
+
+        HttpMarker httpMarker = new HttpMarker(this.formFragment.getContext(), userID, category, description, chosenLocation ,feedSubmitListener, this.encodedImage);
+        httpMarker.execute();
+    }
+
     void encodeImage(Bitmap photo){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -156,9 +152,8 @@ public class FormFragmentHandler {
     }
 
     public void onActivityResultConfigure(double lat, double lng){
-        setGeolocationButtonClickable(true);
-        updateGeolocationText(true);
-        configureStaticMap(new LatLng(lat,lng));
+        this.chosenLocation = new LatLng(lat, lng);
+        this.removeLocationErrorMessage();
     }
 
     public void showDescriptionErrorMessage(){
@@ -174,6 +169,16 @@ public class FormFragmentHandler {
     public void showImageErrorMessage(){
         TextView imageError = (TextView) formFragment.getView().findViewById(R.id.imageError);
         imageError.setVisibility(View.VISIBLE);
+    }
+
+    public void showLocationErrorMessage(){
+        TextView imageError = (TextView) formFragment.getView().findViewById(R.id.locationError);
+        imageError.setVisibility(View.VISIBLE);
+    }
+
+    public void removeLocationErrorMessage(){
+        TextView descriptionError = (TextView) formFragment.getView().findViewById(R.id.locationError);
+        descriptionError.setVisibility(View.INVISIBLE);
     }
 
     public void removeDescriptionErrorMessage(){
@@ -273,58 +278,6 @@ public class FormFragmentHandler {
         });
     }
 
-    void configureGeolocationButton(){
-        Button geolocationButton = (Button) formFragment.getView().findViewById(R.id.geolocationButton);
-
-        geolocationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setGeolocationButtonClickable(false);
-                updateGeolocationText(false);
-
-                CurrentLocation currentLocation = new CurrentLocation(formFragment.getActivity());
-                LatLng location = currentLocation.accessGeolocation();
-
-                configureStaticMap(new LatLng(location.latitude, location.longitude));
-            }
-        });
-
-        setGeolocationButtonClickable(false);
-        updateGeolocationText(false);
-    }
-
-    void setGeolocationButtonClickable(boolean clickable){
-        Button geolocationButton = (Button) formFragment.getView().findViewById(R.id.geolocationButton);
-        geolocationButton.setClickable(clickable);
-    }
-
-    void setFormGeolocationTag(double lat, double lng){
-        Button geolocationButton = (Button) formFragment.getView().findViewById(R.id.geolocationButton);
-        geolocationButton.setTag(new LatLng(lat, lng));
-    }
-
-    void updateGeolocationText(boolean locationButtonSelected){
-        Button geolocationButton = (Button) formFragment.getView().findViewById(R.id.geolocationButton);
-
-        if(locationButtonSelected){
-            geolocationButton.setText(formFragment.getString(R.string.form_use_current_location));
-        }else{
-            geolocationButton.setText(formFragment.getString(R.string.form_current_location));
-        }
-    }
-
-    public void configureStaticMap(LatLng latLng){
-        String imageUrl = MessageFormat.format(formFragment.getString(R.string.form_static_map),
-                latLng.latitude, latLng.longitude, 15, latLng.latitude, latLng.longitude, formFragment.getString(R.string.GOOGLE_API_KEY));
-        formLocationImage = (ImageView) formFragment.getView().findViewById(R.id.formLocationImage);
-
-        setFormGeolocationTag(latLng.latitude, latLng.longitude);
-
-        //FormStaticMap formStaticMap = new FormStaticMap(formLocationImage);
-        //formStaticMap.execute(imageUrl);
-
-        isConfiguredStaticMap = true;
-    }
 
     void configureMedia(){
         RelativeLayout imageButton = (RelativeLayout) this.formFragment.getView().findViewById(R.id.imageButton);
@@ -417,7 +370,7 @@ public class FormFragmentHandler {
                     if(formFragment.getActivity() != null){
                         Tools.HideKeyboard(formFragment.getActivity());
                     }
-                    submit();
+                    submitForm();
                 }
             }
         });
@@ -442,12 +395,14 @@ public class FormFragmentHandler {
         EditText mapFeedDescription = (EditText) formFragment.getView().findViewById(R.id.mapFeedDescription);
         Spinner spinner = formFragment.getView().findViewById(R.id.formSpinner);
         RelativeLayout imageButton = (RelativeLayout) formFragment.getView().findViewById(R.id.imageButton);
+        Button locationButton = (Button) formFragment.getView().findViewById(R.id.locationButton);
 
         boolean validSpinnerItem = formFragmentValidator.spinnerFocusChange(spinner);
         boolean validDescription = formFragmentValidator.descriptionFocusChange(mapFeedDescription);
         boolean validImage = formFragmentValidator.imageSelected(imageButton, encodedImage);
+        boolean validLocation = formFragmentValidator.locationSelected(locationButton, chosenLocation);
 
-        return validSpinnerItem && validDescription && validImage;
+        return validSpinnerItem && validDescription && validImage && validLocation;
     }
 
 }

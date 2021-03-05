@@ -81,6 +81,8 @@ public class HttpWriteRadiusMarker extends AsyncTask<String , Void ,String> {
             jsonObject.put("longitude", this.lon);
             jsonObject.put("radius", this.radius);
 
+            Log.d("Print", "body - " + jsonObject.toString());
+
             BufferedOutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
             writer.write(jsonObject.toString());
@@ -115,6 +117,7 @@ public class HttpWriteRadiusMarker extends AsyncTask<String , Void ,String> {
     @Override
     protected void onPostExecute(String str) {
         boolean valid = Boolean.parseBoolean(str);
+        Log.d("Print", "Radius marker response " + str);
         setRadiusMarkerListener.handleRadiusMarker(valid);
     }
 

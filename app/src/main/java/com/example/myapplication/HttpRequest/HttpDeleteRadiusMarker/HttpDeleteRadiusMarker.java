@@ -43,8 +43,6 @@ public class HttpDeleteRadiusMarker extends AsyncTask<String , Void ,String> {
 
         String apiRequest = this.createApiQuery();
 
-        Log.d("Print", "Api request " + apiRequest);
-
         try {
             String response = handleRequest(apiRequest);
 

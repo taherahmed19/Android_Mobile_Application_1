@@ -34,15 +34,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
-import static com.example.myapplication.Models.CurrentLocation.CurrentLocation.MY_PERMISSIONS_REQUEST_FINE_LOCATION;
-
 public class MapHandler implements OnMapReadyCallback {
 
     GoogleMap mMap;
     FragmentActivity fragmentActivity;
     FragmentManager fragmentManager;
     ArrayList<com.google.android.gms.maps.model.Marker> googleMarkers;
-    CurrentLocation currentLocation;
     com.google.android.gms.maps.model.Marker userLocationMarker;
     boolean cameraInitPos = false;
     LatLng location;

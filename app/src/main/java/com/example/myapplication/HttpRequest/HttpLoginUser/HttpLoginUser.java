@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.myapplication.Handlers.LoginActivityHandler.LoginActivityHandler;
 import com.example.myapplication.Interfaces.LoginListener.LoginListener;
@@ -53,7 +54,6 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
         SSL.AllowSSLCertificates();
 
         String apiRequest = this.createApiQuery();
-        Log.d("Print", "Login api req " + apiRequest);
         try {
             String response = handleRequest(apiRequest);
 
@@ -69,8 +69,13 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
 
     @Override
     protected void onPostExecute(String responseString) {
-        handleJSONResponse(responseString);
-        loginListener.handleSignInAttempt(validCredentials, userId, userFirstName, userLastName, userEmail);
+        if(responseString.length() > 0){
+            handleJSONResponse(responseString);
+            loginListener.handleSignInAttempt(validCredentials, userId, userFirstName, userLastName, userEmail);
+        }else{
+            Toast.makeText(context, context.getString(R.string.login_error_body), Toast.LENGTH_LONG).show();
+        }
+
     }
 
     String handleRequest(String apiRequest){
@@ -93,7 +98,6 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
     }
 
     void handleJSONResponse(String jsonString){
-        Log.d("Print", "Response str " + jsonString);
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
             validCredentials = jsonObject.getBoolean("validCredentials");

@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.Fragments.ErrorFragment.ErrorFragment;
 import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
@@ -152,16 +153,6 @@ public class MapFeedSearchFragmentHandler {
                 returnFragmentData(new LatLng(currentUserLocation.getLatitude(), currentUserLocation.getLongitude()));
             }
         });
-    }
-
-    public void showErrorFragment(int title, int body){
-        ErrorFragment errorFragment = new ErrorFragment(mapFeedSearchFragment,
-                mapFeedSearchFragment.getResources().getString(title),
-                mapFeedSearchFragment.getResources().getString(body));
-
-        if (mapFeedSearchFragment.getFragmentManager() != null) {
-            FragmentTransition.OpenFragment(mapFeedSearchFragment.getFragmentManager(), errorFragment, R.id.mapFeedSearchFragment, "");
-        }
     }
 
     public void updateEditText(CharSequence text){

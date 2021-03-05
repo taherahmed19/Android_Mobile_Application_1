@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.myapplication.Fragments.ConfirmFragment.ConfirmFragment;
 import com.example.myapplication.Fragments.ErrorFragment.ErrorFragment;
@@ -94,8 +95,7 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
             Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
             getParentFragmentManager().popBackStack();
         }else{
-            ErrorFragment errorFragment = new ErrorFragment(this, this.getString(R.string.form_error_title), this.getString(R.string.form_error_body));
-            FragmentTransition.OpenFragment(this.getChildFragmentManager(), errorFragment, R.id.userFeedForm, "");
+            Toast.makeText(getContext(), getContext().getString(R.string.form_error_body), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -115,7 +115,6 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
     public void updateUserLocation(Location location) {
         if(!this.formFragmentHandler.isConfiguredStaticMap()){
             this.currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-            this.formFragmentHandler.configureStaticMap(currentLatLng);
         }
     }
 }

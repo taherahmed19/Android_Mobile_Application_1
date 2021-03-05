@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.example.myapplication.Handlers.MapFeedSearchFragmentHandler.MapFeedSearchFragmentHandler;
 import com.example.myapplication.JsonBuilders.MapFeedSearchJsonBuilder.MapFeedSearchJsonBuilder;
@@ -69,7 +70,7 @@ public class HttpMapFeedSearch extends AsyncTask<String , Void , LatLng> {
             this.mapFeedSearchFragmentHandler.popFragments();
             this.mapFeedSearchFragmentHandler.returnFragmentData(latLng);
         }else{
-            this.mapFeedSearchFragmentHandler.showErrorFragment(R.string.map_feed_search_error_title_2, R.string.map_feed_search_error_body_2);
+            Toast.makeText(context, context.getString(R.string.map_feed_search_error_body_2), Toast.LENGTH_LONG).show();
         }
     }
 

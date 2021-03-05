@@ -33,10 +33,6 @@ public class CurrentLocation {
 
     CurrentLocationListener currentLocationListener;
 
-    public CurrentLocation(Activity context) {
-        this.context = context;
-    }
-
     public CurrentLocation(Activity context, CurrentLocationListener currentLocationListener) {
         this.context = context;
 
@@ -65,7 +61,6 @@ public class CurrentLocation {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
-
             currentLocationListener.updateUserLocation(locationResult.getLastLocation());
         }
     };
