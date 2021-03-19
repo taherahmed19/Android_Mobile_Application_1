@@ -7,7 +7,13 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Distance {
 
-    public static double CalculateRadiusMarkerDistance(LatLng centre, double radius)
+    /**
+     * No longer used
+     * @param centre
+     * @param radius
+     * @return
+     */
+    public static int CalculateRadiusMarkerDistance(LatLng centre, double radius)
     {
         double EARTH_RADIUS = 6378100.0;
         double lat = centre.latitude * Math.PI / 180.0;
@@ -22,17 +28,21 @@ public class Distance {
         Location.distanceBetween(circlePerimeterPoint.latitude, circlePerimeterPoint.longitude,
                 centre.latitude, centre.longitude, distance);
 
-        double distanceInMiles =  distance[0] * 0.000621371192;
-
-        //return distance in miles with two dp
-        return Math.floor(distanceInMiles * 100) / 100;
+        return Math.round(distance[0]);
     }
 
+    /**
+     *
+     * @param startingLat
+     * @param startingLng
+     * @param destinationLat
+     * @param destinationLng
+     * @return
+     */
     public static double CalculatePointsDistance(double startingLat, double startingLng, double destinationLat, double destinationLng){
         float[] distance = new float[1];
         Location.distanceBetween(startingLat, startingLng, destinationLat, destinationLng, distance);
 
         return Math.floor(distance[0] * 100) / 100;
-    }
-
+   }
 }

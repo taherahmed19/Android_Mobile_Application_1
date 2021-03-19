@@ -30,7 +30,7 @@ public class RadiusMarkerStorage {
         this.deleteRadiusMarkerListener = deleteRadiusMarkerListener;
         this.setRadiusMarkerListener = setRadiusMarkerListener;
         this.context = context;
-        this.removeExistingData();
+      //  this.removeExistingData();
     }
 
     public void writeRadiusMarkerDb(){

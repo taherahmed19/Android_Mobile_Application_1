@@ -94,32 +94,6 @@ public class RadiusMarkerHandler {
         radiusMarker.remove();
     }
 
-    public double calculateCircleRadiusMeterForMapCircle(final int _targetRadiusDip, final double _circleCenterLatitude, final float _currentMapZoom) {
-        final double arbitraryValueForDip = radiusMarker.getRadius();
-        final double oneDipDistance = Math.abs(Math.cos(Math.toRadians(_circleCenterLatitude))) * arbitraryValueForDip / Math.pow(2, _currentMapZoom);
-        return oneDipDistance * (double) _targetRadiusDip;
-    }
-
-    public void addCircleWithConstantSize(){
-        final GoogleMap googleMap = mMap;
-
-        //Setting a listener on the map camera to monitor when the camera changes
-        googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-            @Override
-            public void onCameraChange(CameraPosition position) {
-                if (position.zoom != currentZoom){
-                    currentZoom = position.zoom;  // here you get zoom level
-
-                    //Use the function to calculate the radius
-                    final double newRadius = calculateCircleRadiusMeterForMapCircle((int)radius, co.getCenter().latitude, googleMap.getCameraPosition().zoom);
-                    //Apply the radius to the circle
-                    radiusMarker.setRadius(newRadius);
-                }
-
-            }
-        });
-    }
-
     public Circle getRadiusMarker() {
         return radiusMarker;
     }

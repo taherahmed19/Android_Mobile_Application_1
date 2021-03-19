@@ -133,6 +133,7 @@ public class FormFragmentHandler {
     }
 
     void submitForm(){
+        Log.d("Print", "Clicked submit");
         Spinner spinner = (Spinner) formFragment.getView().findViewById(R.id.formSpinner);
         SpinnerItem item = (SpinnerItem) spinner.getSelectedItem();
         String category = item.getName().toLowerCase();
@@ -402,7 +403,7 @@ public class FormFragmentHandler {
         boolean validImage = formFragmentValidator.imageSelected(imageButton, encodedImage);
         boolean validLocation = formFragmentValidator.locationSelected(locationButton, chosenLocation);
 
-        return validSpinnerItem && validDescription && validImage && validLocation;
+        return validSpinnerItem && validDescription && validImage;
     }
 
 }

@@ -36,14 +36,21 @@ public class LoginActivityHandler {
         this.password = "";
     }
 
+    public void configure(){
+        configureLoginSubmitButton();
+        configureRegisterButton();
+        configureEmail();
+        configurePassword();
+    }
+
     public void handleSignInAttempt(boolean valid, int userId, String userFirstName, String userLastName, String userEmail) {
         if(valid){
             LoginPreferenceData.SaveLoginState(this.loginActivity, true, userId, userFirstName, userLastName, userEmail);
 
             //send firebase token
-            HttpFirebaseToken httpFirebaseToken = new HttpFirebaseToken(loginActivity.getApplicationContext(),
-                    LoginPreferenceData.getUserId(loginActivity.getApplicationContext()), loginActivity.getToken());
-            httpFirebaseToken.execute();
+//            HttpFirebaseToken httpFirebaseToken = new HttpFirebaseToken(loginActivity.getApplicationContext(),
+//                    LoginPreferenceData.getUserId(loginActivity.getApplicationContext()), loginActivity.getToken());
+//            httpFirebaseToken.execute();
 
             enterApplication();
         }else{
@@ -51,11 +58,12 @@ public class LoginActivityHandler {
         }
     }
 
-    public void configure(){
-        configureLoginSubmitButton();
-        configureRegisterButton();
-        configureEmail();
-        configurePassword();
+    public void submitSignIn(){
+        if(validateAllFields()){
+            this.hashPassword();
+            HttpLoginUser httpLoginUser = new HttpLoginUser(this.loginActivity.getApplicationContext(), this, this.loginActivity);
+            httpLoginUser.execute("");
+        }
     }
 
     void enterApplication(){
@@ -68,7 +76,7 @@ public class LoginActivityHandler {
         loginSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validateAllFields();
+                submitSignIn();
             }
         });
     }
@@ -77,14 +85,7 @@ public class LoginActivityHandler {
         boolean validEmail = this.loginActivityValidator.validateEmailTextChanged();
         boolean validPassword = this.loginActivityValidator.validatePasswordTextChanged();
 
-        if(validEmail && validPassword){
-            this.hashPassword();
-            HttpLoginUser httpLoginUser = new HttpLoginUser(this.loginActivity.getApplicationContext(), this, this.loginActivity);
-            httpLoginUser.execute("");
-            return true;
-        }
-
-        return false;
+        return validEmail && validPassword;
     }
 
     void hashPassword(){
@@ -172,5 +173,13 @@ public class LoginActivityHandler {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

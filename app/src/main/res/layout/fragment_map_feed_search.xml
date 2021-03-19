@@ -40,7 +40,7 @@
                     android:id="@+id/mapSearchSubmit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:src="@drawable/ic_routing_search_submit"
                     android:background="@android:color/transparent">
                 </ImageButton>
@@ -54,7 +54,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="10sp"
+                    android:paddingStart="10sp"
                     android:orientation="vertical"
                     android:gravity="center_horizontal"
                     >

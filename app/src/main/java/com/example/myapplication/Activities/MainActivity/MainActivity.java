@@ -14,6 +14,7 @@ import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFr
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.Handlers.MainActivityHandler.MainActivityHandler;
 import com.example.myapplication.R;
+import com.example.myapplication.Utils.Distance.Distance;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         resetSharedPreference();
         onNewIntent(getIntent());
+        Log.d("Print", Distance.CalculatePointsDistance(51.50814359035564, -0.12757841703333933, 51.509679991312744, -0.12818183756448506) + "");
     }
 
     @Override

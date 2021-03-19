@@ -75,7 +75,6 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
         }else{
             Toast.makeText(context, context.getString(R.string.login_error_body), Toast.LENGTH_LONG).show();
         }
-
     }
 
     String handleRequest(String apiRequest){
