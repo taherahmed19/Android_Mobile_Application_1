@@ -2,8 +2,6 @@ package com.example.myapplication.Interfaces.LoginContract;
 
 import android.content.Context;
 
-import androidx.fragment.app.Fragment;
-
 import com.example.myapplication.Models.User.User;
 
 public interface LoginContract {
@@ -14,8 +12,8 @@ public interface LoginContract {
         Context getContext();
         boolean validateEmailTextChanged();
         boolean validatePasswordTextChanged();
-        boolean validateEmailFocusChanged();
-        boolean validatePasswordFocusChange();
+        void validateEmailFocusChanged();
+        void validatePasswordFocusChange();
     }
 
     interface Presenter{

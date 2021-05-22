@@ -10,10 +10,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,24 +19,14 @@ import android.widget.Toast;
 
 import com.example.myapplication.Activities.MainActivity.MainActivity;
 import com.example.myapplication.Activities.RegisterActivity.RegisterActivity;
-import com.example.myapplication.Handlers.LoginActivityHandler.LoginActivityHandler;
-import com.example.myapplication.HttpRequest.HttpLoginUser.HttpLoginUser;
 import com.example.myapplication.Interfaces.LoginContract.LoginContract;
-import com.example.myapplication.Interfaces.LoginListener.LoginListener;
-import com.example.myapplication.Models.LoginUser.LoginUser;
 import com.example.myapplication.Models.User.User;
 import com.example.myapplication.Presenters.LoginPresenter.LoginPresenter;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
-import com.example.myapplication.Utils.HashingTool.HashingTool;
-import com.example.myapplication.Utils.Tools.Tools;
-import com.google.common.hash.HashCode;
-import com.google.common.hash.Hashing;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.tomtom.online.sdk.common.util.StringUtils;
 
-import java.nio.charset.Charset;
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View {
@@ -97,24 +85,21 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     @Override
-    public boolean validateEmailFocusChanged() {
+    public void validateEmailFocusChanged() {
         EditText loginEmail = (EditText) this.findViewById(R.id.loginEmail);
         TextView emailErrorMessage = this.findViewById(R.id.loginEmailErrorMessage);
         String email = loginEmail.getText().toString();
 
         if(email.length() == 0){
             showErrorMessage(loginEmail,  emailErrorMessage, R.drawable.ic_login_email_icon, R.drawable.ic_login_register_error_icon, "Field must be inputted");
-            return false;
         }else if(!email.matches("[a-zA-Z0-9._-]+@[a-zA-Z]+\\.+[a-zA-Z]+")){
             showErrorMessage(loginEmail,  emailErrorMessage, R.drawable.ic_login_email_icon, R.drawable.ic_login_register_error_icon, "Enter a valid email");
-            return false;
         }
 
-        return true;
     }
 
     @Override
-    public boolean validatePasswordFocusChange() {
+    public void validatePasswordFocusChange() {
         EditText registerPassword = this.findViewById(R.id.loginPassword);
         TextView passwordErrorMessage = this.findViewById(R.id.loginPasswordErrorMessage);
 
@@ -122,10 +107,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         if(registerPassword.getText().length() == 0){
             showErrorMessage(registerPassword,  passwordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Field must be inputted");
-            return false;
         }
 
-        return true;
     }
 
     @Override

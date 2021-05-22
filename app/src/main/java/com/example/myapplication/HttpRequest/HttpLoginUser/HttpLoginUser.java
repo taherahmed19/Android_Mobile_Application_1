@@ -67,7 +67,7 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
     protected void onPostExecute(String responseString) {
         if(responseString.length() > 0){
             handleJSONResponse(responseString);
-            loginListener.handleSignInAttempt(validCredentials, user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
+            loginListener.handleSignInAttempt(validCredentials, user);
         }else{
             Toast.makeText(context, context.getString(R.string.login_error_body), Toast.LENGTH_LONG).show();
         }
