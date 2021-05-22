@@ -64,6 +64,20 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
     }
 
     @Override
+    public void validateAllFields() {
+        boolean validFirstName = registerPresenter.validateFirstNameTextChanged();
+        boolean validLastName = registerPresenter.validateLastNameTextChanged();
+        boolean validEmail = registerPresenter.validateEmailTextChanged();
+        boolean validPassword = registerPresenter.validatePasswordTextChanged();
+        boolean validConfirmPassword = registerPresenter.validateConfirmPasswordTextChanged();
+
+        if(validFirstName && validLastName && validEmail && validPassword && validConfirmPassword){
+            registerPresenter.hashPassword();
+            registerPresenter.registerAccount();
+        }
+    }
+
+    @Override
     public void handleRegistrationAttempt(boolean valid, User user) {
         if(valid){
             LoginPreferenceData.SaveLoginState(this, true, user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
@@ -226,7 +240,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validateAllFields();
+                registerPresenter.validateAllFields();
             }
         });
     }
@@ -244,19 +258,6 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
 
     void enterApplication(){
         FragmentTransition.StartActivity(this, MainActivity.class);
-    }
-
-    void validateAllFields(){
-        boolean validFirstName = registerPresenter.validateFirstNameTextChanged();
-        boolean validLastName = registerPresenter.validateLastNameTextChanged();
-        boolean validEmail = registerPresenter.validateEmailTextChanged();
-        boolean validPassword = registerPresenter.validatePasswordTextChanged();
-        boolean validConfirmPassword = registerPresenter.validateConfirmPasswordTextChanged();
-
-        if(validFirstName && validLastName && validEmail && validPassword && validConfirmPassword){
-            registerPresenter.hashPassword();
-            registerPresenter.registerAccount();
-        }
     }
 
     void hideKeyboard(){

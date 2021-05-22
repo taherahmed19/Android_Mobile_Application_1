@@ -8,6 +8,7 @@ import com.example.myapplication.Models.User.User;
 public interface RegisterContract {
 
     interface View{
+        void validateAllFields();
         void handleRegistrationAttempt(boolean valid, User user);
         boolean validateFirstNameTextChanged();
         boolean validateFirstNameFocusChange();

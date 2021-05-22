@@ -27,7 +27,6 @@ public class RegisterPresenter implements RegisterContract.Presenter, RegisterLi
     }
 
     public void registerAccount(){
-        //move to model
         registerUser.makeApiCall(view.getContext());
     }
 
@@ -93,5 +92,9 @@ public class RegisterPresenter implements RegisterContract.Presenter, RegisterLi
 
     public boolean validateConfirmPasswordFocusChange(){
         return view.validateConfirmPasswordFocusChange();
+    }
+
+    public void validateAllFields(){
+        view.validateAllFields();
     }
 }
