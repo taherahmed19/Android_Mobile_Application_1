@@ -14,32 +14,43 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.example.myapplication.Adapters.LockableViewPager.LockableViewPager;
 import com.example.myapplication.Application.App;
+import com.example.myapplication.Fragments.FormFragment.FormFragment;
 import com.example.myapplication.Fragments.MainMapFragment.MainMapFragment;
 import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.MapFeedSearchAutocompleteFragment;
 import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
 import com.example.myapplication.Fragments.RadiusMarkerNotificationFragment.RadiusMarkerNotificationFragment;
 import com.example.myapplication.Handlers.BackgroundNotificationHandler.BackgroundNotificationHandler;
+import com.example.myapplication.Handlers.InteractiveMap.InteractiveMap;
+import com.example.myapplication.Handlers.MapFeedSearchFragmentHandler.MapFeedSearchFragmentHandler;
 import com.example.myapplication.Handlers.MapFragmentHandler.MapFragmentHandler;
+import com.example.myapplication.HttpRequest.HttpMap.HttpMap;
 import com.example.myapplication.Interfaces.CurrentLocationListener.CurrentLocationListener;
 import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
+import com.example.myapplication.Interfaces.MapContract.MapContract;
 import com.example.myapplication.Interfaces.MapListener.MapListener;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.Models.LoadingSpinner.LoadingSpinner;
 import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Models.Settings.Settings;
+import com.example.myapplication.Presenters.MapPresenter.MapPresenter;
 import com.example.myapplication.R;
 import com.example.myapplication.Refactor.searchAutocomplete.Place;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
+import com.example.myapplication.Utils.StringConstants.StringConstants;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -51,13 +62,22 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class MapFragment extends Fragment implements MapFeedSearchFragment.FragmentSearchListener, MapFeedSearchAutocompleteFragment.FragmentAutocompleteListener
-        , CurrentLocationListener, MapListener, CustomMarkerListener {
+import static android.app.Activity.RESULT_OK;
+
+public class MapFragment extends Fragment implements MapFeedSearchFragment.FragmentSearchListener,
+        MapFeedSearchAutocompleteFragment.FragmentAutocompleteListener,
+        CurrentLocationListener, MapListener, CustomMarkerListener,
+        MapContract.View {
+
     SupportMapFragment supportMapFragment;
     LoadingSpinner loadingSpinner;
     MapFragmentHandler mapFragmentHandler;
     LockableViewPager viewPager;
     CurrentLocation currentLocation;
+
+    MapPresenter mapPresenter;
+    MapFeedSearchAutocompleteFragment mapFeedSearchAutocompleteFragment;
+    MapFeedSearchFragment mapFeedSearchFragment;
 
     public MapFragment(LockableViewPager viewPager) {
         this.viewPager = viewPager;
@@ -75,33 +95,28 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
         this.mapFragmentHandler = new MapFragmentHandler(this, viewPager, this, this);
         this.supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
         this.loadingSpinner = new LoadingSpinner((ProgressBar) Objects.requireNonNull(getView()).findViewById(R.id.feedLoadingSpinner));
-        this.mapFragmentHandler.configureElements();
 
         currentLocation = new CurrentLocation(getActivity(), this);
-        this.mapFragmentHandler.requestMap(null);
-    }
+        mapPresenter.requestMap(getChildFragmentManager(), supportMapFragment);
 
-    @Override
-    public void addMarkerData(ArrayList<Marker> markers) {
-        this.mapFragmentHandler.addMarkerData(markers);
+        this.mapPresenter = new MapPresenter(this);
+
+        this.mapFeedSearchAutocompleteFragment = new MapFeedSearchAutocompleteFragment(this);
+        this.mapFeedSearchFragment = new MapFeedSearchFragment(this);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        this.mapFragmentHandler.showSpinner();
+        this.showSpinner();
 
-        LatLng latLng = this.mapFragmentHandler.handleResult(requestCode, resultCode, data);
-        this.mapFragmentHandler.handleSavedLocation(latLng);
+        LatLng latLng = this.handleResult(requestCode, resultCode, data);
+        this.handleSavedLocation(latLng);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
         currentLocation.startLocationUpdates();
-    }
-
-    public void showFeedMapContainer(){
-        this.mapFragmentHandler.showFeedMapContainer();
     }
 
     @Override
@@ -130,21 +145,9 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
     }
 
     @Override
-    public void updateUserLocation(Location location) {
-        this.mapFragmentHandler.updateUserLocation(location);
-        this.showFeedMapContainer();
-    }
-
-    /*
-    * Map Listener
-    * */
-    @Override
     public void handleMapClick(GoogleMap googleMap) {
     }
 
-    /*
-     * Map Listener
-     * */
     @Override
     public void handleMarkerClick(GoogleMap googleMap, FragmentActivity fragmentActivity) {
         this.mapFragmentHandler.addMarkersListener(googleMap, fragmentActivity);
@@ -185,6 +188,148 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
         }
     }
 
+    @Override
+    public void handleSearchButtonClick() {
+        if (getFragmentManager() != null) {
+            FragmentTransition.TransitionActivityResult(getFragmentManager(), mapFeedSearchFragment,
+                    this, R.anim.top_animation, R.anim.down_animation, R.id.mapFeedSearchPointer, MapFeedSearchFragmentHandler.REQUEST_CODE_SEARCH, MapFeedSearchFragment.TAG);
+
+            FragmentTransition.Transition(getFragmentManager(), mapFeedSearchAutocompleteFragment,
+                    R.anim.right_animations, R.anim.left_animation, R.id.mapFeedSearchAutoPointer, MapFeedSearchAutocompleteFragment.TAG);
+        }
+    }
+
+    @Override
+    public void handleNewPostButtonClick(){
+        FormFragment fragment = new FormFragment(getFragmentManager(), viewPager);
+        FragmentTransaction transition = FragmentTransition.Transition(getFragmentManager(), fragment, R.anim.right_animations, R.anim.left_animation, R.id.mapFeedSearchPointer, "");
+    }
+
+    @Override
+    public boolean handleMarkerClick(com.google.android.gms.maps.model.Marker marker){
+        if(!marker.getTag().equals(getString(R.string.default_constant))){
+            Marker item = (Marker)marker.getTag();
+
+            MarkerModalFragment markerModalFragment = new MarkerModalFragment(item, viewPager);
+            FragmentTransition.Transition(this.getParentFragmentManager(), markerModalFragment, R.anim.right_animations, R.anim.left_animation,
+                    R.id.mapModalContainer, "");
+
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void hideSpinner(){
+        if(this.loadingSpinner != null){
+            this.loadingSpinner.hide();
+        }
+    }
+
+    void configureSupportMapFragment(){
+        supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
+    }
+
+    void configureSpinner(){
+        this.loadingSpinner = new LoadingSpinner((ProgressBar) getView().findViewById(R.id.feedLoadingSpinner));
+    }
+
+    void configureMapSearchButton(){
+        ImageButton mapSearchButton = (ImageButton) getView().findViewById(R.id.mapSearchButton);
+
+        mapSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mapPresenter.handleSearchButtonClick();
+            }
+        });
+    }
+
+    void configureNewPostButton(){
+        final ImageButton newPost = (ImageButton) getView().findViewById(R.id.newPost);
+        newPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mapPresenter.handleNewPostButtonClick();
+            }
+        });
+    }
+
+    void configureSwitchButton(){
+        final ImageButton mapLocationResetBtn = (ImageButton) getView().findViewById(R.id.mapLocationResetBtn);
+
+        mapLocationResetBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mapPresenter.setCameraCurrentLocation();
+            }
+        });
+    }
+
+    void configureMapRefreshButton(){
+        final ImageButton mapRefreshBtn = (ImageButton) getView().findViewById(R.id.mapRefreshBtn);
+
+        mapRefreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
+            }
+        });
+    }
+
+    public void addMarkerData(ArrayList<Marker> markers) {
+        mapPresenter.addMarkerList(markers);
+    }
+
+    public void updateUserLocation(Location location) {
+        mapPresenter.setGoogleMakerLocation(location);
+        //showFeedMapContainer(); remove?
+    }
+
+    public void setMapLocation(LatLng latLng){
+        mapPresenter.setMapLocation(latLng);
+    }
+
+    public void addMarkersListener(GoogleMap mMap, FragmentActivity fragmentActivity){
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(com.google.android.gms.maps.model.Marker marker) {
+                return mapPresenter.handleMarkerClick(marker);
+            }
+        });
+    }
+
+    public void triggerMarkerOnMap(ViewPager viewPager, Marker markerModel){
+        mapPresenter.addMarkerToMap(viewPager, markerModel);
+    }
+
+    public void handleSavedLocation(LatLng latLng){
+        mapPresenter.handleMapSavedLocation(latLng);
+    }
+
+    public void showSpinner(){
+        if(this.loadingSpinner != null){
+            this.loadingSpinner.show();
+        }
+    }
+
+    //remove?
+    public void showFeedMapContainer(){
+//        LinearLayout feedMapContainer = (LinearLayout) mapFragment.getView().findViewById(R.id.feedMapContainer);
+//        feedMapContainer.setVisibility(View.VISIBLE);
+    }
+
+    public LatLng handleResult(int requestCode, int resultCode, Intent data){
+        if (resultCode == RESULT_OK) {
+            if (requestCode == MapFeedSearchFragmentHandler.REQUEST_CODE_SEARCH){
+                return (LatLng)data.getParcelableExtra(StringConstants.INTENT_MAP_FEED_SEARCH_LAT_LNG);
+            }
+        }
+
+        return null;
+    }
+
+
     private BroadcastReceiver receiver = new BroadcastReceiver() {
 
         @Override
@@ -203,7 +348,7 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
 
             Marker markerModel = new Marker(userId, firstName, lastName, category, description, lat, lng, null, markerId, rating);
 
-            mapFragmentHandler.triggerMarkerOnMap(viewPager, markerModel);
+            triggerMarkerOnMap(viewPager, markerModel);
 
             if(!voiceEnabled && openNotification == 0){
                 MarkerModalFragment markerModalFragment = new MarkerModalFragment(markerModel, viewPager);
@@ -224,5 +369,6 @@ public class MapFragment extends Fragment implements MapFeedSearchFragment.Fragm
             }
         }
     };
+
 
 }

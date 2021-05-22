@@ -3,7 +3,6 @@ package com.example.myapplication.HttpRequest.HttpMap;
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -18,7 +17,7 @@ import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
 import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Models.LoadingSpinner.LoadingSpinner;
-import com.example.myapplication.Handlers.MapHandler.MapHandler;
+import com.example.myapplication.Handlers.InteractiveMap.InteractiveMap;
 import com.google.android.gms.maps.SupportMapFragment;
 
 import java.net.HttpURLConnection;
@@ -46,7 +45,7 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
     Fragment viewPagerFragment;
     Settings settings;
 
-    MapHandler mapHandler;
+    InteractiveMap interactiveMap;
     MapJsonBuilder mapJsonBuilder;
 
     CustomMarkerListener customMarkerListener;

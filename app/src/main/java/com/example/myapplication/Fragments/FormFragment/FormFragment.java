@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.example.myapplication.Fragments.ConfirmFragment.ConfirmFragment;
 import com.example.myapplication.Fragments.ErrorFragment.ErrorFragment;
 import com.example.myapplication.Handlers.FormFragmentHandler.FormFragmentHandler;
-import com.example.myapplication.Handlers.LocationSelectorActivityHandler.LocationSelectorActivityHandler;
 import com.example.myapplication.Interfaces.CurrentLocationListener.CurrentLocationListener;
 import com.example.myapplication.Interfaces.FeedSubmitListener.FeedSubmitListener;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;

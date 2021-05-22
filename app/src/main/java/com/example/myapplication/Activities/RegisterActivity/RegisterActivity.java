@@ -2,45 +2,33 @@ package com.example.myapplication.Activities.RegisterActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.myapplication.Activities.LoginActivity.LoginActivity;
 import com.example.myapplication.Activities.MainActivity.MainActivity;
-import com.example.myapplication.Handlers.RegisterActivityHandler.RegisterActivityHandler;
 import com.example.myapplication.HttpRequest.HttpFirebaseToken.HttpFirebaseToken;
-import com.example.myapplication.HttpRequest.HttpRegisterUser.HttpRegisterUser;
 import com.example.myapplication.Interfaces.RegisterContract.RegisterContract;
-import com.example.myapplication.Interfaces.RegisterListener.RegisterListener;
 import com.example.myapplication.Models.BroadcastReceiverToken.BroadcastReceiverToken;
 import com.example.myapplication.Models.User.User;
 import com.example.myapplication.Presenters.RegisterPresenter.RegisterPresenter;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
-import com.example.myapplication.Utils.Tools.Tools;
 
 import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity implements RegisterContract.View {
 
     BroadcastReceiverToken token;
-
-
     RegisterPresenter registerPresenter;
 
     @Override
@@ -266,6 +254,17 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         );
     }
 
+    void showErrorMessage(EditText field, TextView errorMessage, int iconLeft, int iconRight, String message){
+        field.setCompoundDrawablesWithIntrinsicBounds(iconLeft, 0, iconRight, 0);
+        errorMessage.setVisibility(View.VISIBLE);
+        errorMessage.setText(message);
+    }
+
+    void hideErrorMessages(EditText field, TextView errorMessage, int iconLeft){
+        errorMessage.setVisibility(View.INVISIBLE);
+        field.setCompoundDrawablesWithIntrinsicBounds(iconLeft, 0, 0, 0);
+    }
+
     @Override
     public boolean validateFirstNameTextChanged() {
         EditText registerFirstName = this.findViewById(R.id.registerFirstName);
@@ -467,16 +466,5 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
     @Override
     public Context getContext() {
         return this.getApplicationContext();
-    }
-
-    void showErrorMessage(EditText field, TextView errorMessage, int iconLeft, int iconRight, String message){
-        field.setCompoundDrawablesWithIntrinsicBounds(iconLeft, 0, iconRight, 0);
-        errorMessage.setVisibility(View.VISIBLE);
-        errorMessage.setText(message);
-    }
-
-    void hideErrorMessages(EditText field, TextView errorMessage, int iconLeft){
-        errorMessage.setVisibility(View.INVISIBLE);
-        field.setCompoundDrawablesWithIntrinsicBounds(iconLeft, 0, 0, 0);
     }
 }

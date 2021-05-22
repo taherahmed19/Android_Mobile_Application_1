@@ -1,14 +1,9 @@
 package com.example.myapplication.Presenters.RegisterPresenter;
 
-import android.widget.EditText;
-import android.widget.TextView;
-
-import com.example.myapplication.HttpRequest.HttpRegisterUser.HttpRegisterUser;
 import com.example.myapplication.Interfaces.RegisterContract.RegisterContract;
 import com.example.myapplication.Interfaces.RegisterListener.RegisterListener;
 import com.example.myapplication.Models.RegisterUser.RegisterUser;
 import com.example.myapplication.Models.User.User;
-import com.example.myapplication.R;
 import com.example.myapplication.Utils.HashingTool.HashingTool;
 
 public class RegisterPresenter implements RegisterContract.Presenter, RegisterListener {

@@ -1,27 +1,23 @@
-package com.example.myapplication.Handlers.MapHandler;
+package com.example.myapplication.Handlers.InteractiveMap;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
-import com.example.myapplication.Fragments.RadiusMarkerNotificationFragment.RadiusMarkerNotificationFragment;
 import com.example.myapplication.Handlers.MapOnClickHandler.MapOnClickHandler;
+import com.example.myapplication.Interfaces.LocationSelectorContract.LocationSelectorContract;
+import com.example.myapplication.Interfaces.LocationSelectorMapListener.LocationSelectorMapListener;
 import com.example.myapplication.Interfaces.MapListener.MapListener;
-import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Models.Marker.Marker;
-import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -34,7 +30,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
-public class MapHandler implements OnMapReadyCallback {
+public class InteractiveMap implements OnMapReadyCallback, LocationSelectorContract.Model {
 
     GoogleMap mMap;
     FragmentActivity fragmentActivity;
@@ -47,18 +43,20 @@ public class MapHandler implements OnMapReadyCallback {
     Context context;
     com.example.myapplication.Fragments.MapFragment.MapFragment mapFragment;
 
-    public MapHandler(SupportMapFragment supportMapFragment, FragmentActivity fragmentActivity, FragmentManager fragmentManager, MapListener mapListener) {
-        this.fragmentActivity = fragmentActivity;
+    LocationSelectorMapListener locationSelectorMapListener;
+
+    public InteractiveMap(SupportMapFragment supportMapFragment, Context context, FragmentManager fragmentManager, LocationSelectorMapListener locationSelectorMapListener) {
         this.fragmentManager = fragmentManager;
         this.googleMarkers = new ArrayList<>();
-        this.mapListener = mapListener;
+        this.locationSelectorMapListener = locationSelectorMapListener;
+        this.context = context;
 
         if (mMap == null) {
             supportMapFragment.getMapAsync(this);
         }
     }
 
-    public MapHandler(SupportMapFragment supportMapFragment, FragmentActivity fragmentActivity, FragmentManager fragmentManager, MapListener mapListener, Context context, com.example.myapplication.Fragments.MapFragment.MapFragment mapFragment) {
+    public InteractiveMap(SupportMapFragment supportMapFragment, FragmentActivity fragmentActivity, FragmentManager fragmentManager, MapListener mapListener, Context context, com.example.myapplication.Fragments.MapFragment.MapFragment mapFragment) {
         this.fragmentActivity = fragmentActivity;
         this.fragmentManager = fragmentManager;
         this.googleMarkers = new ArrayList<>();
@@ -86,8 +84,14 @@ public class MapHandler implements OnMapReadyCallback {
             mMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
         }
 
-        mapListener.handleMapClick(mMap);
-        mapListener.handleMarkerClick(mMap, fragmentActivity);
+        //need to refactor map fragment handler to sort out this code
+        if(locationSelectorMapListener != null){
+            locationSelectorMapListener.handleMapClick(mMap);
+            locationSelectorMapListener.handleMarkerClick(mMap);
+        }else{
+            mapListener.handleMapClick(mMap);
+            mapListener.handleMarkerClick(mMap, fragmentActivity);
+        }
 
         //error with location activity
         if(mapFragment != null){
@@ -146,12 +150,12 @@ public class MapHandler implements OnMapReadyCallback {
             markerOptions.anchor((float) 0.5, (float) 0.5);
 
             this.userLocationMarker = mMap.addMarker(markerOptions);
-            userLocationMarker.setTag(fragmentActivity.getString(R.string.default_constant));
+            userLocationMarker.setTag(context.getString(R.string.default_constant));
             googleMarkers.add(userLocationMarker);
 
             if (mMap != null) {
-                if (ActivityCompat.checkSelfPermission(fragmentActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(fragmentActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION);
                 }
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.latitude, currentLocation.longitude), 17));
             }
@@ -170,8 +174,8 @@ public class MapHandler implements OnMapReadyCallback {
 
         if (!cameraInitPos) {
             if (mMap != null) {
-                if (ActivityCompat.checkSelfPermission(fragmentActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(fragmentActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION);
                 }
                 mMap.setMyLocationEnabled(true);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.latitude, currentLocation.longitude), 17));
@@ -182,9 +186,8 @@ public class MapHandler implements OnMapReadyCallback {
 
     public void moveCameraToCurrentLocation(){
         if (mMap != null) {
-            if (ActivityCompat.checkSelfPermission(fragmentActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(fragmentActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION);
             }
             mMap.setMyLocationEnabled(true);
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.location, 17));
@@ -194,7 +197,7 @@ public class MapHandler implements OnMapReadyCallback {
     BitmapDescriptor returnMarkerIcon(int userId){
         BitmapDescriptor markerColour = null;
 
-        if(userId == LoginPreferenceData.getUserId(this.fragmentActivity)){
+        if(userId == LoginPreferenceData.getUserId(this.context)){
             markerColour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
        }else{
             markerColour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
@@ -209,7 +212,7 @@ public class MapHandler implements OnMapReadyCallback {
             String longitude = String.valueOf(mMyCam.target.longitude);
             String latitude = String.valueOf(mMyCam.target.latitude);
 
-            SharedPreferences mapState = fragmentActivity.getSharedPreferences("Main_MapFeed_Map_State", 0);
+            SharedPreferences mapState = context.getApplicationContext().getSharedPreferences("Main_MapFeed_Map_State", 0);
             SharedPreferences.Editor mapStateEditor = mapState.edit();
             mapStateEditor.putString("longitude", longitude);
             mapStateEditor.putString("latitude", latitude);
@@ -218,7 +221,7 @@ public class MapHandler implements OnMapReadyCallback {
     }
 
     LatLng getMapCameraPosition(){
-        SharedPreferences mapState = fragmentActivity.getSharedPreferences("Main_MapFeed_Map_State", 0);
+        SharedPreferences mapState = context.getSharedPreferences("Main_MapFeed_Map_State", 0);
         String latitudeStr = mapState.getString("latitude", "");
         String longitudeStr = mapState.getString("longitude", "");
 

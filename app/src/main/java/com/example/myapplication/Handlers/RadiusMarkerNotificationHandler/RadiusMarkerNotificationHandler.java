@@ -9,11 +9,9 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
 import com.example.myapplication.Fragments.RadiusMarkerNotificationFragment.RadiusMarkerNotificationFragment;
-import com.example.myapplication.Handlers.MapHandler.MapHandler;
 import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
-import com.google.android.gms.maps.model.LatLng;
 
 public class RadiusMarkerNotificationHandler {
 

@@ -3,7 +3,6 @@ package com.example.myapplication.Handlers.MapFragmentHandler;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -18,10 +17,9 @@ import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
 import com.example.myapplication.Fragments.FormFragment.FormFragment;
-import com.example.myapplication.Fragments.RadiusMarkerNotificationFragment.RadiusMarkerNotificationFragment;
 import com.example.myapplication.Handlers.MapFeedSearchFragmentHandler.MapFeedSearchFragmentHandler;
 import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.MapFeedSearchAutocompleteFragment;
-import com.example.myapplication.Handlers.MapHandler.MapHandler;
+import com.example.myapplication.Handlers.InteractiveMap.InteractiveMap;
 import com.example.myapplication.HttpRequest.HttpMap.HttpMap;
 import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
 import com.example.myapplication.Interfaces.MapListener.MapListener;
@@ -50,7 +48,7 @@ public class MapFragmentHandler  {
     LoadingSpinner loadingSpinner;
     SupportMapFragment supportMapFragment;
     HttpMap httpMap;
-    MapHandler mapHandler;
+    InteractiveMap interactiveMap;
     CustomMarkerListener customMarkerListener;
     MapListener mapListenerInstance;
 
@@ -63,32 +61,23 @@ public class MapFragmentHandler  {
         this.customMarkerListener = customMarkerListener;
     }
 
-    public void configureElements(){
-        this.configureSupportMapFragment();
-        this.configureSpinner();
-        this.configureMapSearchButton();
-        this.configureNewPostButton();
-        this.configureSwitchButton();
-        this.configureMapRefreshButton();
-    }
-
     public void requestMap(Settings settings){
-        this.mapHandler = new MapHandler(supportMapFragment, mapFragment.getActivity(), mapFragment.getChildFragmentManager(), mapListenerInstance, mapFragment.getContext(), mapFragment);
+        this.interactiveMap = new InteractiveMap(supportMapFragment, mapFragment.getActivity(), mapFragment.getChildFragmentManager(), mapListenerInstance, mapFragment.getContext(), mapFragment);
 
         this.httpMap = new HttpMap(mapFragment.getActivity(), mapFragment.getChildFragmentManager(), supportMapFragment, mapFragment, loadingSpinner, settings, customMarkerListener);
         this.httpMap.execute("https://10.0.2.2:443/api/getmarkers");
     }
 
     public void addMarkerData(ArrayList<Marker> markers) {
-        this.mapHandler.addDataSetMarkers(markers);
+        this.interactiveMap.addDataSetMarkers(markers);
     }
 
     public void updateUserLocation(Location location) {
-        this.mapHandler.setUserLocationGoogleMarker(location);
+        this.interactiveMap.setUserLocationGoogleMarker(location);
     }
 
     public void setMapLocation(LatLng latLng){
-        this.mapHandler.setMapLocation(latLng);
+        this.interactiveMap.setMapLocation(latLng);
     }
 
     public void addMarkersListener(GoogleMap mMap, FragmentActivity fragmentActivity){
@@ -110,13 +99,13 @@ public class MapFragmentHandler  {
     }
 
     public void triggerMarkerOnMap(ViewPager viewPager, Marker markerModel){
-        mapHandler.triggerMarkerOnMap(viewPager, markerModel);
+        interactiveMap.triggerMarkerOnMap(viewPager, markerModel);
     }
 
     public void handleSavedLocation(LatLng latLng){
         if(latLng != null){
-            if(mapHandler != null){
-                mapHandler.setMapLocation(latLng);
+            if(interactiveMap != null){
+                interactiveMap.setMapLocation(latLng);
                 hideSpinner();
             }
         }
@@ -161,62 +150,6 @@ public class MapFragmentHandler  {
         return mapFeedSearchFragment;
     }
 
-    void configureSupportMapFragment(){
-        supportMapFragment = (SupportMapFragment) mapFragment.getChildFragmentManager().findFragmentById(R.id.mapFragment);
-    }
 
-    void configureSpinner(){
-        this.loadingSpinner = new LoadingSpinner((ProgressBar) mapFragment.getView().findViewById(R.id.feedLoadingSpinner));
-    }
-
-    void configureMapSearchButton(){
-        this.mapSearchButton = (ImageButton) mapFragment.getView().findViewById(R.id.mapSearchButton);
-
-        this.mapSearchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mapFragment.getFragmentManager() != null) {
-                    FragmentTransition.TransitionActivityResult(mapFragment.getFragmentManager(), mapFeedSearchFragment,
-                            mapFragment, R.anim.top_animation, R.anim.down_animation, R.id.mapFeedSearchPointer, MapFeedSearchFragmentHandler.REQUEST_CODE_SEARCH, MapFeedSearchFragment.TAG);
-
-                    FragmentTransition.Transition(mapFragment.getFragmentManager(), mapFeedSearchAutocompleteFragment,
-                            R.anim.right_animations, R.anim.left_animation, R.id.mapFeedSearchAutoPointer, MapFeedSearchAutocompleteFragment.TAG);
-                }
-            }
-        });
-    }
-
-    void configureNewPostButton(){
-        final ImageButton newPost = (ImageButton) mapFragment.getView().findViewById(R.id.newPost);
-        newPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FormFragment fragment = new FormFragment(mapFragment.getFragmentManager(), viewPager);
-                FragmentTransaction transition = FragmentTransition.Transition(mapFragment.getFragmentManager(), fragment, R.anim.right_animations, R.anim.left_animation, R.id.mapFeedSearchPointer, "");
-            }
-        });
-    }
-
-    void configureSwitchButton(){
-        final ImageButton mapLocationResetBtn = (ImageButton) mapFragment.getView().findViewById(R.id.mapLocationResetBtn);
-
-        mapLocationResetBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mapHandler.moveCameraToCurrentLocation();
-            }
-        });
-    }
-
-    void configureMapRefreshButton(){
-        final ImageButton mapRefreshBtn = (ImageButton) mapFragment.getView().findViewById(R.id.mapRefreshBtn);
-
-        mapRefreshBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
-            }
-        });
-    }
 
 }

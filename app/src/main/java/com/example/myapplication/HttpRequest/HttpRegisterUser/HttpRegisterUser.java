@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.example.myapplication.Handlers.RegisterActivityHandler.RegisterActivityHandler;
 import com.example.myapplication.Interfaces.RegisterListener.RegisterListener;
 import com.example.myapplication.Models.RegisterUser.RegisterUser;
 import com.example.myapplication.Models.User.User;
@@ -24,6 +23,7 @@ import java.text.MessageFormat;
 import javax.net.ssl.HttpsURLConnection;
 
 public class HttpRegisterUser extends AsyncTask<String , Void ,String> {
+
     HttpsURLConnection urlConnection;
     URL url;
     int responseCode;
@@ -40,10 +40,6 @@ public class HttpRegisterUser extends AsyncTask<String , Void ,String> {
         this.registerListener = registerListener;
         this.registerUser = registerUser;
         this.user = new User();
-    }
-
-    @Override
-    protected void onPreExecute() {
     }
 
     @Override
