@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.example.myapplication.Interfaces.LoginContract.LoginContract;
 import com.example.myapplication.Interfaces.LoginListener.LoginListener;
+import com.example.myapplication.Models.BroadcastReceiverToken.BroadcastReceiverToken;
 import com.example.myapplication.Models.LoginUser.LoginUser;
 import com.example.myapplication.Models.User.User;
 import com.example.myapplication.R;
@@ -15,9 +16,11 @@ public class LoginPresenter implements LoginContract.Presenter, LoginListener {
 
     private LoginContract.View view;
     private LoginUser loginUser;
+    private BroadcastReceiverToken token;
 
     public LoginPresenter(LoginContract.View view) {
         this.loginUser = new LoginUser(this);
+        this.token = new BroadcastReceiverToken();
         this.view = view;
     }
 
@@ -26,12 +29,20 @@ public class LoginPresenter implements LoginContract.Presenter, LoginListener {
         view.handleSignInAttempt(valid, user);
     }
 
+    public void startRegisterActivity(){
+        view.startRegisterActivity(token);
+    }
+
     public void updateEmail(String email){
         loginUser.setEmail(email);
     }
 
     public void updatePassword(String password){
         loginUser.setPassword(password);
+    }
+
+    public void updateBroadcastReceiverToken(String token){
+        this.token.setToken(token);
     }
 
     public void hashPassword(){

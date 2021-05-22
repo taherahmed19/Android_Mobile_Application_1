@@ -16,6 +16,11 @@ public class LoginUser implements LoginContract.Model {
         this.loginListener = loginListener;
     }
 
+    public void makeApiCall(Context context){
+        HttpLoginUser httpLoginUser = new HttpLoginUser(context, loginListener, this);
+        httpLoginUser.execute("");
+    }
+
     public String getEmail() {
         return email;
     }
@@ -30,11 +35,6 @@ public class LoginUser implements LoginContract.Model {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void makeApiCall(Context context){
-        HttpLoginUser httpLoginUser = new HttpLoginUser(context, loginListener, this);
-        httpLoginUser.execute("");
     }
 
 }

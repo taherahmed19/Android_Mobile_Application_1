@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.myapplication.Handlers.LoginActivityHandler.LoginActivityHandler;
 import com.example.myapplication.Interfaces.LoginListener.LoginListener;
 import com.example.myapplication.Models.LoginUser.LoginUser;
 import com.example.myapplication.Models.User.User;

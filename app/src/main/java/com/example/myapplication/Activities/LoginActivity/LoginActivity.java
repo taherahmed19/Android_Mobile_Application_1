@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.example.myapplication.Activities.MainActivity.MainActivity;
 import com.example.myapplication.Activities.RegisterActivity.RegisterActivity;
 import com.example.myapplication.Interfaces.LoginContract.LoginContract;
+import com.example.myapplication.Models.BroadcastReceiverToken.BroadcastReceiverToken;
 import com.example.myapplication.Models.User.User;
 import com.example.myapplication.Presenters.LoginPresenter.LoginPresenter;
 import com.example.myapplication.R;
@@ -37,15 +39,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
-        );
-
         loginPresenter = new LoginPresenter(this);
         configureEmail();
         configureLoginSubmitButton();
         configurePassword();
         configureRegisterButton();
+        hideKeyboard();
     }
 
     @Override
@@ -114,7 +113,30 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Override
     public void submitSignIn(){
         if(validateAllFields()){
-            this.hashPassword();
+            loginPresenter.hashPassword();
+        }
+    }
+
+    @Override
+    public void startRegisterActivity(BroadcastReceiverToken token) {
+        Intent intent = new Intent(getBaseContext(), RegisterActivity.class);
+        intent.putExtra("token", token.getToken());
+        startActivity(intent);
+    }
+
+    @Override
+    public void handleSignInAttempt(boolean valid, User user) {
+        if(valid){
+            LoginPreferenceData.SaveLoginState(this, true, user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
+
+            //send firebase token
+//            HttpFirebaseToken httpFirebaseToken = new HttpFirebaseToken(loginActivity.getApplicationContext(),
+//                    LoginPreferenceData.getUserId(loginActivity.getApplicationContext()), loginActivity.getToken());
+//            httpFirebaseToken.execute();
+
+            enterApplication();
+        }else{
+            Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.login_error_body), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -167,9 +189,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         loginRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getBaseContext(), RegisterActivity.class);
-                intent.putExtra("token", getToken());
-                startActivity(intent);
+                loginPresenter.startRegisterActivity();
             }
         });
     }
@@ -243,10 +263,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         return validEmail && validPassword;
     }
 
-    void hashPassword(){
-        loginPresenter.hashPassword();
-    }
-
     void showErrorMessage(EditText field, TextView errorMessage, int iconLeft, int iconRight, String message){
         field.setCompoundDrawablesWithIntrinsicBounds(iconLeft, 0, iconRight, 0);
         errorMessage.setVisibility(View.VISIBLE);
@@ -258,13 +274,18 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         field.setCompoundDrawablesWithIntrinsicBounds(iconLeft, 0, 0, 0);
     }
 
-    public String token;
+    void hideKeyboard(){
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
+    }
 
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
+    BroadcastReceiver receiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             String currentToken = FirebaseInstanceId.getInstance().getToken();
+            String token;
 
             //if current token does not exist get the generated token otherwise this.token = current token
             if(TextUtils.isEmpty(currentToken)){
@@ -272,25 +293,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             }else{
                 token = currentToken;
             }
+
+            loginPresenter.updateBroadcastReceiverToken(token);
         }
     };
-
-    public String getToken() {
-        return token;
-    }
-
-    @Override
-    public void handleSignInAttempt(boolean valid, User user) {
-        if(valid){
-            LoginPreferenceData.SaveLoginState(this, true, user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
-
-            //send firebase token
-//            HttpFirebaseToken httpFirebaseToken = new HttpFirebaseToken(loginActivity.getApplicationContext(),
-//                    LoginPreferenceData.getUserId(loginActivity.getApplicationContext()), loginActivity.getToken());
-//            httpFirebaseToken.execute();
-
-            enterApplication();
-        }else{
-            Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.login_error_body), Toast.LENGTH_LONG).show();
-        }    }
 }

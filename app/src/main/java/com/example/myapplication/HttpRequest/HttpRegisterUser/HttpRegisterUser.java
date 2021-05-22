@@ -1,5 +1,6 @@
 package com.example.myapplication.HttpRequest.HttpRegisterUser;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
@@ -7,6 +8,8 @@ import android.util.Log;
 
 import com.example.myapplication.Handlers.RegisterActivityHandler.RegisterActivityHandler;
 import com.example.myapplication.Interfaces.RegisterListener.RegisterListener;
+import com.example.myapplication.Models.RegisterUser.RegisterUser;
+import com.example.myapplication.Models.User.User;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
@@ -24,20 +27,19 @@ public class HttpRegisterUser extends AsyncTask<String , Void ,String> {
     HttpsURLConnection urlConnection;
     URL url;
     int responseCode;
+    @SuppressLint("StaticFieldLeak")
     Context context;
-    RegisterActivityHandler registerActivityHandler;
     RegisterListener registerListener;
 
     boolean validCredentials;
-    int userId;
-    String userFirstName;
-    String userLastName;
-    String userEmail;
+    User user;
+    RegisterUser registerUser;
 
-    public HttpRegisterUser(Context context, RegisterActivityHandler registerActivityHandler, RegisterListener registerListener) {
+    public HttpRegisterUser(Context context, RegisterListener registerListener, RegisterUser registerUser) {
         this.context = context;
-        this.registerActivityHandler = registerActivityHandler;
         this.registerListener = registerListener;
+        this.registerUser = registerUser;
+        this.user = new User();
     }
 
     @Override
@@ -84,17 +86,17 @@ public class HttpRegisterUser extends AsyncTask<String , Void ,String> {
     @Override
     protected void onPostExecute(String responseString) {
         handleJSONResponse(responseString);
-        registerListener.handleRegistrationAttempt(validCredentials, userId, userFirstName, userLastName, userEmail);
+        registerListener.handleRegistrationAttempt(validCredentials, user);
     }
 
     void handleJSONResponse(String jsonString){
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
             validCredentials = jsonObject.getBoolean("validCredentials");
-            userId = jsonObject.getInt("userId");
-            userFirstName = jsonObject.getString("userFirstName");
-            userLastName = jsonObject.getString("userLastName");
-            userEmail = jsonObject.getString("userEmail");
+            user.setId(jsonObject.getInt("userId"));
+            user.setFirstName(jsonObject.getString("userFirstName"));
+            user.setLastName(jsonObject.getString("userLastName"));
+            user.setEmail(jsonObject.getString("userEmail"));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -103,7 +105,7 @@ public class HttpRegisterUser extends AsyncTask<String , Void ,String> {
 
     String createApiQuery(){
         return MessageFormat.format(this.context.getResources().getString(R.string.webservice_register_endpoint),
-                this.registerActivityHandler.getFirstName(), this.registerActivityHandler.getLastName(),
-                this.registerActivityHandler.getEmail(), this.registerActivityHandler.getPassword());
+                this.registerUser.getFirstName(), this.registerUser.getLastName(),
+                this.registerUser.getEmail(), this.registerUser.getPassword());
     }
 }
