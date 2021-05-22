@@ -34,7 +34,7 @@ import java.util.Objects;
  * Displays bottom fragment for radius marker
  */
 public class BottomSheetFragment extends Fragment implements BottomSheetContract.View {
-
+/*
     BottomSheetPresenter bottomSheetPresenter;
     Context context;
     GoogleMap mMap;
@@ -198,5 +198,5 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
                 bottomSheetFragment.getParentFragmentManager().popBackStack();
             }
         });
-    }
+    }*/
 }

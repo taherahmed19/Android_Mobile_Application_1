@@ -2,57 +2,59 @@ package com.example.myapplication.Activities.MainActivity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.MapFeedSearchAutocompleteFragment;
 import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
-import com.example.myapplication.Handlers.MainActivityHandler.MainActivityHandler;
+import com.example.myapplication.Interfaces.MainContract.MainContract;
+import com.example.myapplication.Presenters.MainPresenter.MainPresenter;
 import com.example.myapplication.R;
-import com.example.myapplication.Utils.Distance.Distance;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.iid.FirebaseInstanceId;
 
-import java.util.Objects;
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MainContract.View {
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-    MainActivityHandler mainActivityHandler;
-
-    public MainActivity() {
-        this.mainActivityHandler = new MainActivityHandler(this);
-    }
+    private MainPresenter mainPresenter;
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.mainActivityHandler.configure();
+        mainPresenter = new MainPresenter(this);
 
+        configureDrawerLayout();
+        configureHeaderMenuButton();
+        configureNavigation();
         resetSharedPreference();
         onNewIntent(getIntent());
-        Log.d("Print", Distance.CalculatePointsDistance(51.50814359035564, -0.12757841703333933, 51.509679991312744, -0.12818183756448506) + "");
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        this.mainActivityHandler.handleNavMenuItemListener(item);
-        return true;
+        if (item.getItemId() == R.id.nav_sign_out) {
+            LoginPreferenceData.clear(this.getApplicationContext());
+            this.finish();
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void onBackPressed() {
-        Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag("findThisFragment");
-
-        if (fragment != null) {
-            handleBackPressMapFragments(fragment);
-        }
+        mainPresenter.handleBackPressed();
     }
 
     @Override
@@ -75,6 +77,70 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    void configureDrawerLayout(){
+        drawerLayout = this.findViewById(R.id.homepage);
+    }
+
+    void configureHeaderMenuButton(){
+        ImageButton userMenu = (ImageButton) this.findViewById(R.id.userMenu);
+
+        userMenu.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("RtlHardcoded")
+            @Override
+            public void onClick(View view) {
+                drawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
+    }
+
+    void configureNavigation(){
+        configureNavigationListener();
+        configureNavHeaderName();
+        configureNavHeaderEmail();
+        configureNavHeaderUserIcon();
+    }
+
+    void configureNavigationListener(){
+        NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    void configureNavHeaderName(){
+        String firstName = LoginPreferenceData.getUserFirstName(this);
+        String lastName = LoginPreferenceData.getUserLastName(this);
+
+        String concatName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1) + " " + lastName.substring(0, 1).toUpperCase() + lastName.substring(1);
+
+        NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
+        View headerLayout = navigationView.getHeaderView(0);
+
+        TextView text = headerLayout.findViewById(R.id.nav_header_name);
+        text.setText(concatName);
+    }
+
+    void configureNavHeaderEmail(){
+        String email = LoginPreferenceData.getUserEmail(this);
+
+        NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
+        View headerLayout = navigationView.getHeaderView(0);
+
+        TextView text = headerLayout.findViewById(R.id.nav_header_email);
+        text.setText(email);
+    }
+
+    void configureNavHeaderUserIcon(){
+        String firstName = LoginPreferenceData.getUserFirstName(this);
+        String lastName = LoginPreferenceData.getUserLastName(this);
+
+        String concatInitials = firstName.substring(0, 1).toUpperCase() + " " + lastName.substring(0, 1).toUpperCase();
+
+        NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
+        View headerLayout = navigationView.getHeaderView(0);
+
+        TextView nav_header_name_logo = (TextView) headerLayout.findViewById(R.id.nav_header_name_logo);
+        nav_header_name_logo.setText(concatInitials);
+    }
+
     void resetSharedPreference(){
         getApplicationContext().getSharedPreferences("Main_Fragment_Map_State", 0).edit().clear().apply();
         getApplicationContext().getSharedPreferences("Main_MapFeed_Map_State", 0).edit().clear().apply();
@@ -82,7 +148,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getApplicationContext().getSharedPreferences("Region_Geolocation_State", 0).edit().clear().apply();
     }
 
-    void handleBackPressMapFragments(Fragment fragment){
+    @Override
+    public void handleBackPressed() {
+        Fragment fragment = (Fragment) this.getSupportFragmentManager().findFragmentByTag("findThisFragment");
+
+        if (fragment != null) {
+            mainPresenter.handleBackPressMapFragments(fragment);
+        }
+    }
+
+    @Override
+    public void handleBackPressMapFragments(Fragment fragment) {
         MapFeedSearchFragment mapFeedSearchFragment = (MapFeedSearchFragment) fragment.getChildFragmentManager().findFragmentByTag(MapFeedSearchFragment.TAG);
         MapFeedSearchAutocompleteFragment mapFeedSearchAutocompleteFragment = (MapFeedSearchAutocompleteFragment) fragment.getChildFragmentManager().findFragmentByTag(MapFeedSearchAutocompleteFragment.TAG);
 

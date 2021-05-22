@@ -1,5 +1,6 @@
 package com.example.myapplication.HttpRequest.HttpLoginUser;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
@@ -8,6 +9,8 @@ import android.widget.Toast;
 
 import com.example.myapplication.Handlers.LoginActivityHandler.LoginActivityHandler;
 import com.example.myapplication.Interfaces.LoginListener.LoginListener;
+import com.example.myapplication.Models.LoginUser.LoginUser;
+import com.example.myapplication.Models.User.User;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
@@ -27,28 +30,21 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
     HttpsURLConnection urlConnection;
     URL url;
     int responseCode;
+    @SuppressLint("StaticFieldLeak")
     Context context;
-    LoginActivityHandler loginActivityHandler;
     LoginListener loginListener;
-
     boolean validCredentials;
-    int userId;
-    String userFirstName;
-    String userLastName;
-    String userEmail;
 
-    public HttpLoginUser(Context context, LoginActivityHandler loginActivityHandler, LoginListener loginListener) {
+    User user;
+    LoginUser loginUser;
+
+    public HttpLoginUser(Context context, LoginListener loginListener, LoginUser loginUser) {
         this.context = context;
-        this.loginActivityHandler = loginActivityHandler;
         this.loginListener = loginListener;
         this.validCredentials = false;
-        this.userId = 0;
+        this.loginUser = loginUser;
+        this.user = new User();
     }
-
-    @Override
-    protected void onPreExecute() {
-    }
-
     @Override
     protected String doInBackground(String... strings) {
         SSL.AllowSSLCertificates();
@@ -71,7 +67,7 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
     protected void onPostExecute(String responseString) {
         if(responseString.length() > 0){
             handleJSONResponse(responseString);
-            loginListener.handleSignInAttempt(validCredentials, userId, userFirstName, userLastName, userEmail);
+            loginListener.handleSignInAttempt(validCredentials, user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
         }else{
             Toast.makeText(context, context.getString(R.string.login_error_body), Toast.LENGTH_LONG).show();
         }
@@ -100,10 +96,10 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
             validCredentials = jsonObject.getBoolean("validCredentials");
-            userId = jsonObject.getInt("userId");
-            userFirstName = jsonObject.getString("userFirstName");
-            userLastName = jsonObject.getString("userLastName");
-            userEmail = jsonObject.getString("userEmail");
+            user.setId(jsonObject.getInt("userId"));
+            user.setFirstName(jsonObject.getString("userFirstName"));
+            user.setLastName(jsonObject.getString("userLastName"));
+            user.setEmail(jsonObject.getString("userEmail"));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -112,6 +108,6 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
 
     String createApiQuery(){
         return MessageFormat.format(this.context.getResources().getString(R.string.webservice_login_endpoint),
-                this.loginActivityHandler.getEmail(), this.loginActivityHandler.getPassword());
+                this.loginUser.getEmail(), this.loginUser.getPassword());
     }
 }

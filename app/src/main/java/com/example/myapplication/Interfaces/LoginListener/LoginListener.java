@@ -1,6 +1,8 @@
 package com.example.myapplication.Interfaces.LoginListener;
 
+import com.example.myapplication.Models.User.User;
+
 public interface LoginListener {
 
-    void handleSignInAttempt(boolean valid, int userId, String userFirstName, String userLastName, String email);
+    void handleSignInAttempt(boolean valid, User user);
 }

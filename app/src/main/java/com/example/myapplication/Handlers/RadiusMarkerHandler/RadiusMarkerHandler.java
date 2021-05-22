@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
 
-import com.example.myapplication.Fragments.CustomMarkerBottomSheetFragment.CustomMarkerBottomSheetFragment;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.google.android.gms.maps.GoogleMap;
@@ -69,22 +68,22 @@ public class RadiusMarkerHandler {
         }
     }
 
-    public boolean handleRadiusMarkerClick(CustomMarkerBottomSheetFragment customMarkerBottomSheetDialog, Context context, FragmentManager supportFragmentManager, LatLng latLng){
-        SharedPreferences settingsPreference = Objects.requireNonNull(context).getSharedPreferences("Radius_Marker_Settings", 0);
-        boolean stateExists = settingsPreference.getBoolean("stateExists", false);
-        double radius = (double)settingsPreference.getFloat("radius", 0.0f);
-        double centerLat = (double)settingsPreference.getFloat("centerLat", 0.0f);
-        double centerLon = (double)settingsPreference.getFloat("centerLon", 0.0f);
-
-        if(stateExists){
-            float[] distance = new float[2];
-            Location.distanceBetween(latLng.latitude, latLng.longitude, centerLat, centerLon, distance);
-
-            return distance[0] <= radius;
-        }
-
-        return false;
-    }
+//    public boolean handleRadiusMarkerClick(CustomMarkerBottomSheetFragment customMarkerBottomSheetDialog, Context context, FragmentManager supportFragmentManager, LatLng latLng){
+//        SharedPreferences settingsPreference = Objects.requireNonNull(context).getSharedPreferences("Radius_Marker_Settings", 0);
+//        boolean stateExists = settingsPreference.getBoolean("stateExists", false);
+//        double radius = (double)settingsPreference.getFloat("radius", 0.0f);
+//        double centerLat = (double)settingsPreference.getFloat("centerLat", 0.0f);
+//        double centerLon = (double)settingsPreference.getFloat("centerLon", 0.0f);
+//
+//        if(stateExists){
+//            float[] distance = new float[2];
+//            Location.distanceBetween(latLng.latitude, latLng.longitude, centerLat, centerLon, distance);
+//
+//            return distance[0] <= radius;
+//        }
+//
+//        return false;
+//    }
 
     public void updateMarkerRadius(double radius){
         radiusMarker.setRadius(radius);

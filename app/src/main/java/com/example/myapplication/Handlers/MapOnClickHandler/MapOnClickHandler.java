@@ -6,7 +6,7 @@ import android.util.Log;
 
 import androidx.fragment.app.FragmentManager;
 
-import com.example.myapplication.Fragments.CustomMarkerBottomSheetFragment.CustomMarkerBottomSheetFragment;
+//import com.example.myapplication.Fragments.CustomMarkerBottomSheetFragment.CustomMarkerBottomSheetFragment;
 import com.example.myapplication.Handlers.RadiusMarkerHandler.RadiusMarkerHandler;
 import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
 import com.example.myapplication.Interfaces.SetRadiusMarkerListener.SetRadiusMarkerListener;
@@ -22,7 +22,7 @@ public class MapOnClickHandler implements DeleteRadiusMarkerListener, SetRadiusM
     FragmentManager fragmentManager;
     private Context context;
     private GoogleMap mMap;
-    CustomMarkerBottomSheetFragment customMarkerBottomSheetDialog;
+    //CustomMarkerBottomSheetFragment customMarkerBottomSheetDialog;
     RadiusMarkerHandler radiusMarkerHandler;
 
     public MapOnClickHandler(Context context, GoogleMap mMap, FragmentManager fragmentManager) {
@@ -46,8 +46,8 @@ public class MapOnClickHandler implements DeleteRadiusMarkerListener, SetRadiusM
 
             if(stateExists){
                 radiusMarkerHandler = new RadiusMarkerHandler(mMap, new LatLng(centerLat, centerLon), radius);
-                customMarkerBottomSheetDialog = new CustomMarkerBottomSheetFragment(context, mMap, new LatLng(centerLat, centerLon), radius, radiusMarkerHandler,
-                        this, this, fragmentManager);
+//                customMarkerBottomSheetDialog = new CustomMarkerBottomSheetFragment(context, mMap, new LatLng(centerLat, centerLon), radius, radiusMarkerHandler,
+//                        this, this, fragmentManager);
             }
         }
     }
@@ -60,38 +60,38 @@ public class MapOnClickHandler implements DeleteRadiusMarkerListener, SetRadiusM
             public void onMapLongClick(LatLng latLng) {
                 radiusMarkerHandler = new RadiusMarkerHandler(mMap, latLng, 0);
 
-                if(customMarkerBottomSheetDialog != null){
-                    customMarkerBottomSheetDialog.remove();
-                    customMarkerBottomSheetDialog = null;
-                }
-
-                customMarkerBottomSheetDialog = new CustomMarkerBottomSheetFragment(context, mMap, latLng, 0, radiusMarkerHandler,
-                        instance, instance, fragmentManager);
-                FragmentTransition.OpenFragment(fragmentManager, customMarkerBottomSheetDialog, R.id.mapFeedSearchPointer, "");
+//                if(customMarkerBottomSheetDialog != null){
+//                    customMarkerBottomSheetDialog.remove();
+//                    customMarkerBottomSheetDialog = null;
+//                }
+//
+//                customMarkerBottomSheetDialog = new CustomMarkerBottomSheetFragment(context, mMap, latLng, 0, radiusMarkerHandler,
+//                        instance, instance, fragmentManager);
+//                FragmentTransition.OpenFragment(fragmentManager, customMarkerBottomSheetDialog, R.id.mapFeedSearchPointer, "");
             }
         });
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                if(customMarkerBottomSheetDialog != null){
-                    boolean clickedInsideArea = radiusMarkerHandler.handleRadiusMarkerClick(customMarkerBottomSheetDialog, context, fragmentManager, latLng);
-
-                    if(clickedInsideArea){
-                        customMarkerBottomSheetDialog.openFragment(customMarkerBottomSheetDialog, fragmentManager);
-                    }
-                }
+//                if(customMarkerBottomSheetDialog != null){
+//                    boolean clickedInsideArea = radiusMarkerHandler.handleRadiusMarkerClick(customMarkerBottomSheetDialog, context, fragmentManager, latLng);
+//
+//                    if(clickedInsideArea){
+//                        customMarkerBottomSheetDialog.openFragment(customMarkerBottomSheetDialog, fragmentManager);
+//                    }
+//                }
             }
         });
     }
 
     @Override
     public void handleRadiusMarkerRemoval(boolean valid) {
-        this.customMarkerBottomSheetDialog.handleRadiusMarkerRemoval(valid);
+    //    this.customMarkerBottomSheetDialog.handleRadiusMarkerRemoval(valid);
     }
 
     @Override
     public void handleRadiusMarker(boolean valid) {
-        this.customMarkerBottomSheetDialog.handleRadiusMarker(valid);
+      //  this.customMarkerBottomSheetDialog.handleRadiusMarker(valid);
     }
 }

@@ -8,7 +8,7 @@ import com.example.myapplication.Activities.LoginActivity.LoginActivity;
 import com.example.myapplication.R;
 
 public class LoginActivityValidator {
-
+/*
     LoginActivity loginActivity;
 
     public LoginActivityValidator(LoginActivity loginActivity) {
@@ -80,15 +80,6 @@ public class LoginActivityValidator {
 
         return true;
     }
+*/
 
-    void showErrorMessage(EditText field, TextView errorMessage, int iconLeft, int iconRight, String message){
-        field.setCompoundDrawablesWithIntrinsicBounds(iconLeft, 0, iconRight, 0);
-        errorMessage.setVisibility(View.VISIBLE);
-        errorMessage.setText(message);
-    }
-
-    void hideErrorMessages(EditText field, TextView errorMessage, int iconLeft){
-        errorMessage.setVisibility(View.INVISIBLE);
-        field.setCompoundDrawablesWithIntrinsicBounds(iconLeft, 0, 0, 0);
-    }
 }
