@@ -4,15 +4,15 @@ import android.location.Location;
 
 import androidx.fragment.app.FragmentManager;
 
-import com.example.myapplication.Handlers.InteractiveMap.InteractiveMap;
+import com.example.myapplication.Models.InteractiveMap.InteractiveMap;
 import com.example.myapplication.Interfaces.LocationSelectorContract.LocationSelectorContract;
-import com.example.myapplication.Interfaces.LocationSelectorMapListener.LocationSelectorMapListener;
+import com.example.myapplication.Interfaces.MapListener.MapListener;
 import com.example.myapplication.Models.SelectedLocation.SelectedLocation;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
-public class LocationSelectorPresenter implements LocationSelectorContract.Presenter, LocationSelectorMapListener {
+public class LocationSelectorPresenter implements LocationSelectorContract.Presenter, MapListener {
 
     LocationSelectorContract.View view;
     SelectedLocation selectedLocation;

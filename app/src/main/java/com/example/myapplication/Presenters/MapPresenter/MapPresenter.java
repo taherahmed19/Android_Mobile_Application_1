@@ -2,12 +2,12 @@ package com.example.myapplication.Presenters.MapPresenter;
 
 import android.location.Location;
 
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.myapplication.Handlers.InteractiveMap.InteractiveMap;
+import com.example.myapplication.Models.InteractiveMap.InteractiveMap;
 import com.example.myapplication.HttpRequest.HttpMap.HttpMap;
+import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
 import com.example.myapplication.Interfaces.MapContract.MapContract;
 import com.example.myapplication.Interfaces.MapListener.MapListener;
 import com.example.myapplication.Models.Marker.Marker;
@@ -17,7 +17,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
-public class MapPresenter implements MapContract.Presenter, MapListener {
+public class MapPresenter implements MapContract.Presenter, MapListener, CustomMarkerListener {
 
     MapContract.View view;
     InteractiveMap interactiveMap;
@@ -46,10 +46,6 @@ public class MapPresenter implements MapContract.Presenter, MapListener {
         this.interactiveMap.setMapLocation(latLng);
     }
 
-    public void addMarkerList(ArrayList<Marker> markers){
-        this.interactiveMap.addDataSetMarkers(markers);
-    }
-
     public boolean handleMarkerClick(com.google.android.gms.maps.model.Marker marker){
         return this.view.handleMarkerClick(marker);
     }
@@ -68,20 +64,24 @@ public class MapPresenter implements MapContract.Presenter, MapListener {
     }
 
     public void requestMap(FragmentManager fragmentManager, SupportMapFragment supportMapFragment){
-        this.interactiveMap = new InteractiveMap(supportMapFragment, mapFragment.getActivity(), mapFragment.getChildFragmentManager(), this, mapFragment.getContext(), mapFragment);
+        this.interactiveMap = new InteractiveMap(supportMapFragment, view.getApplicationContext(), fragmentManager, this);
 
-        HttpMap httpMap = new HttpMap(mapFragment.getActivity(), mapFragment.getChildFragmentManager(), supportMapFragment, mapFragment, loadingSpinner, settings, customMarkerListener);
+        HttpMap httpMap = new HttpMap(view.getLoadingSpinner(), view.getApplicationContext(), this);
         httpMap.execute("https://10.0.2.2:443/api/getmarkers");
 
     }
 
     @Override
     public void handleMapClick(GoogleMap googleMap) {
-
     }
 
     @Override
-    public void handleMarkerClick(GoogleMap googleMap, FragmentActivity fragmentActivity) {
+    public void handleMarkerClick(GoogleMap googleMap) {
+        view.addMarkersListener(googleMap);
+    }
 
+    @Override
+    public void addMarkerData(ArrayList<Marker> markers) {
+        this.interactiveMap.addDataSetMarkers(markers);
     }
 }

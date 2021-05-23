@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.example.myapplication.Handlers.MapFeedSearchFragmentHandler.MapFeedSearchFragmentHandler;
+import com.example.myapplication.Interfaces.SearchListener.SearchListener;
 import com.example.myapplication.JsonBuilders.MapFeedSearchJsonBuilder.MapFeedSearchJsonBuilder;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.SSL.SSL;
@@ -25,8 +26,8 @@ public class HttpMapFeedSearch extends AsyncTask<String , Void , LatLng> {
 
     @SuppressLint("StaticFieldLeak")
     Context context;
+    SearchListener listener;
 
-    MapFeedSearchFragmentHandler mapFeedSearchFragmentHandler;
     MapFeedSearchJsonBuilder mapFeedSearchJsonBuilder;
 
     URL url = null;
@@ -35,9 +36,9 @@ public class HttpMapFeedSearch extends AsyncTask<String , Void , LatLng> {
 
     boolean validResponse;
 
-    public HttpMapFeedSearch(MapFeedSearchFragmentHandler mapFeedFragmentHandler) {
-        this.mapFeedSearchFragmentHandler = mapFeedFragmentHandler;
-        this.context = mapFeedFragmentHandler.getContext();
+    public HttpMapFeedSearch(Context context, SearchListener listener) {
+        this.listener = listener;
+        this.context = context;
         this.mapFeedSearchJsonBuilder = new MapFeedSearchJsonBuilder();
         this.validResponse = false;
     }
@@ -67,8 +68,8 @@ public class HttpMapFeedSearch extends AsyncTask<String , Void , LatLng> {
     @Override
     protected void onPostExecute(LatLng latLng) {
         if(validResponse){
-            this.mapFeedSearchFragmentHandler.popFragments();
-            this.mapFeedSearchFragmentHandler.returnFragmentData(latLng);
+            this.listener.popFragments();
+            this.listener.returnFragmentData(latLng);
         }else{
             Toast.makeText(context, context.getString(R.string.map_feed_search_error_body_2), Toast.LENGTH_LONG).show();
         }

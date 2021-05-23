@@ -52,8 +52,6 @@ public class FeedFragment extends Fragment {
 
         this.loadingSpinner = new LoadingSpinner((ProgressBar) getView().findViewById(R.id.feedLoadingSpinner));
 
-        httpMap = new HttpMap(getActivity(), getChildFragmentManager(), this, loadingSpinner);
-        httpMap.execute("https://10.0.2.2:443/api/getmarkers");
     }
 
     public void renderFeed(ArrayList<Marker> markers){

@@ -1,42 +1,72 @@
-package com.example.myapplication.Handlers.MapFeedSearchAutocompleteHandler;
+package com.example.myapplication.Fragments.SearchAutocompleteFragment;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.text.TextUtils;
-import android.util.Log;
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import androidx.lifecycle.ViewModelProviders;
-
-import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.MapFeedSearchAutocompleteFragment;
-import com.example.myapplication.Fragments.MapFragment.MapFragment;
-import com.example.myapplication.Models.SharedViewModel.SharedViewModel;
+import com.example.myapplication.Interfaces.FragmentAutocompleteListener.FragmentAutocompleteListener;
+import com.example.myapplication.Interfaces.SearchAutocompleteContract.SearchAutocompleteContract;
+import com.example.myapplication.Presenters.SearchAutocompletePresenter.SearchAutocompletePresenter;
 import com.example.myapplication.R;
 import com.example.myapplication.Refactor.searchAutocomplete.Place;
 import com.example.myapplication.Utils.Tools.Tools;
 
-public class MapFeedSearchAutocompleteHandler {
+public class SearchAutocompleteFragment extends Fragment implements SearchAutocompleteContract.View {
 
-    MapFeedSearchAutocompleteFragment mapFeedSearchAutocompleteFragment;
+    public final static String TAG = SearchAutocompleteFragment.class.getName();
+
+    SearchAutocompletePresenter searchAutocompletePresenter;
+    FragmentAutocompleteListener listener;
 
     ScrollView searchAutocompleteContainer;
     LinearLayout searchAutocompleteSubContainer;
-    MapFeedSearchAutocompleteFragment.FragmentAutocompleteListener listener;
-    MapFragment mapFragment;
 
-    public MapFeedSearchAutocompleteHandler(MapFeedSearchAutocompleteFragment mapFeedSearchAutocompleteFragment, MapFragment mapFragment) {
-        this.mapFeedSearchAutocompleteFragment = mapFeedSearchAutocompleteFragment;
-        this.mapFragment = mapFragment;
+    public SearchAutocompleteFragment(FragmentAutocompleteListener listener) {
+        this.listener = listener;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        searchAutocompletePresenter = new SearchAutocompletePresenter(this);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        return inflater.inflate(R.layout.fragment_map_feed_search_autocomplete, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.listener = null;
     }
 
     void addClickListener(LinearLayout item){
-
         Place place = (Place) item.getTag();
         item.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +81,7 @@ public class MapFeedSearchAutocompleteHandler {
     }
 
     public void clearAutocomplete(){
-        this.searchAutocompleteSubContainer = (LinearLayout) mapFeedSearchAutocompleteFragment.getView().findViewById(R.id.searchAutocompleteSubContainer);
+        this.searchAutocompleteSubContainer = (LinearLayout) getView().findViewById(R.id.searchAutocompleteSubContainer);
 
         if(searchAutocompleteSubContainer.getChildCount() > 0){
             searchAutocompleteSubContainer.removeAllViews();
@@ -59,8 +89,8 @@ public class MapFeedSearchAutocompleteHandler {
     }
 
     public void buildAutocompleteSearchItem(Place place, String mainText, String secondText){
-        this.searchAutocompleteContainer = (ScrollView) mapFeedSearchAutocompleteFragment.getView().findViewById(R.id.searchAutocompleteContainer);
-        this.searchAutocompleteSubContainer = (LinearLayout) mapFeedSearchAutocompleteFragment.getView().findViewById(R.id.searchAutocompleteSubContainer);
+        this.searchAutocompleteContainer = (ScrollView) getView().findViewById(R.id.searchAutocompleteContainer);
+        this.searchAutocompleteSubContainer = (LinearLayout) getView().findViewById(R.id.searchAutocompleteSubContainer);
 
         LinearLayout searchAutocompleteItemContainer = itemContainer(mainText, secondText);
         searchAutocompleteItemContainer.setTag(place);
@@ -70,7 +100,7 @@ public class MapFeedSearchAutocompleteHandler {
     }
 
     LinearLayout itemContainer(String mainText, String secondText){
-        LinearLayout searchAutocompleteItemContainer = new LinearLayout(mapFeedSearchAutocompleteFragment.getActivity());
+        LinearLayout searchAutocompleteItemContainer = new LinearLayout(getActivity());
         searchAutocompleteItemContainer.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         searchAutocompleteItemContainer.setOrientation(LinearLayout.HORIZONTAL);
         searchAutocompleteItemContainer.setBackgroundResource(R.drawable.bottom_border);
@@ -78,10 +108,10 @@ public class MapFeedSearchAutocompleteHandler {
         int paddingLeftRight = 20;
         int paddingTopBottom = 10;
         searchAutocompleteItemContainer.setPadding(
-                Tools.pixelsToDP(paddingLeftRight, mapFeedSearchAutocompleteFragment.getResources()),
-                Tools.pixelsToDP(paddingTopBottom, mapFeedSearchAutocompleteFragment.getResources()),
-                Tools.pixelsToDP(paddingLeftRight, mapFeedSearchAutocompleteFragment.getResources()),
-                Tools.pixelsToDP(paddingTopBottom, mapFeedSearchAutocompleteFragment.getResources()));
+                Tools.pixelsToDP(paddingLeftRight, getResources()),
+                Tools.pixelsToDP(paddingTopBottom, getResources()),
+                Tools.pixelsToDP(paddingLeftRight, getResources()),
+                Tools.pixelsToDP(paddingTopBottom, getResources()));
 
         itemImageView(searchAutocompleteItemContainer);
         itemFullText(searchAutocompleteItemContainer, mainText, secondText);
@@ -90,7 +120,7 @@ public class MapFeedSearchAutocompleteHandler {
     }
 
     void itemImageView(LinearLayout searchAutocompleteItemContainer){
-        ImageView icon = new ImageView(mapFeedSearchAutocompleteFragment.getActivity());
+        ImageView icon = new ImageView(getActivity());
         LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         iconParams.gravity = Gravity.CENTER_VERTICAL;
@@ -103,16 +133,16 @@ public class MapFeedSearchAutocompleteHandler {
     }
 
     void itemFullText(LinearLayout searchAutocompleteItemContainer, String mainText, String secondText){
-        LinearLayout textContainer = new LinearLayout(mapFeedSearchAutocompleteFragment.getActivity());
+        LinearLayout textContainer = new LinearLayout(getActivity());
         textContainer.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         textContainer.setOrientation(LinearLayout.VERTICAL);
         textContainer.setGravity(Gravity.CENTER_VERTICAL);
 
         int paddingLeftRight = 15;
         textContainer.setPadding(
-                Tools.pixelsToDP(paddingLeftRight, mapFeedSearchAutocompleteFragment.getResources()),
+                Tools.pixelsToDP(paddingLeftRight, getResources()),
                 0,
-                Tools.pixelsToDP(paddingLeftRight, mapFeedSearchAutocompleteFragment.getResources()),
+                Tools.pixelsToDP(paddingLeftRight, getResources()),
                 0);
 
         TextView mainTextView = itemMainText(mainText);
@@ -125,7 +155,7 @@ public class MapFeedSearchAutocompleteHandler {
     }
 
     TextView itemMainText(String mainText){
-        TextView mainTextView = new TextView(mapFeedSearchAutocompleteFragment.getActivity());
+        TextView mainTextView = new TextView(getActivity());
 
         LinearLayout.LayoutParams mainTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         mainTextView.setLayoutParams(mainTextParams);
@@ -138,7 +168,7 @@ public class MapFeedSearchAutocompleteHandler {
     }
 
     TextView itemSecondText(String secondText){
-        TextView secondTextView = new TextView(mapFeedSearchAutocompleteFragment.getActivity());
+        TextView secondTextView = new TextView(getActivity());
 
         LinearLayout.LayoutParams mainTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         secondTextView.setLayoutParams(mainTextParams);
@@ -151,10 +181,6 @@ public class MapFeedSearchAutocompleteHandler {
     }
 
     public Context getContext(){
-        return this.mapFeedSearchAutocompleteFragment.getContext();
-    }
-
-    public void setListener(MapFeedSearchAutocompleteFragment.FragmentAutocompleteListener listener) {
-        this.listener = listener;
+        return this.getContext();
     }
 }

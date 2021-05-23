@@ -1,4 +1,4 @@
-package com.example.myapplication.Handlers.InteractiveMap;
+package com.example.myapplication.Models.InteractiveMap;
 
 import android.Manifest;
 import android.content.Context;
@@ -7,13 +7,10 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.myapplication.Handlers.MapOnClickHandler.MapOnClickHandler;
 import com.example.myapplication.Interfaces.LocationSelectorContract.LocationSelectorContract;
-import com.example.myapplication.Interfaces.LocationSelectorMapListener.LocationSelectorMapListener;
 import com.example.myapplication.Interfaces.MapListener.MapListener;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
@@ -33,7 +30,6 @@ import java.util.ArrayList;
 public class InteractiveMap implements OnMapReadyCallback, LocationSelectorContract.Model {
 
     GoogleMap mMap;
-    FragmentActivity fragmentActivity;
     FragmentManager fragmentManager;
     ArrayList<com.google.android.gms.maps.model.Marker> googleMarkers;
     com.google.android.gms.maps.model.Marker userLocationMarker;
@@ -41,28 +37,13 @@ public class InteractiveMap implements OnMapReadyCallback, LocationSelectorContr
     LatLng location;
     MapListener mapListener;
     Context context;
-    com.example.myapplication.Fragments.MapFragment.MapFragment mapFragment;
 
-    LocationSelectorMapListener locationSelectorMapListener;
-
-    public InteractiveMap(SupportMapFragment supportMapFragment, Context context, FragmentManager fragmentManager, LocationSelectorMapListener locationSelectorMapListener) {
-        this.fragmentManager = fragmentManager;
-        this.googleMarkers = new ArrayList<>();
-        this.locationSelectorMapListener = locationSelectorMapListener;
-        this.context = context;
-
-        if (mMap == null) {
-            supportMapFragment.getMapAsync(this);
-        }
-    }
-
-    public InteractiveMap(SupportMapFragment supportMapFragment, FragmentActivity fragmentActivity, FragmentManager fragmentManager, MapListener mapListener, Context context, com.example.myapplication.Fragments.MapFragment.MapFragment mapFragment) {
-        this.fragmentActivity = fragmentActivity;
+    public InteractiveMap(SupportMapFragment supportMapFragment, Context context,
+                          FragmentManager fragmentManager, MapListener mapListener) {
         this.fragmentManager = fragmentManager;
         this.googleMarkers = new ArrayList<>();
         this.mapListener = mapListener;
         this.context = context;
-        this.mapFragment = mapFragment;
 
         if (mMap == null) {
             supportMapFragment.getMapAsync(this);
@@ -84,20 +65,16 @@ public class InteractiveMap implements OnMapReadyCallback, LocationSelectorContr
             mMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
         }
 
-        //need to refactor map fragment handler to sort out this code
-        if(locationSelectorMapListener != null){
-            locationSelectorMapListener.handleMapClick(mMap);
-            locationSelectorMapListener.handleMarkerClick(mMap);
-        }else{
-            mapListener.handleMapClick(mMap);
-            mapListener.handleMarkerClick(mMap, fragmentActivity);
-        }
+        mapListener.handleMapClick(mMap);
+        mapListener.handleMarkerClick(mMap);
 
         //error with location activity
-        if(mapFragment != null){
-            MapOnClickHandler onClickHandler = new MapOnClickHandler(context, mMap, fragmentManager);
-            onClickHandler.configure();
-        }
+        //determines if fragment manager is needed
+//        if(mapFragment != null){
+//            //bottom sheet fragment
+//            MapOnClickHandler onClickHandler = new MapOnClickHandler(context, mMap, fragmentManager);
+//            onClickHandler.configure();
+//        }
     }
 
     public void addDataSetMarkers(ArrayList<Marker> markers) {

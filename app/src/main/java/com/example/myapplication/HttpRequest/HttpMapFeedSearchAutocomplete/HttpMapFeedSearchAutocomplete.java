@@ -5,16 +5,13 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
-import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
-import com.example.myapplication.Handlers.MapFeedSearchAutocompleteHandler.MapFeedSearchAutocompleteHandler;
-import com.example.myapplication.Handlers.MapFeedSearchFragmentHandler.MapFeedSearchFragmentHandler;
+import com.example.myapplication.Fragments.SearchFragment.SearchFragment;
+import com.example.myapplication.Interfaces.FragmentSearchListener.FragmentSearchListener;
 import com.example.myapplication.JsonBuilders.MapFeedSearchAutocompleteJsonBuilder.MapFeedSearchAutocompleteJsonBuilder;
 import com.example.myapplication.R;
 import com.example.myapplication.Refactor.searchAutocomplete.Places;
-import com.example.myapplication.Refactor.searchAutocomplete.PlacesFinder;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -36,9 +33,9 @@ public class HttpMapFeedSearchAutocomplete extends AsyncTask<String, Void, Place
 
     boolean validResponse;
 
-    MapFeedSearchFragment.FragmentSearchListener listener;
+    FragmentSearchListener listener;
 
-    public HttpMapFeedSearchAutocomplete(Context context, MapFeedSearchFragment.FragmentSearchListener listener) {
+    public HttpMapFeedSearchAutocomplete(Context context, FragmentSearchListener listener) {
         this.context = context;
         this.validResponse = true;
         this.mapFeedSearchAutocompleteJsonBuilder = new MapFeedSearchAutocompleteJsonBuilder();

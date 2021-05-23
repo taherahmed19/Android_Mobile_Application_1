@@ -16,11 +16,9 @@ import java.util.ArrayList;
 
 public class MapJsonBuilder {
     ArrayList<Marker> markers;
-    Settings settings;
 
-    public MapJsonBuilder(ArrayList<Marker> markers, Settings settings) {
+    public MapJsonBuilder(ArrayList<Marker> markers) {
         this.markers = markers;
-        this.settings = settings;
     }
 
     public void parseJson(String json){
@@ -36,21 +34,7 @@ public class MapJsonBuilder {
             JSONArray data = jsonObject.getJSONArray("data");
 
             for(int i = 0; i < data.length(); i++){
-                if(settings != null){
-                    ArrayList<String> selectedItems = settings.getFilterSortBy().getSelectedItems();
-                    for (String spinnerItem : selectedItems) {
-                        if(Tools.CategoryMarkerSwitch(spinnerItem) == data.getJSONObject(i).getInt("Marker")){
-                            addMarker(i, data);
-                        }
-                    }
-
-                    if(settings.getFilterSortBy().getSelectedItems().size() == 0){
-                        addMarker(i, data);
-                    }
-
-                }else{
-                    addMarker(i, data);
-                }
+                addMarker(i, data);
             }
 
         } catch (JSONException e) {

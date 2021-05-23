@@ -14,8 +14,8 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.myapplication.Fragments.MapFeedSearchAutocompleteFragment.MapFeedSearchAutocompleteFragment;
-import com.example.myapplication.Fragments.MapFeedSearchFragment.MapFeedSearchFragment;
+import com.example.myapplication.Fragments.SearchAutocompleteFragment.SearchAutocompleteFragment;
+import com.example.myapplication.Fragments.SearchFragment.SearchFragment;
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.Interfaces.MainContract.MainContract;
 import com.example.myapplication.Presenters.MainPresenter.MainPresenter;
@@ -159,15 +159,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void handleBackPressMapFragments(Fragment fragment) {
-        MapFeedSearchFragment mapFeedSearchFragment = (MapFeedSearchFragment) fragment.getChildFragmentManager().findFragmentByTag(MapFeedSearchFragment.TAG);
-        MapFeedSearchAutocompleteFragment mapFeedSearchAutocompleteFragment = (MapFeedSearchAutocompleteFragment) fragment.getChildFragmentManager().findFragmentByTag(MapFeedSearchAutocompleteFragment.TAG);
+        SearchFragment searchFragment = (SearchFragment) fragment.getChildFragmentManager().findFragmentByTag(SearchFragment.TAG);
+        SearchAutocompleteFragment searchAutocompleteFragment = (SearchAutocompleteFragment) fragment.getChildFragmentManager().findFragmentByTag(SearchAutocompleteFragment.TAG);
 
-        if(mapFeedSearchFragment != null){
-            mapFeedSearchFragment.getFragmentManager().popBackStack();
+        if(searchFragment != null){
+            searchFragment.getFragmentManager().popBackStack();
         }
 
-        if(mapFeedSearchAutocompleteFragment != null){
-            mapFeedSearchAutocompleteFragment.getFragmentManager().popBackStack();
+        if(searchAutocompleteFragment != null){
+            searchAutocompleteFragment.getFragmentManager().popBackStack();
         }
     }
 }
