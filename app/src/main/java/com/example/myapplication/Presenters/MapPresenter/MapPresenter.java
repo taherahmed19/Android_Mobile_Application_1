@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.myapplication.Models.InteractiveMap.InteractiveMap;
-import com.example.myapplication.HttpRequest.HttpMap.HttpMap;
+import com.example.myapplication.Webservice.HttpMap.HttpMap;
 import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
 import com.example.myapplication.Interfaces.MapContract.MapContract;
 import com.example.myapplication.Interfaces.MapListener.MapListener;

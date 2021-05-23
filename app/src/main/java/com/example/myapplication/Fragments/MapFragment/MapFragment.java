@@ -24,7 +24,6 @@ import com.example.myapplication.Fragments.SearchFragment.SearchFragment;
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
 import com.example.myapplication.Fragments.RadiusMarkerNotificationFragment.RadiusMarkerNotificationFragment;
 import com.example.myapplication.Handlers.BackgroundNotificationHandler.BackgroundNotificationHandler;
-import com.example.myapplication.Handlers.MapFeedSearchFragmentHandler.MapFeedSearchFragmentHandler;
 import com.example.myapplication.Interfaces.CurrentLocationListener.CurrentLocationListener;
 import com.example.myapplication.Interfaces.FragmentAutocompleteListener.FragmentAutocompleteListener;
 import com.example.myapplication.Interfaces.FragmentSearchListener.FragmentSearchListener;
@@ -165,7 +164,7 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
     public void handleSearchButtonClick() {
         if (getFragmentManager() != null) {
             FragmentTransition.TransitionActivityResult(getFragmentManager(), searchFragment,
-                    this, R.anim.top_animation, R.anim.down_animation, R.id.mapFeedSearchPointer, MapFeedSearchFragmentHandler.REQUEST_CODE_SEARCH, SearchFragment.TAG);
+                    this, R.anim.top_animation, R.anim.down_animation, R.id.mapFeedSearchPointer, SearchFragment.REQUEST_CODE_SEARCH, SearchFragment.TAG);
 
             FragmentTransition.Transition(getFragmentManager(), searchAutocompleteFragment,
                     R.anim.right_animations, R.anim.left_animation, R.id.mapFeedSearchAutoPointer, SearchAutocompleteFragment.TAG);
@@ -243,7 +242,7 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
 
     public LatLng handleResult(int requestCode, int resultCode, Intent data){
         if (resultCode == RESULT_OK) {
-            if (requestCode == MapFeedSearchFragmentHandler.REQUEST_CODE_SEARCH){
+            if (requestCode == SearchFragment.REQUEST_CODE_SEARCH){
                 return (LatLng)data.getParcelableExtra(StringConstants.INTENT_MAP_FEED_SEARCH_LAT_LNG);
             }
         }

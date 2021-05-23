@@ -24,12 +24,10 @@ import java.util.Objects;
 public class MainMapFragment extends Fragment {
     LockableViewPager viewPager;
     MapFragment mapFragment;
-    FeedFragment feedFragment;
     SwiperAdapter swiperAdapter;
 
     public MainMapFragment(){
         mapFragment = new MapFragment(viewPager);
-        feedFragment = new FeedFragment();
         viewPager = null;
     }
 
@@ -52,7 +50,7 @@ public class MainMapFragment extends Fragment {
 
         viewPager = (LockableViewPager)getView().findViewById(R.id.viewPager);
         viewPager.setOffscreenPageLimit(0);
-        swiperAdapter = new SwiperAdapter(getChildFragmentManager(), mapFragment, feedFragment, viewPager);
+        swiperAdapter = new SwiperAdapter(getChildFragmentManager(), mapFragment, viewPager);
         viewPager.setAdapter(swiperAdapter);
         viewPager.setCurrentItem(0);
         viewPager.setSwipeable(false);

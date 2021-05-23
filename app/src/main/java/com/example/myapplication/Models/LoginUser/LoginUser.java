@@ -2,7 +2,7 @@ package com.example.myapplication.Models.LoginUser;
 
 import android.content.Context;
 
-import com.example.myapplication.HttpRequest.HttpLoginUser.HttpLoginUser;
+import com.example.myapplication.Webservice.HttpLoginUser.HttpLoginUser;
 import com.example.myapplication.Interfaces.LoginContract.LoginContract;
 import com.example.myapplication.Interfaces.LoginListener.LoginListener;
 

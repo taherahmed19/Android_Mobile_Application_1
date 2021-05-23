@@ -1,32 +1,10 @@
 package com.example.myapplication.Fragments.FeedFragment;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import com.example.myapplication.HttpRequest.HttpMap.HttpMap;
-import com.example.myapplication.R;
-import com.example.myapplication.Utils.Tools.Tools;
-import com.example.myapplication.Models.Marker.Marker;
-import com.example.myapplication.Models.LoadingSpinner.LoadingSpinner;
-
-import java.util.ArrayList;
 
 public class FeedFragment extends Fragment {
 
-    HttpMap httpMap;
+  /*  HttpMap httpMap;
     UserAlertsFragmentElements userAlertsFragmentElements;
     LoadingSpinner loadingSpinner;
 
@@ -150,5 +128,5 @@ public class FeedFragment extends Fragment {
         }
 
     }
-
+*/
 }

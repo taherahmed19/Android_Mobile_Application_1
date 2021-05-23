@@ -2,12 +2,11 @@ package com.example.myapplication.Handlers.RatingHandler;
 
 import android.content.SharedPreferences;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
-import com.example.myapplication.HttpRequest.HttpRatings.HttpRatings;
+import com.example.myapplication.Webservice.HttpRatings.HttpRatings;
 import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.R;
 

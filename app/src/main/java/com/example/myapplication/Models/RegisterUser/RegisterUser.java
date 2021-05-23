@@ -2,8 +2,7 @@ package com.example.myapplication.Models.RegisterUser;
 
 import android.content.Context;
 
-import com.example.myapplication.HttpRequest.HttpLoginUser.HttpLoginUser;
-import com.example.myapplication.HttpRequest.HttpRegisterUser.HttpRegisterUser;
+import com.example.myapplication.Webservice.HttpRegisterUser.HttpRegisterUser;
 import com.example.myapplication.Interfaces.RegisterListener.RegisterListener;
 
 public class RegisterUser {

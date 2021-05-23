@@ -9,32 +9,21 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
-import androidx.viewpager.widget.ViewPager;
-
-import com.example.myapplication.Adapters.MediaPageAdapter.MediaPageAdapter;
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
-import com.example.myapplication.HttpRequest.HttpMarkerDelete.HttpMarkerDelete;
-import com.example.myapplication.HttpRequest.HttpMarkerImage.HttpMarkerImage;
-import com.example.myapplication.Models.ImageItem.ImageItem;
-import com.example.myapplication.Models.MediaItem.MediaItem;
-import com.example.myapplication.Models.VideoItem.VideoItem;
+import com.example.myapplication.Webservice.HttpMarkerDelete.HttpMarkerDelete;
+import com.example.myapplication.Webservice.HttpMarkerImage.HttpMarkerImage;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
-import com.example.myapplication.Utils.Tools.Tools;
 import com.github.chrisbanes.photoview.PhotoView;
-import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 

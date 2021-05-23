@@ -19,8 +19,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
-import com.example.myapplication.Handlers.MapFeedSearchFragmentHandler.MapFeedSearchFragmentHandler;
-import com.example.myapplication.HttpRequest.HttpMapFeedSearchAutocomplete.HttpMapFeedSearchAutocomplete;
+import com.example.myapplication.Webservice.HttpMapFeedSearchAutocomplete.HttpMapFeedSearchAutocomplete;
 import com.example.myapplication.Interfaces.CurrentLocationListener.CurrentLocationListener;
 import com.example.myapplication.Interfaces.FragmentSearchListener.FragmentSearchListener;
 import com.example.myapplication.Interfaces.SearchContract.SearchContract;
@@ -38,9 +37,9 @@ import static android.app.Activity.RESULT_OK;
 public class SearchFragment extends Fragment implements CurrentLocationListener, SearchListener, SearchContract.View {
 
     public final static String TAG = SearchFragment.class.getName();
+    public static int REQUEST_CODE_SEARCH = 2;
 
     MapFragment mapFragment;
-    MapFeedSearchFragmentHandler mapFeedSearchFragmentHandler;
     CurrentLocation currentLocation;
 
     SearchPresenter searchPresenter;
@@ -49,7 +48,6 @@ public class SearchFragment extends Fragment implements CurrentLocationListener,
     public SearchFragment(MapFragment mapFragment, FragmentSearchListener listener) {
         this.listener = listener;
         this.mapFragment = mapFragment;
-        this.mapFeedSearchFragmentHandler = new MapFeedSearchFragmentHandler(mapFragment, this, this);
     }
 
     @Override

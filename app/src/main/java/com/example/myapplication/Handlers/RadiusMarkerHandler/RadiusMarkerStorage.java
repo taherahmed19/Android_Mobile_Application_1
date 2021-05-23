@@ -2,16 +2,12 @@ package com.example.myapplication.Handlers.RadiusMarkerHandler;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.Toast;
 
-import com.example.myapplication.Fragments.ErrorFragment.ErrorFragment;
-import com.example.myapplication.HttpRequest.HttpDeleteRadiusMarker.HttpDeleteRadiusMarker;
-import com.example.myapplication.HttpRequest.HttpWriteRadiusMarker.HttpWriteRadiusMarker;
+import com.example.myapplication.Webservice.HttpDeleteRadiusMarker.HttpDeleteRadiusMarker;
+import com.example.myapplication.Webservice.HttpWriteRadiusMarker.HttpWriteRadiusMarker;
 import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
 import com.example.myapplication.Interfaces.SetRadiusMarkerListener.SetRadiusMarkerListener;
-import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
-import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Objects;

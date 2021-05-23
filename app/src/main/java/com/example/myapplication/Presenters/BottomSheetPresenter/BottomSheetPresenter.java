@@ -3,8 +3,6 @@ package com.example.myapplication.Presenters.BottomSheetPresenter;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
-import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -21,7 +19,7 @@ import com.example.myapplication.Interfaces.BottomSheetContract.BottomSheetContr
 import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
 import com.example.myapplication.Interfaces.SetRadiusMarkerListener.SetRadiusMarkerListener;
 import com.example.myapplication.R;
-import com.example.myapplication.Views.Views.Fragments.BottomSheetFragment.BottomSheetFragment;
+import com.example.myapplication.BottomSheetFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 

@@ -15,14 +15,12 @@ import com.example.myapplication.Fragments.FeedFragment.FeedFragment;
 public class SwiperAdapter extends FragmentStatePagerAdapter{
     FragmentManager fragmentManager = null;
     MapFragment mapFragment;
-    FeedFragment feedFragment;
     LockableViewPager viewPager;
 
-    public SwiperAdapter(@NonNull FragmentManager fm, MapFragment mapFragment, FeedFragment feedFragment, LockableViewPager viewPager) {
+    public SwiperAdapter(@NonNull FragmentManager fm, MapFragment mapFragment, LockableViewPager viewPager) {
         super(fm);
         fragmentManager = fm;
         this.mapFragment = mapFragment;
-        this.feedFragment = feedFragment;
         this.viewPager = viewPager;
     }
 
@@ -31,16 +29,8 @@ public class SwiperAdapter extends FragmentStatePagerAdapter{
     public Fragment getItem(int position) {
         Fragment fragment = null;
 
-        switch (position){
-            case 0:
-                mapFragment = new MapFragment(viewPager);
-                fragment = mapFragment;
-                break;
-            case 1:
-                feedFragment = new FeedFragment();
-                fragment = feedFragment;
-                break;
-        }
+        mapFragment = new MapFragment(viewPager);
+        fragment = mapFragment;
 
 //        Bundle bundle = new Bundle();
 //        bundle.putInt("position", position + 1);
