@@ -1,4 +1,6 @@
-package com.example.myapplication.Refactor.searchAutocomplete;
+package com.example.myapplication.Models.Places;
+
+import com.example.myapplication.Models.Place.Place;
 
 import org.json.JSONArray;
 import org.json.JSONException;

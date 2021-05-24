@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import com.example.myapplication.Interfaces.FragmentSearchListener.FragmentSearchListener;
 import com.example.myapplication.JsonBuilders.MapFeedSearchAutocompleteJsonBuilder.MapFeedSearchAutocompleteJsonBuilder;
 import com.example.myapplication.R;
-import com.example.myapplication.Refactor.searchAutocomplete.Places;
+import com.example.myapplication.Models.Places.Places;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
 

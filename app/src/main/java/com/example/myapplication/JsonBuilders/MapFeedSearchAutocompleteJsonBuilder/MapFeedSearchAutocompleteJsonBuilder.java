@@ -1,8 +1,6 @@
 package com.example.myapplication.JsonBuilders.MapFeedSearchAutocompleteJsonBuilder;
 
-import android.util.Log;
-
-import com.example.myapplication.Refactor.searchAutocomplete.Places;
+import com.example.myapplication.Models.Places.Places;
 import com.example.myapplication.Utils.JsonUtil.JsonUtil;
 
 import org.json.JSONArray;

@@ -4,7 +4,6 @@ import android.location.Location;
 import android.util.Log;
 
 import com.example.myapplication.Models.Marker.Marker;
-import com.example.myapplication.Models.Settings.Settings;
 import com.example.myapplication.Utils.JsonUtil.JsonUtil;
 import com.example.myapplication.Utils.Tools.Tools;
 

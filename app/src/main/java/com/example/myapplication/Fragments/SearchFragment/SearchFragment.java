@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,10 +81,11 @@ public class SearchFragment extends Fragment implements CurrentLocationListener,
     public void onAttach(@NotNull Context context) {
         super.onAttach(context);
     }
+
     @Override
     public void onDetach() {
         super.onDetach();
-        this.listener = null;
+        //this.listener = null;
     }
 
     @Override

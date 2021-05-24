@@ -33,7 +33,7 @@ import com.example.myapplication.Models.LoadingSpinner.LoadingSpinner;
 import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Presenters.MapPresenter.MapPresenter;
 import com.example.myapplication.R;
-import com.example.myapplication.Refactor.searchAutocomplete.Place;
+import com.example.myapplication.Models.Place.Place;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Utils.StringConstants.StringConstants;
 import com.google.android.gms.maps.GoogleMap;
@@ -77,8 +77,8 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
         this.currentLocation = new CurrentLocation(getActivity(), this);
         this.mapPresenter = new MapPresenter(this);
         this.mapPresenter.requestMap(getChildFragmentManager(), supportMapFragment);
-        this.searchAutocompleteFragment = new SearchAutocompleteFragment(this);
         this.searchFragment = new SearchFragment(this, this);
+        this.searchAutocompleteFragment = new SearchAutocompleteFragment(this);
 
         configureMapRefreshButton();
         configureMapSearchButton();
@@ -105,10 +105,6 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
     @Override
     public void onInputAutocompleteSent(CharSequence input) {
         searchFragment.updateEditText(input);
-    }
-
-    @Override
-    public void onInputSearchSent(CharSequence input) {
     }
 
     @Override
@@ -162,13 +158,11 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
 
     @Override
     public void handleSearchButtonClick() {
-        if (getFragmentManager() != null) {
-            FragmentTransition.TransitionActivityResult(getFragmentManager(), searchFragment,
-                    this, R.anim.top_animation, R.anim.down_animation, R.id.mapFeedSearchPointer, SearchFragment.REQUEST_CODE_SEARCH, SearchFragment.TAG);
+        FragmentTransition.TransitionActivityResult(getParentFragmentManager(), searchFragment,
+                this, R.anim.top_animation, R.anim.down_animation, R.id.mapFeedSearchPointer, SearchFragment.REQUEST_CODE_SEARCH, SearchFragment.TAG);
 
-            FragmentTransition.Transition(getFragmentManager(), searchAutocompleteFragment,
-                    R.anim.right_animations, R.anim.left_animation, R.id.mapFeedSearchAutoPointer, SearchAutocompleteFragment.TAG);
-        }
+        FragmentTransition.Transition(getParentFragmentManager(), searchAutocompleteFragment,
+                R.anim.right_animations, R.anim.left_animation, R.id.mapFeedSearchAutoPointer, SearchAutocompleteFragment.TAG);
     }
 
     @Override

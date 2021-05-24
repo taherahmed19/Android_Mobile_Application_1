@@ -1,4 +1,4 @@
-package com.example.myapplication.Refactor.searchAutocomplete;
+package com.example.myapplication.Models.Place;
 
 import java.util.ArrayList;
 

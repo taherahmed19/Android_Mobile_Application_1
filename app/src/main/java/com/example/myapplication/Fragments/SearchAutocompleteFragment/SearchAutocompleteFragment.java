@@ -19,7 +19,7 @@ import com.example.myapplication.Interfaces.FragmentAutocompleteListener.Fragmen
 import com.example.myapplication.Interfaces.SearchAutocompleteContract.SearchAutocompleteContract;
 import com.example.myapplication.Presenters.SearchAutocompletePresenter.SearchAutocompletePresenter;
 import com.example.myapplication.R;
-import com.example.myapplication.Refactor.searchAutocomplete.Place;
+import com.example.myapplication.Models.Place.Place;
 import com.example.myapplication.Utils.Tools.Tools;
 
 public class SearchAutocompleteFragment extends Fragment implements SearchAutocompleteContract.View {
