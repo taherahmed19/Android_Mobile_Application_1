@@ -119,7 +119,7 @@
 
                     <TextView
                         android:id="@+id/modalDescription"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="You can now view this by returning to the Feed. Other users will also be able to view this data on their devices.

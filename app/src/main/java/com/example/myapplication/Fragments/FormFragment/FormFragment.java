@@ -185,10 +185,9 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
     public boolean handleDescriptionScroll(EditText mapFeedDescription, View v, MotionEvent event){
         if (mapFeedDescription.hasFocus()) {
             v.getParent().requestDisallowInterceptTouchEvent(true);
-            switch (event.getAction() & MotionEvent.ACTION_MASK){
-                case MotionEvent.ACTION_SCROLL:
-                    v.getParent().requestDisallowInterceptTouchEvent(false);
-                    return true;
+            if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_SCROLL) {
+                v.getParent().requestDisallowInterceptTouchEvent(false);
+                return true;
             }
         }
         return false;
