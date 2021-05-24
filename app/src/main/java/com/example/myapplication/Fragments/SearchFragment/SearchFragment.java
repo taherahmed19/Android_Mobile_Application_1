@@ -85,7 +85,7 @@ public class SearchFragment extends Fragment implements CurrentLocationListener,
     @Override
     public void onDetach() {
         super.onDetach();
-        //this.listener = null;
+        this.listener = null;
     }
 
     @Override
@@ -163,9 +163,6 @@ public class SearchFragment extends Fragment implements CurrentLocationListener,
         mapFeedSearch.setText(text, TextView.BufferType.EDITABLE);
     }
 
-    public boolean validateSubmission(EditText mapFeedSearch){
-        return !TextUtils.isEmpty(mapFeedSearch.getText());
-    }
 
     public boolean validateLocationField(Editable s){
         return s.toString().trim().length() > 0;

@@ -40,7 +40,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
-
 import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
@@ -315,25 +314,23 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
 
             triggerMarkerOnMap(viewPager, markerModel);
 
-            if(!voiceEnabled && openNotification == 0){
+            if (!voiceEnabled && openNotification == 0) {
                 MarkerModalFragment markerModalFragment = new MarkerModalFragment(markerModel, viewPager);
                 FragmentTransition.Transition(getParentFragmentManager(), markerModalFragment, R.anim.right_animations, R.anim.left_animation,
                         R.id.mapModalContainer, "");
                 setMapLocation(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)));
             }
 
-            if(!voiceEnabled && openNotification == 1){
+            if (!voiceEnabled && openNotification == 1) {
                 RadiusMarkerNotificationFragment notificationFragment = new RadiusMarkerNotificationFragment(getParentFragmentManager(), viewPager, markerModel);
                 FragmentTransition.Transition(getParentFragmentManager(), notificationFragment,
                         R.anim.radius_marker_notif_open_anim, R.anim.radius_marker_notif_close_anim, R.id.mapFeedSearchPointer, RadiusMarkerNotificationFragment.class.toString());
             }
 
-            if(voiceEnabled){
+            if (voiceEnabled) {
                 setMapLocation(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)));
                 new BackgroundNotificationHandler(getContext(), category, description, lat, lng);
             }
         }
     };
-
-
 }
