@@ -21,7 +21,5 @@ public class HeaderFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
     }
 }

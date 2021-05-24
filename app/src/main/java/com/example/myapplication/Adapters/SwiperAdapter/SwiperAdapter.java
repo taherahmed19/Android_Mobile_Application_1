@@ -1,8 +1,5 @@
 package com.example.myapplication.Adapters.SwiperAdapter;
 
-import android.os.Bundle;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -10,7 +7,6 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.example.myapplication.Adapters.LockableViewPager.LockableViewPager;
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
-import com.example.myapplication.Fragments.FeedFragment.FeedFragment;
 
 public class SwiperAdapter extends FragmentStatePagerAdapter{
     FragmentManager fragmentManager = null;

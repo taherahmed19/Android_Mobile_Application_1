@@ -13,12 +13,13 @@ import android.widget.TextView;
 
 import com.example.myapplication.R;
 
-public class ConfirmFragment extends Fragment {
+public class ConfirmFragment extends Fragment  {
 
     Fragment fragment;
     Activity activity;
     String titleMessage;
     String bodyMessage;
+
 
     public ConfirmFragment(Activity activity, String titleMessage, String bodyMessage) {
         this.activity = activity;
@@ -42,6 +43,8 @@ public class ConfirmFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+
         configureConfirmButton();
         configureTitle();
         configureBody();

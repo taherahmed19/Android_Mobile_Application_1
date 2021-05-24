@@ -12,7 +12,6 @@ import com.example.myapplication.R;
 
 public class SeekBarFragment extends Fragment {
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

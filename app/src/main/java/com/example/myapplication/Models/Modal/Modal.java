@@ -41,16 +41,12 @@ public class Modal implements MarkerModalContract.Model {
         ratingTemp = 0;
     }
 
-    public void decodeImage(){
+    public void decodeImage() {
         byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
         image = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
 
-    public Bitmap getImage(){
-        return this.image;
-    }
-
-    public void handleModalName(){
+    public void handleModalName() {
         String altFirstName = this.firstName;
         String altLastName = this.lastName;
 
@@ -58,18 +54,119 @@ public class Modal implements MarkerModalContract.Model {
         this.userPost = "Your post";
     }
 
-    public void saveSettingsSharedPreference(Context context, Marker marker){
+    public void saveSettingsSharedPreference(Context context, Marker marker) {
         SharedPreferences settingsPreference = context.getSharedPreferences("Marker_Modal_Fragment_Ratings", 0);
         SharedPreferences.Editor preferenceEditor = settingsPreference.edit();
 
-        if(!isDownVoteClicked && !isUpVoteClicked){
+        if (!isDownVoteClicked && !isUpVoteClicked) {
             preferenceEditor.putString(String.valueOf(marker.getId() + "isUpvoteClicked"), "");
-        }else{
+        } else {
             preferenceEditor.putString(String.valueOf(marker.getId() + "isUpvoteClicked"), Boolean.toString(isUpVoteClicked));
         }
 
         preferenceEditor.putInt(String.valueOf(marker.getId() + "rating"), rating);
         preferenceEditor.apply();
+    }
+
+    public void isUpVoteClicked() {
+        if (isUpVoteClicked) {
+            isUpVoteClicked = false;
+        } else {
+            isUpVoteClicked = true;
+        }
+        isDownVoteClicked = false;
+    }
+
+    public void isDownVoteClicked() {
+        if (isDownVoteClicked) {
+            isDownVoteClicked = false;
+        } else {
+            isDownVoteClicked = true;
+        }
+        isUpVoteClicked = false;
+    }
+
+    public void makeApiCall(Context context, Marker marker) {
+        HttpRatings httpRatings = new HttpRatings(context, marker.getId(), isUpVoteClicked, markerModalPresenter);
+        httpRatings.execute("");
+    }
+
+    public void incrementRating() {
+        ratingTemp = originalRating + 1;
+    }
+
+    public void decrementRating() {
+        ratingTemp = originalRating - 1;
+    }
+
+    public void setRatingToOriginalValue() {
+        ratingTemp = originalRating;
+    }
+
+    public void configureUserRatingState(Context context, Marker marker) {
+        boolean isUpVoteChosen;
+        String isUpVoteChosenPrefStr;
+        SharedPreferences settingsPreference = context.getSharedPreferences("Marker_Modal_Fragment_Ratings", 0);
+
+        isUpVoteChosenPrefStr = settingsPreference.getString(String.valueOf(marker.getId() + "isUpvoteClicked"), "");
+
+        if (!TextUtils.isEmpty(isUpVoteChosenPrefStr)) {
+            isUpVoteChosen = Boolean.parseBoolean(isUpVoteChosenPrefStr);
+
+            if (isUpVoteChosen) {
+                this.markerModalPresenter.setUpVote();
+                this.isUpVoteClicked = true;
+                this.isDownVoteClicked = false;
+            } else {
+                this.markerModalPresenter.setDownVote();
+                this.isDownVoteClicked = true;
+                this.isUpVoteClicked = false;
+            }
+        } else {
+            this.markerModalPresenter.removeVote();
+            this.isUpVoteClicked = false;
+            this.isDownVoteClicked = false;
+        }
+
+        int rating = settingsPreference.getInt(String.valueOf(marker.getId() + "rating"), -10);
+
+        if (rating != -10) {
+            this.rating = rating;
+            this.ratingTemp = rating;
+            this.markerModalPresenter.saveModalRatingState(rating);
+        }
+    }
+
+    public void handleUpVoteButtonClick() {
+        if (!getUpVoteClicked()) {
+            isUpVoteClicked();
+            this.markerModalPresenter.setUpVote();
+
+            incrementRating();
+            this.markerModalPresenter.submitMarkerRating();
+        } else {
+            isUpVoteClicked();
+            this.markerModalPresenter.removeVote();
+
+            setRatingToOriginalValue();
+            this.markerModalPresenter.submitMarkerRating();
+        }
+    }
+
+    public void handleDownVoteButtonClick() {
+        if (!getDownVoteClicked()) {
+            isDownVoteClicked();
+            this.markerModalPresenter.setDownVote();
+
+            decrementRating();
+            this.markerModalPresenter.submitMarkerRating();
+        } else {
+            isDownVoteClicked();
+            this.markerModalPresenter.removeVote();
+
+            setRatingToOriginalValue();
+            this.markerModalPresenter.submitMarkerRating();
+        }
     }
 
     public String getAltName() {
@@ -80,7 +177,7 @@ public class Modal implements MarkerModalContract.Model {
         return userPost;
     }
 
-    public void updateRating(){
+    public void updateRating() {
         this.rating = ratingTemp;
     }
 
@@ -96,72 +193,7 @@ public class Modal implements MarkerModalContract.Model {
         return isDownVoteClicked;
     }
 
-    public void isUpVoteClicked(){
-        if(isUpVoteClicked){
-            isUpVoteClicked = false;
-        }else{
-            isUpVoteClicked = true;
-        }
-        isDownVoteClicked = false;
-    }
-
-    public void isDownVoteClicked(){
-        if(isDownVoteClicked){
-            isDownVoteClicked = false;
-        }else{
-            isDownVoteClicked = true;
-        }
-        isUpVoteClicked = false;
-    }
-
-    public void makeApiCall(Context context, Marker marker){
-        HttpRatings httpRatings = new HttpRatings(context, marker.getId(), isUpVoteClicked, markerModalPresenter);
-        httpRatings.execute("");
-    }
-
-    public void incrementRating(){
-        ratingTemp = originalRating + 1;
-    }
-
-    public void decrementRating(){
-        ratingTemp = originalRating -1;
-    }
-
-    public void setRatingToOriginalValue(){
-        ratingTemp = originalRating;
-    }
-
-    public void configureUserRatingState(Context context, Marker marker){
-        boolean isUpVoteChosen;
-        String isUpVoteChosenPrefStr;
-        SharedPreferences settingsPreference = context.getSharedPreferences("Marker_Modal_Fragment_Ratings", 0);
-
-        isUpVoteChosenPrefStr = settingsPreference.getString(String.valueOf(marker.getId() + "isUpvoteClicked"), "");
-
-        if(!TextUtils.isEmpty(isUpVoteChosenPrefStr)) {
-            isUpVoteChosen = Boolean.parseBoolean(isUpVoteChosenPrefStr);
-
-            if (isUpVoteChosen) {
-                this.markerModalPresenter.setUpVote();
-                this.isUpVoteClicked = true;
-                this.isDownVoteClicked = false;
-            } else {
-                this.markerModalPresenter.setDownVote();
-                this.isDownVoteClicked = true;
-                this.isUpVoteClicked = false;
-            }
-        } else{
-            this.markerModalPresenter.removeVote();
-            this.isUpVoteClicked = false;
-            this.isDownVoteClicked = false;
-        }
-
-        int rating = settingsPreference.getInt(String.valueOf(marker.getId() + "rating"), -10);
-
-        if(rating != -10){
-            this.rating = rating;
-            this.ratingTemp = rating;
-            this.markerModalPresenter.saveModalRatingState(rating);
-        }
+    public Bitmap getImage() {
+        return this.image;
     }
 }

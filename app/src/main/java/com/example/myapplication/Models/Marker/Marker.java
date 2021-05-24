@@ -1,5 +1,12 @@
 package com.example.myapplication.Models.Marker;
 
+import android.content.Context;
+
+import com.example.myapplication.Interfaces.MarkerImageListener.MarkerImageListener;
+import com.example.myapplication.Interfaces.MarkerListener.MarkerListener;
+import com.example.myapplication.Webservice.HttpMarkerDelete.HttpMarkerDelete;
+import com.example.myapplication.Webservice.HttpMarkerImage.HttpMarkerImage;
+
 public class Marker {
 
     private String firstName;
@@ -24,6 +31,16 @@ public class Marker {
         this.id = id;
         this.userId = userId;
         this.rating = rating;
+    }
+
+    public void makeApiCallDeleteMarker(Context context, MarkerListener markerListener){
+        HttpMarkerDelete httpMarkerDelete = new HttpMarkerDelete(context, id, markerListener);
+        httpMarkerDelete.execute();
+    }
+
+    public void makeApiCallCreateGetMarkerImage(Context context, MarkerImageListener markerImageListener){
+        HttpMarkerImage httpMarkerImage = new HttpMarkerImage(context, id, markerImageListener);
+        httpMarkerImage.execute();
     }
 
     public String getFirstName() {

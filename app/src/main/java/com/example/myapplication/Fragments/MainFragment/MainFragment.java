@@ -1,12 +1,7 @@
-package com.example.myapplication.Fragments.MainMapFragment;
+package com.example.myapplication.Fragments.MainFragment;
 
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +11,15 @@ import androidx.fragment.app.Fragment;
 import com.example.myapplication.Adapters.LockableViewPager.LockableViewPager;
 import com.example.myapplication.Adapters.SwiperAdapter.SwiperAdapter;
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
-import com.example.myapplication.Fragments.FeedFragment.FeedFragment;
 import com.example.myapplication.R;
 
-import java.util.Objects;
+public class MainFragment extends Fragment {
 
-public class MainMapFragment extends Fragment {
     LockableViewPager viewPager;
     MapFragment mapFragment;
     SwiperAdapter swiperAdapter;
 
-    public MainMapFragment(){
+    public MainFragment(){
         mapFragment = new MapFragment(viewPager);
         viewPager = null;
     }
