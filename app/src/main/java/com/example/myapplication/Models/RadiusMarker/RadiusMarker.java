@@ -11,10 +11,13 @@ import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
 
+import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
+import com.example.myapplication.Interfaces.SetRadiusMarkerListener.SetRadiusMarkerListener;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Webservice.HttpDeleteRadiusMarker.HttpDeleteRadiusMarker;
+import com.example.myapplication.Webservice.HttpGetRadiusMarker.HttpGetRadiusMarker;
 import com.example.myapplication.Webservice.HttpWriteRadiusMarker.HttpWriteRadiusMarker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -71,6 +74,22 @@ public class RadiusMarker {
         }
     }
 
+    public void writeRadiusMarkerDb(Context context, SetRadiusMarkerListener setRadiusMarkerListener){
+        HttpWriteRadiusMarker httpWriteRadiusMarker = new HttpWriteRadiusMarker(context,
+                LoginPreferenceData.getUserId(context), 1,
+                String.valueOf(this.radiusMarker.getCenter().latitude),
+                String.valueOf(this.radiusMarker.getCenter().longitude),
+                String.valueOf(this.radiusMarker.getRadius()),
+                setRadiusMarkerListener);
+        httpWriteRadiusMarker.execute();
+    }
+
+    public void deleteRadiusMarkerDb(Context context, DeleteRadiusMarkerListener deleteRadiusMarkerListener){
+        HttpDeleteRadiusMarker httpDeleteRadiusMarker = new HttpDeleteRadiusMarker(context,
+                LoginPreferenceData.getUserId(context), deleteRadiusMarkerListener, this);
+        httpDeleteRadiusMarker.execute();
+    }
+
     public void updateMarkerRadius(double radius){
         radiusMarker.setRadius(radius);
     }
@@ -81,5 +100,9 @@ public class RadiusMarker {
 
     public Circle getRadiusMarker() {
         return radiusMarker;
+    }
+
+    public LatLng getLatLng() {
+        return latLng;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.myapplication.Presenters.MapPresenter;
 
 import android.location.Location;
+import android.util.Log;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
@@ -8,6 +9,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.myapplication.Fragments.BottomSheetFragment.BottomSheetFragment;
 import com.example.myapplication.Models.InteractiveMap.InteractiveMap;
 import com.example.myapplication.Models.RadiusMarker.RadiusMarker;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
+import com.example.myapplication.Webservice.HttpGetRadiusMarker.HttpGetRadiusMarker;
 import com.example.myapplication.Webservice.HttpMap.HttpMap;
 import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
 import com.example.myapplication.Interfaces.MapContract.MapContract;
@@ -93,6 +96,11 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
         this.interactiveMap.addDataSetMarkers(markers);
     }
 
+    @Override
+    public void renderRadiusMarker(double lat, double lon, double radius){
+        this.radiusMarker = new RadiusMarker(this.interactiveMap.getMap(), new LatLng(lat, lon), radius);
+    }
+
     public void createRadiusMarker(LatLng latLng){
         if(radiusMarker != null){
             radiusMarker.removeMarker();
@@ -106,5 +114,11 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
 
     public RadiusMarker getRadiusMarker(){
         return this.radiusMarker;
+    }
+
+    public void getRadiusMarkerDb(){
+        Log.d("Print", "get radius marker. " + LoginPreferenceData.getUserId(this.view.getApplicationContext()));
+        HttpGetRadiusMarker httpGetRadiusMarker = new HttpGetRadiusMarker(this.view.getApplicationContext(), LoginPreferenceData.getUserId(this.view.getApplicationContext()), this);
+        httpGetRadiusMarker.execute();
     }
 }

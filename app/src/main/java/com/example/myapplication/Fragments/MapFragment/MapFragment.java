@@ -90,6 +90,7 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
         configureSupportMapFragment();
         configureSwitchButton();
 
+        this.mapPresenter.getRadiusMarkerDb();
     }
 
     @Override
@@ -99,6 +100,7 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
 
         LatLng latLng = this.handleResult(requestCode, resultCode, data);
         this.handleSavedLocation(latLng);
+
     }
 
     @Override
@@ -208,7 +210,6 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
 
     @Override
     public void handleRadiusMarkerMapClick(GoogleMap mMap){
-
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {

@@ -46,8 +46,12 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
     Button radiusMarkerSaveButton;
     Dialog dialog;
 
+    GoogleMap mMap; LatLng latLng; RadiusMarker radiusMarker;
+
     public BottomSheetFragment(GoogleMap mMap, LatLng latLng, RadiusMarker radiusMarker) {
-        this.bottomSheetPresenter = new BottomSheetPresenter(mMap, latLng, radiusMarker, getFragmentManager(), this);
+        this.mMap = mMap;
+        this.latLng = latLng;
+        this.radiusMarker = radiusMarker;
     }
 
     @Override
@@ -63,6 +67,8 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        this.bottomSheetPresenter = new BottomSheetPresenter(mMap, latLng, radiusMarker, getParentFragmentManager(), this);
 
         initialiseComponents();
         configureCloseButton();

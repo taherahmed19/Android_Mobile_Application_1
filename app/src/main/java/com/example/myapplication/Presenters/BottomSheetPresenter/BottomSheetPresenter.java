@@ -135,19 +135,11 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
     }
 
     public void writeRadiusMarkerDb(){
-        HttpWriteRadiusMarker httpWriteRadiusMarker = new HttpWriteRadiusMarker(this.view.getApplicationContext(),
-                LoginPreferenceData.getUserId(this.view.getApplicationContext()), 1,
-                String.valueOf(this.radiusMarker.getRadiusMarker().getCenter().latitude),
-                String.valueOf(this.radiusMarker.getRadiusMarker().getCenter().longitude),
-                String.valueOf(this.radiusMarker.getRadiusMarker().getRadius()),
-                this);
-        httpWriteRadiusMarker.execute();
+        this.radiusMarker.writeRadiusMarkerDb(this.view.getApplicationContext(), this);
     }
 
     public void deleteRadiusMarkerDb(){
-        HttpDeleteRadiusMarker httpDeleteRadiusMarker = new HttpDeleteRadiusMarker(this.view.getApplicationContext(),
-                LoginPreferenceData.getUserId(this.view.getApplicationContext()), this, radiusMarker);
-        httpDeleteRadiusMarker.execute();
+        this.radiusMarker.deleteRadiusMarkerDb(this.view.getApplicationContext(), this);
     }
 
 }

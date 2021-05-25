@@ -12,6 +12,7 @@
     <string name="webservice_marker_image">https://jellymaps.com/api/getmarkerimage?markerId={0}</string>
     <string name="webservice_markers">https://jellymaps.com/api/getmarkers</string>
 
+    <string name="webservice_get_radius_marker">https://jellymaps.com/api/getRadiusMarker?userId={0}</string>
     <string name="webservice_write_radius_marker">https://jellymaps.com/api/setRadiusMarker/</string>
     <string name="webservice_delete_radius_marker">https://jellymaps.com/api/deleteRadiusMarker?userId={0}</string>
 
