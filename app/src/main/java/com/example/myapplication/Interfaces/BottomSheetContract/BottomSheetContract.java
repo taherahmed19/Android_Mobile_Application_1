@@ -12,6 +12,7 @@ import com.example.myapplication.Fragments.BottomSheetFragment.BottomSheetFragme
 public interface BottomSheetContract {
 
     interface View{
+        void handleSaveButtonClick();
         void updateRadiusMarkerSeekBar(SeekBar seekBar, int progress);
         void setInAppButtonClicked();
         void removeInAppButtonBackground();

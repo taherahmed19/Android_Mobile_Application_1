@@ -66,8 +66,7 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         this.context = context;
         this.mMap = mMap;
         this.latLng = latLng;
-        this.bottomSheetPresenter = new BottomSheetPresenter(mMap, latLng, radiusMarker,
-                context, getFragmentManager(), this);
+        this.bottomSheetPresenter = new BottomSheetPresenter(mMap, latLng, radiusMarker, getFragmentManager(), this);
     }
 
     @Override
@@ -160,6 +159,13 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
     @Override
     public void dismissRemoveDialog(){
         dialog.dismiss();
+    }
+
+    @Override
+    public void handleSaveButtonClick(){
+        bottomSheetPresenter.writeRadiusMarkerDb();
+        //radiusMarkerStorage.saveSharedPreference(inAppButtonClicked, voiceButtonClicked, latLng);
+        getParentFragmentManager().popBackStack();
     }
 
     @Override
@@ -296,9 +302,7 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         radiusMarkerSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                radiusMarkerStorage.writeRadiusMarkerDb();
-//                radiusMarkerStorage.saveSharedPreference(inAppButtonClicked, voiceButtonClicked, latLng);
-//                bottomSheetFragment.getParentFragmentManager().popBackStack();
+                bottomSheetPresenter.handleSaveButtonClick();
             }
         });
     }

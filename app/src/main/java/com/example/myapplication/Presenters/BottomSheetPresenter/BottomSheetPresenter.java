@@ -35,46 +35,22 @@ import java.util.Objects;
 public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetRadiusMarkerListener, DeleteRadiusMarkerListener {
 
     BottomSheetContract.View view;
-
     GoogleMap mMap;
     LatLng latLng;
-
     RadiusMarker radiusMarker;
     BottomSheet bottomSheet;
-
-    Context context;
-
-    RadiusMarkerStorage radiusMarkerStorage;
     FragmentManager fragmentManager;
 
-//    public BottomSheetPresenter(BottomSheetFragment bottomSheetFragment, GoogleMap mMap, LatLng latLng,
-//                                RadiusMarker radiusMarker, Context context,
-//                                DeleteRadiusMarkerListener deleteRadiusMarkerListener, SetRadiusMarkerListener setRadiusMarkerListener,
-//                                FragmentManager fragmentManager, BottomSheetContract.View view) {
-//        this.view = view;
-//        this.bottomSheetFragment = bottomSheetFragment;
-//        this.mMap = mMap;
-//        this.latLng = latLng;
-//        this.radiusMarker = radiusMarker;
-//        this.context = context;
-//        this.deleteRadiusMarkerListener = deleteRadiusMarkerListener;
-//        this.setRadiusMarkerListener = setRadiusMarkerListener;
-//        this.fragmentManager = fragmentManager;
-//        this.radiusMarkerStorage = new RadiusMarkerStorage(radiusMarker, deleteRadiusMarkerListener, setRadiusMarkerListener, context);
-//        setNotificationsState();
-//    }
 
     public BottomSheetPresenter(GoogleMap mMap, LatLng latLng,
-                                RadiusMarker radiusMarker, Context context,
+                                RadiusMarker radiusMarker,
                                 FragmentManager fragmentManager, BottomSheetContract.View view) {
         this.view = view;
         this.mMap = mMap;
         this.latLng = latLng;
         this.radiusMarker = radiusMarker;
-        this.context = context;
         this.fragmentManager = fragmentManager;
         this.bottomSheet = new BottomSheet(this);
-        //setNotificationsState();
     }
 
     @Override
@@ -84,14 +60,14 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
             fragmentManager.popBackStack();
         }else{
             radiusMarker.removeMarker();
-            Toast.makeText(context, context.getString(R.string.radius_marker_set_body), Toast.LENGTH_LONG).show();
+            Toast.makeText(this.view.getApplicationContext(), this.view.getApplicationContext().getString(R.string.radius_marker_set_body), Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
     public void handleRadiusMarkerRemoval(boolean valid){
         if(!valid){
-            Toast.makeText(context, context.getString(R.string.radius_marker_delete_body), Toast.LENGTH_LONG).show();
+            Toast.makeText(this.view.getApplicationContext(), this.view.getApplicationContext().getString(R.string.radius_marker_delete_body), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -143,9 +119,13 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
         this.bottomSheet.resetNotificationsBackgroundState();
     }
 
-    public void writeRadiusMarkerDb(Context context){
-        HttpWriteRadiusMarker httpWriteRadiusMarker = new HttpWriteRadiusMarker(context,
-                LoginPreferenceData.getUserId(context), 1,
+    public void handleSaveButtonClick(){
+        this.view.handleSaveButtonClick();
+    }
+
+    public void writeRadiusMarkerDb(){
+        HttpWriteRadiusMarker httpWriteRadiusMarker = new HttpWriteRadiusMarker(this.view.getApplicationContext(),
+                LoginPreferenceData.getUserId(this.view.getApplicationContext()), 1,
                 String.valueOf(this.radiusMarker.getRadiusMarker().getCenter().latitude),
                 String.valueOf(this.radiusMarker.getRadiusMarker().getCenter().longitude),
                 String.valueOf(this.radiusMarker.getRadiusMarker().getRadius()),
@@ -153,9 +133,9 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
         httpWriteRadiusMarker.execute();
     }
 
-    public void deleteRadiusMarkerDb(Context context){
-        HttpDeleteRadiusMarker httpDeleteRadiusMarker = new HttpDeleteRadiusMarker(context,
-                LoginPreferenceData.getUserId(context), this, radiusMarker);
+    public void deleteRadiusMarkerDb(){
+        HttpDeleteRadiusMarker httpDeleteRadiusMarker = new HttpDeleteRadiusMarker(this.view.getApplicationContext(),
+                LoginPreferenceData.getUserId(this.view.getApplicationContext()), this, radiusMarker);
         httpDeleteRadiusMarker.execute();
     }
 
