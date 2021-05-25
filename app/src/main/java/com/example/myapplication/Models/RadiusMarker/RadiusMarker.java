@@ -1,4 +1,4 @@
-package com.example.myapplication.Handlers.RadiusMarkerHandler;
+package com.example.myapplication.Models.RadiusMarker;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,7 +12,10 @@ import android.widget.Toast;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.myapplication.R;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
+import com.example.myapplication.Webservice.HttpDeleteRadiusMarker.HttpDeleteRadiusMarker;
+import com.example.myapplication.Webservice.HttpWriteRadiusMarker.HttpWriteRadiusMarker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -27,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class RadiusMarkerHandler {
+public class RadiusMarker {
 
     public static double INITIAL_RADIUS = 50;
     private final int FILL_COLOUR = 0x220000FF;
@@ -41,7 +44,7 @@ public class RadiusMarkerHandler {
     private CircleOptions co;
     private double radius;
 
-    public RadiusMarkerHandler(GoogleMap mMap, LatLng latLng, double radius) {
+    public RadiusMarker(GoogleMap mMap, LatLng latLng, double radius) {
         this.mMap = mMap;
         this.latLng = latLng;
         this.radius = radius;
@@ -67,23 +70,6 @@ public class RadiusMarkerHandler {
             radiusMarker = mMap.addCircle(co);
         }
     }
-
-//    public boolean handleRadiusMarkerClick(CustomMarkerBottomSheetFragment customMarkerBottomSheetDialog, Context context, FragmentManager supportFragmentManager, LatLng latLng){
-//        SharedPreferences settingsPreference = Objects.requireNonNull(context).getSharedPreferences("Radius_Marker_Settings", 0);
-//        boolean stateExists = settingsPreference.getBoolean("stateExists", false);
-//        double radius = (double)settingsPreference.getFloat("radius", 0.0f);
-//        double centerLat = (double)settingsPreference.getFloat("centerLat", 0.0f);
-//        double centerLon = (double)settingsPreference.getFloat("centerLon", 0.0f);
-//
-//        if(stateExists){
-//            float[] distance = new float[2];
-//            Location.distanceBetween(latLng.latitude, latLng.longitude, centerLat, centerLon, distance);
-//
-//            return distance[0] <= radius;
-//        }
-//
-//        return false;
-//    }
 
     public void updateMarkerRadius(double radius){
         radiusMarker.setRadius(radius);

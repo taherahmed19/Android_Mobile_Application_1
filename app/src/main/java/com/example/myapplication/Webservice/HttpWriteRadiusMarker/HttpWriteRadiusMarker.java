@@ -115,7 +115,6 @@ public class HttpWriteRadiusMarker extends AsyncTask<String , Void ,String> {
     @Override
     protected void onPostExecute(String str) {
         boolean valid = Boolean.parseBoolean(str);
-        Log.d("Print", "Radius marker response " + str);
         setRadiusMarkerListener.handleRadiusMarker(valid);
     }
 

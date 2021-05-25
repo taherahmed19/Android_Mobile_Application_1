@@ -5,7 +5,9 @@ import android.location.Location;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.myapplication.Fragments.BottomSheetFragment.BottomSheetFragment;
 import com.example.myapplication.Models.InteractiveMap.InteractiveMap;
+import com.example.myapplication.Models.RadiusMarker.RadiusMarker;
 import com.example.myapplication.Webservice.HttpMap.HttpMap;
 import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
 import com.example.myapplication.Interfaces.MapContract.MapContract;
@@ -21,6 +23,7 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
 
     MapContract.View view;
     InteractiveMap interactiveMap;
+    RadiusMarker radiusMarker;
 
     public MapPresenter(MapContract.View view) {
         this.view = view;
@@ -81,7 +84,27 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
     }
 
     @Override
+    public void detectRadiusMarker(){
+        this.view.handleRadiusMarkerMapClick(this.interactiveMap.getMap());
+    }
+
+    @Override
     public void addMarkerData(ArrayList<Marker> markers) {
         this.interactiveMap.addDataSetMarkers(markers);
+    }
+
+    public void createRadiusMarker(LatLng latLng){
+        if(radiusMarker != null){
+            radiusMarker.removeMarker();
+        }
+        radiusMarker = new RadiusMarker(this.interactiveMap.getMap(), latLng, 0);
+    }
+
+    public void createBottomSheetFragment(LatLng latLng){
+        this.view.createBottomSheetFragment(this.interactiveMap.getMap(), latLng);
+    }
+
+    public RadiusMarker getRadiusMarker(){
+        return this.radiusMarker;
     }
 }

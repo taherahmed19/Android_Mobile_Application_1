@@ -18,12 +18,14 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import com.example.myapplication.Adapters.LockableViewPager.LockableViewPager;
+import com.example.myapplication.Fragments.BottomSheetFragment.BottomSheetFragment;
 import com.example.myapplication.Fragments.FormFragment.FormFragment;
 import com.example.myapplication.Fragments.SearchAutocompleteFragment.SearchAutocompleteFragment;
 import com.example.myapplication.Fragments.SearchFragment.SearchFragment;
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
 import com.example.myapplication.Fragments.RadiusMarkerNotificationFragment.RadiusMarkerNotificationFragment;
 import com.example.myapplication.Handlers.BackgroundNotificationHandler.BackgroundNotificationHandler;
+import com.example.myapplication.Models.RadiusMarker.RadiusMarker;
 import com.example.myapplication.Interfaces.CurrentLocationListener.CurrentLocationListener;
 import com.example.myapplication.Interfaces.FragmentAutocompleteListener.FragmentAutocompleteListener;
 import com.example.myapplication.Interfaces.FragmentSearchListener.FragmentSearchListener;
@@ -57,6 +59,8 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
     MapPresenter mapPresenter;
     SearchAutocompleteFragment searchAutocompleteFragment;
     SearchFragment searchFragment;
+    BottomSheetFragment bottomSheetFragment;
+
 
     public MapFragment(LockableViewPager viewPager) {
         this.viewPager = viewPager;
@@ -85,6 +89,7 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
         configureSpinner();
         configureSupportMapFragment();
         configureSwitchButton();
+
     }
 
     @Override
@@ -199,6 +204,44 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
         if(this.loadingSpinner != null){
             this.loadingSpinner.hide();
         }
+    }
+
+    //mMap parameter not needed?
+    @Override
+    public void handleRadiusMarkerMapClick(GoogleMap mMap){
+       // MapOnClickHandler instance = this;
+
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                mapPresenter.createRadiusMarker(latLng);
+                mapPresenter.createBottomSheetFragment(latLng);
+            }
+        });
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+//                if(customMarkerBottomSheetDialog != null){
+//                    boolean clickedInsideArea = radiusMarkerHandler.handleRadiusMarkerClick(customMarkerBottomSheetDialog, context, fragmentManager, latLng);
+//
+//                    if(clickedInsideArea){
+//                        customMarkerBottomSheetDialog.openFragment(customMarkerBottomSheetDialog, fragmentManager);
+//                    }
+//                }
+            }
+        });
+    }
+
+    @Override
+    public void createBottomSheetFragment(GoogleMap mMap, LatLng latLng){
+        if (bottomSheetFragment != null) {
+            bottomSheetFragment.removeRadiusMarker();
+            bottomSheetFragment = null;
+        }
+
+        bottomSheetFragment = new BottomSheetFragment(this.getContext(), mMap, latLng, this.mapPresenter.getRadiusMarker());
+        FragmentTransition.OpenFragment(getParentFragmentManager(), bottomSheetFragment, R.id.mapFeedSearchPointer, "");
     }
 
     @Override

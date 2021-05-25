@@ -9,6 +9,8 @@ import com.google.android.gms.maps.model.LatLng;
 public interface MapContract {
 
     interface View{
+        void createBottomSheetFragment(GoogleMap mMap, LatLng latLng);
+        void handleRadiusMarkerMapClick(GoogleMap mMap);
         void handleSearchButtonClick();
         void handleNewPostButtonClick();
         void hideSpinner();

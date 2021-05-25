@@ -69,12 +69,7 @@ public class InteractiveMap implements OnMapReadyCallback, LocationSelectorContr
         mapListener.handleMarkerClick(mMap);
 
         //error with location activity
-        //determines if fragment manager is needed
-//        if(mapFragment != null){
-//            //bottom sheet fragment
-//            MapOnClickHandler onClickHandler = new MapOnClickHandler(context, mMap, fragmentManager);
-//            onClickHandler.configure();
-//        }
+        //MapOnClickHandler onClickHandler = new MapOnClickHandler(context, mMap, fragmentManager);
     }
 
     public void addDataSetMarkers(ArrayList<Marker> markers) {
@@ -210,6 +205,10 @@ public class InteractiveMap implements OnMapReadyCallback, LocationSelectorContr
         }
 
         return null;
+    }
+
+    public GoogleMap getMap() {
+        return mMap;
     }
 
     public LatLng getLocation() {

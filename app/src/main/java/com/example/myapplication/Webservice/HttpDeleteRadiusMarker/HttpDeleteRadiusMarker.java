@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
-import com.example.myapplication.Handlers.RadiusMarkerHandler.RadiusMarkerHandler;
+import com.example.myapplication.Models.RadiusMarker.RadiusMarker;
 import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.SSL.SSL;
@@ -24,12 +24,12 @@ public class HttpDeleteRadiusMarker extends AsyncTask<String , Void ,String> {
     Context context;
     DeleteRadiusMarkerListener deleteRadiusMarkerListener;
 
-    RadiusMarkerHandler radiusMarkerHandler;
+    RadiusMarker radiusMarker;
 
     int userId;
 
     public HttpDeleteRadiusMarker(Context context, int userId, DeleteRadiusMarkerListener deleteRadiusMarkerListener,
-                                  RadiusMarkerHandler radiusMarkerHandler) {
+                                  RadiusMarker radiusMarker) {
         this.context = context;
         this.userId = userId;
         this.deleteRadiusMarkerListener = deleteRadiusMarkerListener;

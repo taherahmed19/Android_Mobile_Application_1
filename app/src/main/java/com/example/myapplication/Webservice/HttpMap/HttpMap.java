@@ -101,6 +101,7 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
         ArrayList<Marker> markers = this.mapJsonBuilder.getMarkers();
         if(this.markers != null){
             customMarkerListener.addMarkerData(markers);
+            customMarkerListener.detectRadiusMarker();
         }
     }
 

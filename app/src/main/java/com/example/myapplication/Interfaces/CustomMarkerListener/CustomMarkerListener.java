@@ -7,4 +7,5 @@ import java.util.ArrayList;
 public interface CustomMarkerListener {
 
     void addMarkerData(ArrayList<Marker> markers);
+    void detectRadiusMarker();
 }
