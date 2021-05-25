@@ -206,10 +206,8 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
         }
     }
 
-    //mMap parameter not needed?
     @Override
     public void handleRadiusMarkerMapClick(GoogleMap mMap){
-       // MapOnClickHandler instance = this;
 
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
@@ -240,7 +238,7 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
             bottomSheetFragment = null;
         }
 
-        bottomSheetFragment = new BottomSheetFragment(this.getContext(), mMap, latLng, this.mapPresenter.getRadiusMarker());
+        bottomSheetFragment = new BottomSheetFragment(mMap, latLng, this.mapPresenter.getRadiusMarker());
         FragmentTransition.OpenFragment(getParentFragmentManager(), bottomSheetFragment, R.id.mapFeedSearchPointer, "");
     }
 

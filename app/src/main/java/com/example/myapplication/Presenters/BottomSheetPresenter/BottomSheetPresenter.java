@@ -41,7 +41,6 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
     BottomSheet bottomSheet;
     FragmentManager fragmentManager;
 
-
     public BottomSheetPresenter(GoogleMap mMap, LatLng latLng,
                                 RadiusMarker radiusMarker,
                                 FragmentManager fragmentManager, BottomSheetContract.View view) {
@@ -121,6 +120,18 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
 
     public void handleSaveButtonClick(){
         this.view.handleSaveButtonClick();
+    }
+
+    public void removeMarker(){
+        this.radiusMarker.removeMarker();
+    }
+
+    public void updateRadius(double radius){
+        this.radiusMarker.getRadiusMarker().setRadius(radius);
+    }
+
+    public double getRadiusMarkerRadius(){
+        return this.radiusMarker.getRadiusMarker().getRadius();
     }
 
     public void writeRadiusMarkerDb(){

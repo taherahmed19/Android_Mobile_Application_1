@@ -36,9 +36,6 @@ import java.util.Objects;
 public class BottomSheetFragment extends Fragment implements BottomSheetContract.View {
 
     BottomSheetPresenter bottomSheetPresenter;
-    Context context;
-    GoogleMap mMap;
-    LatLng latLng;
 
     SeekBar radiusMarkerSeekBar;
     TextView radiusMarkerSeekBarProgress;
@@ -49,23 +46,7 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
     Button radiusMarkerSaveButton;
     Dialog dialog;
 
-    RadiusMarker radiusMarker;
-
-//    public BottomSheetFragment(Context context, GoogleMap mMap, LatLng latLng, double radius, RadiusMarker radiusMarkerHandler,
-//                               DeleteRadiusMarkerListener deleteRadiusMarkerListener, SetRadiusMarkerListener setRadiusMarkerListener,
-//                               FragmentManager fragmentManager) {
-//        this.context = context;
-//        this.mMap = mMap;
-//        this.latLng = latLng;
-//        this.bottomSheetPresenter = new BottomSheetPresenter(this, mMap, latLng, radiusMarkerHandler,
-//                context, deleteRadiusMarkerListener, setRadiusMarkerListener, fragmentManager, this);
-//    }
-
-    public BottomSheetFragment(Context context, GoogleMap mMap, LatLng latLng, RadiusMarker radiusMarker) {
-        this.radiusMarker = radiusMarker;
-        this.context = context;
-        this.mMap = mMap;
-        this.latLng = latLng;
+    public BottomSheetFragment(GoogleMap mMap, LatLng latLng, RadiusMarker radiusMarker) {
         this.bottomSheetPresenter = new BottomSheetPresenter(mMap, latLng, radiusMarker, getFragmentManager(), this);
     }
 
@@ -97,7 +78,7 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         seekBar.setProgress(progress);
         String progressText = progress + "m";
         radiusMarkerSeekBarProgress.setText(progressText);
-        radiusMarker.updateMarkerRadius(progress);
+        bottomSheetPresenter.updateRadius(progress);
     }
 
     @Override
@@ -131,9 +112,9 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         double centerLon = (double)settingsPreference.getFloat("centerLon", 0.0f);
 
         if (!stateExists){
-            radiusMarker.removeMarker();
+            bottomSheetPresenter.removeMarker();
         }else{
-            radiusMarker.getRadiusMarker().setRadius(radius);
+            bottomSheetPresenter.updateRadius(radius);
             radiusMarkerSeekBar.setProgress((int)radius);
 
             String progressText = (int)radius + "m";
@@ -174,7 +155,7 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
     }
 
     public void removeRadiusMarker(){
-        SharedPreferences settingsPreference = Objects.requireNonNull(context).getSharedPreferences("Radius_Marker_Settings", 0);
+        SharedPreferences settingsPreference = Objects.requireNonNull(getContext()).getSharedPreferences("Radius_Marker_Settings", 0);
         boolean stateExists = settingsPreference.getBoolean("stateExists", false);
 
 //        if(stateExists){
@@ -182,7 +163,7 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
 //            Toast.makeText(context, context.getString(R.string.form_confirm_radius_marker_removed), Toast.LENGTH_LONG).show();
 //        }
 
-        radiusMarker.removeMarker();
+        bottomSheetPresenter.removeMarker();
         if(isAdded()){
             getFragmentManager().popBackStack();
         }
@@ -204,7 +185,7 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             radiusMarkerSeekBar.setMin(50);
             radiusMarkerSeekBar.setMax(500);
-            radiusMarkerSeekBar.setProgress((int)this.radiusMarker.getRadiusMarker().getRadius());
+            radiusMarkerSeekBar.setProgress((int)this.bottomSheetPresenter.getRadiusMarkerRadius());
 
             String progressText =  "50m";
             radiusMarkerSeekBarProgress.setText(progressText);
