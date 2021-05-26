@@ -59,7 +59,7 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
     @Override
     public void renderRadiusMarker(double lat, double lon, double radius, boolean inApp, boolean voice){
         this.radiusMarker = new RadiusMarker(this.interactiveMap.getMap(), new LatLng(lat, lon), radius);
-        this.radiusMarker.saveRadiusMarkerSettings(this.view.getApplicationContext(), lat, lon, radius, inApp, voice);
+        this.radiusMarker.saveRadiusMarkerSettings(this.view.getApplicationContext(), inApp, voice, true);
     }
 
     @Override
@@ -113,11 +113,7 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
 
         if(stateExists){
             radiusMarker.makeApiRequestDeleteRadiusMarker(this.view.getApplicationContext(), this);
-            SharedPreferences.Editor mapStateEditor = settingsPreference.edit();
-            mapStateEditor.putBoolean("stateExists", false);
-            mapStateEditor.putBoolean("inAppNotifications", true);
-            mapStateEditor.putBoolean("voiceNotifications", false);
-            mapStateEditor.apply();
+            this.radiusMarker.saveRadiusMarkerSettings(this.view.getApplicationContext(), true, false, true);
         }
 
         if(radiusMarker != null){

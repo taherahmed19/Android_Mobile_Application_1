@@ -116,10 +116,10 @@ public class RadiusMarker {
         return false;
     }
 
-    public void saveRadiusMarkerSettings(Context context, double lat, double lon, double radius, boolean inApp, boolean voice){
+    public void saveRadiusMarkerSettings(Context context, boolean inApp, boolean voice, boolean state){
         SharedPreferences settingsPreference = Objects.requireNonNull(context).getSharedPreferences("Radius_Marker_Settings", 0);
         SharedPreferences.Editor mapStateEditor = settingsPreference.edit();
-        mapStateEditor.putBoolean("stateExists", true);
+        mapStateEditor.putBoolean("stateExists", state);
         mapStateEditor.putBoolean("inAppNotifications", inApp);
         mapStateEditor.putBoolean("voiceNotifications", voice);
         mapStateEditor.apply();
