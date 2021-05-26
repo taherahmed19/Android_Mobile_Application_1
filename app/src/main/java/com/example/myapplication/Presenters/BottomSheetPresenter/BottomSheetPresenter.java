@@ -1,16 +1,6 @@
 package com.example.myapplication.Presenters.BottomSheetPresenter;
 
-import android.app.Dialog;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
 
@@ -35,23 +25,21 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
     LatLng latLng;
     RadiusMarker radiusMarker;
     BottomSheet bottomSheet;
-    FragmentManager fragmentManager;
 
     public BottomSheetPresenter(GoogleMap mMap, LatLng latLng,
                                 RadiusMarker radiusMarker,
-                                FragmentManager fragmentManager, BottomSheetContract.View view) {
+                                BottomSheetContract.View view) {
         this.view = view;
         this.mMap = mMap;
         this.latLng = latLng;
         this.radiusMarker = radiusMarker;
-        this.fragmentManager = fragmentManager;
         this.bottomSheet = new BottomSheet(this);
     }
 
     @Override
     public void handleRadiusMarker(boolean valid){
         if(valid){
-            fragmentManager.popBackStack();
+            this.view.handleRadiusMarker();
         }else{
             radiusMarker.removeMarker();
         }
@@ -60,6 +48,18 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
     @Override
     public void handleRadiusMarkerRemoval(boolean valid){
         this.view.handleRadiusMarkerRemoval(valid);
+    }
+
+    public void makeApiRequestWriteRadiusMarker(){
+        this.radiusMarker.makeApiRequestWriteRadiusMarker(this.view.getApplicationContext(), this, bottomSheet.isInAppButtonClicked(), bottomSheet.isVoiceButtonClicked());
+    }
+
+    public void makeApiRequestDeleteRadiusMarker(){
+        this.radiusMarker.makeApiRequestDeleteRadiusMarker(this.view.getApplicationContext(), this);
+    }
+
+    public void handleSaveButtonClick(){
+        this.view.handleSaveButtonClick();
     }
 
     public void updateRadiusMarkerSeekBar(SeekBar seekBar, int progress){
@@ -74,8 +74,8 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
         this.bottomSheet.updateRadiusMarkerVoiceButton();
     }
 
-    public void setInAppButtonClicked(){
-        this.view.setInAppButtonClicked();
+    public void removeVoiceButtonBackground(){
+        this.view.removeVoiceButtonBackground();
     }
 
     public void removeInAppButtonBackground(){
@@ -86,8 +86,12 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
         this.view.setVoiceButtonClicked();
     }
 
-    public void removeVoiceButtonBackground(){
-        this.view.removeVoiceButtonBackground();
+    public void setInAppButtonClicked(){
+        this.view.setInAppButtonClicked();
+    }
+
+    public void setNotificationsState() {
+        this.bottomSheet.setNotificationsState(this.view.getApplicationContext());
     }
 
     public void closeBottomSheetView(){
@@ -102,16 +106,8 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
         this.view.dismissRemoveDialog();
     }
 
-    public void setNotificationsState(){
-        this.bottomSheet.setNotificationsState(this.view.getApplicationContext());
-    }
-
     public void resetNotificationsBackgroundState(){
         this.bottomSheet.resetNotificationsBackgroundState();
-    }
-
-    public void handleSaveButtonClick(){
-        this.view.handleSaveButtonClick();
     }
 
     public void removeMarker(){
@@ -124,14 +120,6 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
 
     public double getRadiusMarkerRadius(){
         return this.radiusMarker.getRadiusMarker().getRadius();
-    }
-
-    public void writeRadiusMarkerDb(){
-        this.radiusMarker.writeRadiusMarkerDb(this.view.getApplicationContext(), this, bottomSheet.isInAppButtonClicked(), bottomSheet.isVoiceButtonClicked());
-    }
-
-    public void deleteRadiusMarkerDb(){
-        this.radiusMarker.deleteRadiusMarkerDb(this.view.getApplicationContext(), this);
     }
 
     public boolean isInAppButtonClicked() {

@@ -6,19 +6,13 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
-import com.example.myapplication.Interfaces.SetRadiusMarkerListener.SetRadiusMarkerListener;
-import com.example.myapplication.Models.RadiusMarker.RadiusMarker;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
-import com.google.android.gms.maps.GoogleMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.MessageFormat;

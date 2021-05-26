@@ -13,6 +13,7 @@ import com.example.myapplication.Models.RadiusMarker.RadiusMarker;
 public interface BottomSheetContract {
 
     interface View{
+        void handleRadiusMarker();
         void handleSaveButtonClick();
         void updateRadiusMarkerSeekBar(SeekBar seekBar, int progress);
         void setInAppButtonClicked();

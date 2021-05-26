@@ -37,6 +37,36 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
         this.view = view;
     }
 
+    @Override
+    public void handleMapClick(GoogleMap googleMap) {
+    }
+
+    @Override
+    public void handleMarkerClick(GoogleMap googleMap) {
+        view.addMarkersListener(googleMap);
+    }
+
+    @Override
+    public void detectRadiusMarker(){
+        this.view.handleRadiusMarkerMapClick(this.interactiveMap.getMap());
+    }
+
+    @Override
+    public void addMarkerData(ArrayList<Marker> markers) {
+        this.interactiveMap.addDataSetMarkers(markers);
+    }
+
+    @Override
+    public void renderRadiusMarker(double lat, double lon, double radius, boolean inApp, boolean voice){
+        this.radiusMarker = new RadiusMarker(this.interactiveMap.getMap(), new LatLng(lat, lon), radius);
+        this.radiusMarker.saveRadiusMarkerSettings(this.view.getApplicationContext(), lat, lon, radius, inApp, voice);
+    }
+
+    @Override
+    public void handleRadiusMarkerRemoval(boolean valid) {
+        this.view.handleRadiusMarkerRemoval(valid);
+    }
+
     public void handleSearchButtonClick(){
         view.handleSearchButtonClick();
     }
@@ -66,60 +96,15 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
     }
 
     public void handleMapSavedLocation(LatLng latLng){
-        if(latLng != null){
-            if(interactiveMap != null){
-                interactiveMap.setMapLocation(latLng);
-                view.hideSpinner();
-            }
+        boolean mapLocationSet = this.interactiveMap.handleMapSavedLocation(latLng);
+        if(mapLocationSet){
+            view.hideSpinner();
         }
     }
 
-    public void requestMap(FragmentManager fragmentManager, SupportMapFragment supportMapFragment){
+    public void makeApiRequestForGoogleMap(FragmentManager fragmentManager, SupportMapFragment supportMapFragment){
         this.interactiveMap = new InteractiveMap(supportMapFragment, view.getApplicationContext(), fragmentManager, this);
-
-        HttpMap httpMap = new HttpMap(view.getLoadingSpinner(), view.getApplicationContext(), this);
-        httpMap.execute("https://10.0.2.2:443/api/getmarkers");
-
-    }
-
-    @Override
-    public void handleMapClick(GoogleMap googleMap) {
-    }
-
-    @Override
-    public void handleMarkerClick(GoogleMap googleMap) {
-        view.addMarkersListener(googleMap);
-    }
-
-    @Override
-    public void detectRadiusMarker(){
-        this.view.handleRadiusMarkerMapClick(this.interactiveMap.getMap());
-    }
-
-    @Override
-    public void addMarkerData(ArrayList<Marker> markers) {
-        this.interactiveMap.addDataSetMarkers(markers);
-    }
-
-    @Override
-    public void renderRadiusMarker(double lat, double lon, double radius, boolean inApp, boolean voice){
-        this.radiusMarker = new RadiusMarker(this.interactiveMap.getMap(), new LatLng(lat, lon), radius);
-
-        SharedPreferences settingsPreference = Objects.requireNonNull(this.view.getApplicationContext()).getSharedPreferences("Radius_Marker_Settings", 0);
-        SharedPreferences.Editor mapStateEditor = settingsPreference.edit();
-        mapStateEditor.putBoolean("stateExists", true);
-        mapStateEditor.putBoolean("inAppNotifications", inApp);
-        mapStateEditor.putBoolean("voiceNotifications", voice);
-        mapStateEditor.apply();
-    }
-
-    @Override
-    public void handleRadiusMarkerRemoval(boolean valid) {
-        if(!valid){
-            Toast.makeText(this.view.getApplicationContext(), this.view.getApplicationContext().getString(R.string.radius_marker_delete_body), Toast.LENGTH_LONG).show();
-        }else{
-            Toast.makeText(this.view.getApplicationContext(), this.view.getApplicationContext().getString(R.string.radius_marker_delete_existing_marker_body), Toast.LENGTH_LONG).show();
-        }
+        this.interactiveMap.makeApiRequestForMap(view.getLoadingSpinner(), view.getApplicationContext(), this);
     }
 
     public void createRadiusMarker(LatLng latLng){
@@ -127,7 +112,7 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
         boolean stateExists = settingsPreference.getBoolean("stateExists", false);
 
         if(stateExists){
-            radiusMarker.deleteRadiusMarkerDb(this.view.getApplicationContext(), this);
+            radiusMarker.makeApiRequestDeleteRadiusMarker(this.view.getApplicationContext(), this);
             SharedPreferences.Editor mapStateEditor = settingsPreference.edit();
             mapStateEditor.putBoolean("stateExists", false);
             mapStateEditor.putBoolean("inAppNotifications", true);
@@ -157,8 +142,7 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
         return this.radiusMarker;
     }
 
-    public void getRadiusMarkerDb(){
-        HttpGetRadiusMarker httpGetRadiusMarker = new HttpGetRadiusMarker(this.view.getApplicationContext(), LoginPreferenceData.getUserId(this.view.getApplicationContext()), this);
-        httpGetRadiusMarker.execute();
+    public void makeApiRequestGetRadiusMarker(){
+        this.interactiveMap.makeApiRequestGetRadiusMarker(this.view.getApplicationContext(), this);
     }
 }

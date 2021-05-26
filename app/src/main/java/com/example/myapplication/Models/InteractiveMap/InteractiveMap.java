@@ -10,11 +10,15 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
 import com.example.myapplication.Interfaces.LocationSelectorContract.LocationSelectorContract;
 import com.example.myapplication.Interfaces.MapListener.MapListener;
+import com.example.myapplication.Models.LoadingSpinner.LoadingSpinner;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Models.Marker.Marker;
+import com.example.myapplication.Webservice.HttpGetRadiusMarker.HttpGetRadiusMarker;
+import com.example.myapplication.Webservice.HttpMap.HttpMap;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -205,6 +209,24 @@ public class InteractiveMap implements OnMapReadyCallback, LocationSelectorContr
         }
 
         return null;
+    }
+
+    public boolean handleMapSavedLocation(LatLng latLng){
+        if(latLng != null){
+            this.setMapLocation(latLng);
+            return true;
+        }
+        return false;
+    }
+
+    public void makeApiRequestForMap(LoadingSpinner loadingSpinner, Context context, CustomMarkerListener customMarkerListener){
+        HttpMap httpMap = new HttpMap(loadingSpinner, context, customMarkerListener);
+        httpMap.execute("https://10.0.2.2:443/api/getmarkers");
+    }
+
+    public void makeApiRequestGetRadiusMarker(Context context, CustomMarkerListener customMarkerListener){
+        HttpGetRadiusMarker httpGetRadiusMarker = new HttpGetRadiusMarker(context, LoginPreferenceData.getUserId(context), customMarkerListener);
+        httpGetRadiusMarker.execute();
     }
 
     public GoogleMap getMap() {

@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.myapplication.Adapters.LockableViewPager.LockableViewPager;
 import com.example.myapplication.Fragments.BottomSheetFragment.BottomSheetFragment;
@@ -81,11 +82,11 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
         this.loadingSpinner = new LoadingSpinner((ProgressBar) Objects.requireNonNull(getView()).findViewById(R.id.feedLoadingSpinner));
         this.currentLocation = new CurrentLocation(getActivity(), this);
         this.mapPresenter = new MapPresenter(this);
-        this.mapPresenter.requestMap(getChildFragmentManager(), supportMapFragment);
+        this.mapPresenter.makeApiRequestForGoogleMap(getChildFragmentManager(), supportMapFragment);
         this.searchFragment = new SearchFragment(this, this);
         this.searchAutocompleteFragment = new SearchAutocompleteFragment(this);
 
-        this.mapPresenter.getRadiusMarkerDb();
+        this.mapPresenter.makeApiRequestGetRadiusMarker();
 
         configureMapRefreshButton();
         configureMapSearchButton();
@@ -177,7 +178,7 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
     @Override
     public void handleNewPostButtonClick(){
         FormFragment fragment = new FormFragment(getFragmentManager(), viewPager);
-        FragmentTransaction transition = FragmentTransition.Transition(getFragmentManager(), fragment, R.anim.right_animations, R.anim.left_animation, R.id.mapFeedSearchPointer, "");
+        FragmentTransaction transition = FragmentTransition.Transition(getParentFragmentManager(), fragment, R.anim.right_animations, R.anim.left_animation, R.id.mapFeedSearchPointer, "");
     }
 
     @Override
@@ -232,9 +233,9 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
     @Override
     public void createBottomSheetFragment(GoogleMap mMap, LatLng latLng){
         if(bottomSheetFragment != null && bottomSheetFragment.isAdded()){
-            bottomSheetFragment.getFragmentManager().popBackStack();
+            bottomSheetFragment.getParentFragmentManager().popBackStack();
         }
-        bottomSheetFragment = new BottomSheetFragment(mMap, latLng, this.mapPresenter.getRadiusMarker(), getFragmentManager());
+        bottomSheetFragment = new BottomSheetFragment(mMap, latLng, this.mapPresenter.getRadiusMarker());
         FragmentTransition.OpenFragment(getParentFragmentManager(), bottomSheetFragment, R.id.mapFeedSearchPointer, "");
     }
 
@@ -243,10 +244,19 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
         boolean clickedInsideArea = mapPresenter.handleRadiusMarkerClick(latLng);
 
         if (clickedInsideArea) {
-            bottomSheetFragment = new BottomSheetFragment(mMap, latLng, this.mapPresenter.getRadiusMarker(), getFragmentManager());
-            FragmentTransition.OpenFragment(getFragmentManager(), bottomSheetFragment, R.id.mapFeedSearchPointer, "");
+            bottomSheetFragment = new BottomSheetFragment(mMap, latLng, this.mapPresenter.getRadiusMarker());
+            FragmentTransition.OpenFragment(getParentFragmentManager(), bottomSheetFragment, R.id.mapFeedSearchPointer, "");
         }else{
             Log.d("Print", "Clicked outside area ");
+        }
+    }
+
+    @Override
+    public void handleRadiusMarkerRemoval(Boolean valid){
+        if(!valid){
+            Toast.makeText(getContext(), getContext().getString(R.string.radius_marker_delete_body), Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(getContext(), getContext().getString(R.string.radius_marker_delete_existing_marker_body), Toast.LENGTH_LONG).show();
         }
     }
 

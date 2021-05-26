@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
 
+import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
 import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
 import com.example.myapplication.Interfaces.SetRadiusMarkerListener.SetRadiusMarkerListener;
 import com.example.myapplication.R;
@@ -36,9 +37,6 @@ import java.util.Objects;
 public class RadiusMarker {
 
     public static double INITIAL_RADIUS = 50;
-    private final int FILL_COLOUR = 0x220000FF;
-    private final int STROKE_WIDTH = 5;
-    private final String STROKE_COLOUR = "#6699ff";
 
     private Circle radiusMarker;
     private GoogleMap mMap;
@@ -50,17 +48,21 @@ public class RadiusMarker {
         this.mMap = mMap;
         this.latLng = latLng;
         this.radius = radius;
-        this.createRadiusMarker(radius);
+        this.setInitialRadius(radius);
         this.createStartingMarker();
     }
 
-    public void createRadiusMarker(double radius){
+    public void setInitialRadius(double radius){
         if(radius == 0){
             this.radius = INITIAL_RADIUS;
         }
     }
 
     public void createStartingMarker(){
+        int FILL_COLOUR = 0x220000FF;
+        int STROKE_WIDTH = 5;
+        String STROKE_COLOUR = "#6699ff";
+
         if(radiusMarker == null) {
             co = new CircleOptions();
             co.center(latLng);
@@ -72,7 +74,7 @@ public class RadiusMarker {
         }
     }
 
-    public void writeRadiusMarkerDb(Context context, SetRadiusMarkerListener setRadiusMarkerListener, boolean inApp, boolean voice){
+    public void makeApiRequestWriteRadiusMarker(Context context, SetRadiusMarkerListener setRadiusMarkerListener, boolean inApp, boolean voice){
         int inAppClicked = 0;
         int voiceClicked = 0;
 
@@ -94,7 +96,7 @@ public class RadiusMarker {
         httpWriteRadiusMarker.execute();
     }
 
-    public void deleteRadiusMarkerDb(Context context, DeleteRadiusMarkerListener deleteRadiusMarkerListener){
+    public void makeApiRequestDeleteRadiusMarker(Context context, DeleteRadiusMarkerListener deleteRadiusMarkerListener){
         HttpDeleteRadiusMarker httpDeleteRadiusMarker = new HttpDeleteRadiusMarker(context,
                 LoginPreferenceData.getUserId(context), deleteRadiusMarkerListener);
         httpDeleteRadiusMarker.execute();
@@ -114,8 +116,13 @@ public class RadiusMarker {
         return false;
     }
 
-    public void updateMarkerRadius(double radius){
-        radiusMarker.setRadius(radius);
+    public void saveRadiusMarkerSettings(Context context, double lat, double lon, double radius, boolean inApp, boolean voice){
+        SharedPreferences settingsPreference = Objects.requireNonNull(context).getSharedPreferences("Radius_Marker_Settings", 0);
+        SharedPreferences.Editor mapStateEditor = settingsPreference.edit();
+        mapStateEditor.putBoolean("stateExists", true);
+        mapStateEditor.putBoolean("inAppNotifications", inApp);
+        mapStateEditor.putBoolean("voiceNotifications", voice);
+        mapStateEditor.apply();
     }
 
     public void removeMarker(){
