@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,10 +49,12 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
 
     GoogleMap mMap; LatLng latLng; RadiusMarker radiusMarker;
 
-    public BottomSheetFragment(GoogleMap mMap, LatLng latLng, RadiusMarker radiusMarker) {
+    public BottomSheetFragment(GoogleMap mMap, LatLng latLng, RadiusMarker radiusMarker, FragmentManager fragmentManager) {
         this.mMap = mMap;
         this.latLng = latLng;
         this.radiusMarker = radiusMarker;
+        this.bottomSheetPresenter = new BottomSheetPresenter(mMap, latLng, radiusMarker, fragmentManager, this);
+
     }
 
     @Override
@@ -68,7 +71,6 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        this.bottomSheetPresenter = new BottomSheetPresenter(mMap, latLng, radiusMarker, getParentFragmentManager(), this);
 
         initialiseComponents();
         configureCloseButton();
@@ -110,24 +112,21 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
     }
 
     @Override
-    public void closeBottomSheetView(){
+    public void closeBottomSheetView(RadiusMarker radiusMarker){
         SharedPreferences settingsPreference = Objects.requireNonNull(getContext()).getSharedPreferences("Radius_Marker_Settings", 0);
         boolean stateExists = settingsPreference.getBoolean("stateExists", false);
-        double radius = (double)settingsPreference.getFloat("radius", 0.0f);
-        double centerLat = (double)settingsPreference.getFloat("centerLat", 0.0f);
-        double centerLon = (double)settingsPreference.getFloat("centerLon", 0.0f);
 
         if (!stateExists){
             bottomSheetPresenter.removeMarker();
         }else{
-            bottomSheetPresenter.updateRadius(radius);
-            radiusMarkerSeekBar.setProgress((int)radius);
+            bottomSheetPresenter.updateRadius(radiusMarker.getRadius());
+            radiusMarkerSeekBar.setProgress((int)radiusMarker.getRadius());
 
-            String progressText = (int)radius + "m";
+            String progressText = (int)radiusMarker.getRadius() + "m";
             radiusMarkerSeekBarProgress.setText(progressText);
-
-            bottomSheetPresenter.setNotificationsState();
-            bottomSheetPresenter.resetNotificationsBackgroundState();
+//
+//            bottomSheetPresenter.setNotificationsState();
+//            bottomSheetPresenter.resetNotificationsBackgroundState();
         }
         this.getFragmentManager().popBackStack();
     }
@@ -152,6 +151,12 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
     public void handleSaveButtonClick(){
         bottomSheetPresenter.writeRadiusMarkerDb();
         //radiusMarkerStorage.saveSharedPreference(inAppButtonClicked, voiceButtonClicked, latLng);
+
+        SharedPreferences settingsPreference = Objects.requireNonNull(this.getApplicationContext()).getSharedPreferences("Radius_Marker_Settings", 0);
+        SharedPreferences.Editor mapStateEditor = settingsPreference.edit();
+        mapStateEditor.putBoolean("stateExists", true);
+        mapStateEditor.apply();
+
         getParentFragmentManager().popBackStack();
     }
 
@@ -160,14 +165,8 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         return this.getContext();
     }
 
-    public void removeRadiusMarker(){
-        SharedPreferences settingsPreference = Objects.requireNonNull(getContext()).getSharedPreferences("Radius_Marker_Settings", 0);
-        boolean stateExists = settingsPreference.getBoolean("stateExists", false);
-
-//        if(stateExists){
-//            radiusMarkerStorage.deleteRadiusMarkerDb();
-//            Toast.makeText(context, context.getString(R.string.form_confirm_radius_marker_removed), Toast.LENGTH_LONG).show();
-//        }
+    public void removeExistingRadiusMarker(Context context){
+        bottomSheetPresenter.deleteRadiusMarkerDb();
 
         bottomSheetPresenter.removeMarker();
         if(isAdded()){
@@ -189,11 +188,17 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
 
     private void configureSeekBar(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String progressText =  "";
+
             radiusMarkerSeekBar.setMin(50);
             radiusMarkerSeekBar.setMax(500);
             radiusMarkerSeekBar.setProgress((int)this.bottomSheetPresenter.getRadiusMarkerRadius());
 
-            String progressText =  "50m";
+            if(this.bottomSheetPresenter.getRadiusMarkerRadius() > 0){
+                progressText =  String.valueOf(this.bottomSheetPresenter.getRadiusMarkerRadius());
+            }else{
+                progressText =  "50m";
+            }
             radiusMarkerSeekBarProgress.setText(progressText);
         }
 
@@ -272,15 +277,24 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         radiusMarkerDialogRemoveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                radiusMarkerStorage.deleteRadiusMarkerDb();
-//                dialog.dismiss();
-//                radiusMarkerHandler.removeMarker();
-//                Objects.requireNonNull(context).getSharedPreferences("Radius_Marker_Settings", 0).edit().clear().apply();
-//                if(bottomSheetFragment.isAdded()){
-//                    fragmentManager.popBackStack();
-//                }
+                bottomSheetPresenter.deleteRadiusMarkerDb();
+
             }
         });
+    }
+
+    @Override
+    public void handleRadiusMarkerRemoval(Boolean valid){
+        if(!valid){
+            Toast.makeText(this.getApplicationContext(), this.getApplicationContext().getString(R.string.radius_marker_delete_body), Toast.LENGTH_LONG).show();
+        }else{
+            dialog.dismiss();
+            bottomSheetPresenter.removeMarker();
+            Objects.requireNonNull(getApplicationContext()).getSharedPreferences("Radius_Marker_Settings", 0).edit().clear().apply();
+            if(isAdded()){
+                getFragmentManager().popBackStack();
+            }
+        }
     }
 
     private void configureSaveButton(){

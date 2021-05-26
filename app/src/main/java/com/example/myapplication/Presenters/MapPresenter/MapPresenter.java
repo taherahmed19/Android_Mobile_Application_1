@@ -1,5 +1,6 @@
 package com.example.myapplication.Presenters.MapPresenter;
 
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.util.Log;
 
@@ -21,6 +22,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MapPresenter implements MapContract.Presenter, MapListener, CustomMarkerListener {
 
@@ -99,11 +101,16 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
     @Override
     public void renderRadiusMarker(double lat, double lon, double radius){
         this.radiusMarker = new RadiusMarker(this.interactiveMap.getMap(), new LatLng(lat, lon), radius);
+        SharedPreferences settingsPreference = Objects.requireNonNull(this.view.getApplicationContext()).getSharedPreferences("Radius_Marker_Settings", 0);
+        SharedPreferences.Editor mapStateEditor = settingsPreference.edit();
+        mapStateEditor.putBoolean("stateExists", true);
+        mapStateEditor.apply();
     }
 
     public void createRadiusMarker(LatLng latLng){
         if(radiusMarker != null){
             radiusMarker.removeMarker();
+
         }
         radiusMarker = new RadiusMarker(this.interactiveMap.getMap(), latLng, 0);
     }
@@ -112,12 +119,19 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
         this.view.createBottomSheetFragment(this.interactiveMap.getMap(), latLng);
     }
 
+    public void openBottomSheetWithState(GoogleMap mMap, LatLng latLng){
+        this.view.openBottomSheetWithState(mMap, latLng);
+    }
+
+    public boolean handleRadiusMarkerClick(LatLng latLng){
+        return radiusMarker.handleRadiusMarkerClick(this.view.getApplicationContext(), latLng, this.radiusMarker.getLatLng(), this.radiusMarker.getRadius());
+    }
+
     public RadiusMarker getRadiusMarker(){
         return this.radiusMarker;
     }
 
     public void getRadiusMarkerDb(){
-        Log.d("Print", "get radius marker. " + LoginPreferenceData.getUserId(this.view.getApplicationContext()));
         HttpGetRadiusMarker httpGetRadiusMarker = new HttpGetRadiusMarker(this.view.getApplicationContext(), LoginPreferenceData.getUserId(this.view.getApplicationContext()), this);
         httpGetRadiusMarker.execute();
     }

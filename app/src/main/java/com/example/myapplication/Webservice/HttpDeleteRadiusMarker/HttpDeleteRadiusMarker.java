@@ -3,6 +3,7 @@ package com.example.myapplication.Webservice.HttpDeleteRadiusMarker;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.example.myapplication.Models.RadiusMarker.RadiusMarker;
 import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
@@ -24,14 +25,11 @@ public class HttpDeleteRadiusMarker extends AsyncTask<String , Void ,String> {
     Context context;
     DeleteRadiusMarkerListener deleteRadiusMarkerListener;
 
-    RadiusMarker radiusMarker;
+    String userId;
 
-    int userId;
-
-    public HttpDeleteRadiusMarker(Context context, int userId, DeleteRadiusMarkerListener deleteRadiusMarkerListener,
-                                  RadiusMarker radiusMarker) {
+    public HttpDeleteRadiusMarker(Context context, int userId, DeleteRadiusMarkerListener deleteRadiusMarkerListener) {
         this.context = context;
-        this.userId = userId;
+        this.userId = String.valueOf(userId);
         this.deleteRadiusMarkerListener = deleteRadiusMarkerListener;
     }
 

@@ -3,6 +3,7 @@ package com.example.myapplication.Presenters.BottomSheetPresenter;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -15,15 +16,10 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.myapplication.Models.BottomSheet.BottomSheet;
 import com.example.myapplication.Models.RadiusMarker.RadiusMarker;
-import com.example.myapplication.Handlers.RadiusMarkerHandler.RadiusMarkerStorage;
 import com.example.myapplication.Interfaces.BottomSheetContract.BottomSheetContract;
 import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
 import com.example.myapplication.Interfaces.SetRadiusMarkerListener.SetRadiusMarkerListener;
 import com.example.myapplication.R;
-import com.example.myapplication.Fragments.BottomSheetFragment.BottomSheetFragment;
-import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
-import com.example.myapplication.Webservice.HttpDeleteRadiusMarker.HttpDeleteRadiusMarker;
-import com.example.myapplication.Webservice.HttpWriteRadiusMarker.HttpWriteRadiusMarker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -65,9 +61,7 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
 
     @Override
     public void handleRadiusMarkerRemoval(boolean valid){
-        if(!valid){
-            Toast.makeText(this.view.getApplicationContext(), this.view.getApplicationContext().getString(R.string.radius_marker_delete_body), Toast.LENGTH_LONG).show();
-        }
+        this.view.handleRadiusMarkerRemoval(valid);
     }
 
     public void updateRadiusMarkerSeekBar(SeekBar seekBar, int progress){
@@ -99,7 +93,7 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
     }
 
     public void closeBottomSheetView(){
-        this.view.closeBottomSheetView();
+        this.view.closeBottomSheetView(radiusMarker);
     }
 
     public void showRemoveDialog(){

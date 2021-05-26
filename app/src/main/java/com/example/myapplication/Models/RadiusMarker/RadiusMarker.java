@@ -86,8 +86,22 @@ public class RadiusMarker {
 
     public void deleteRadiusMarkerDb(Context context, DeleteRadiusMarkerListener deleteRadiusMarkerListener){
         HttpDeleteRadiusMarker httpDeleteRadiusMarker = new HttpDeleteRadiusMarker(context,
-                LoginPreferenceData.getUserId(context), deleteRadiusMarkerListener, this);
+                LoginPreferenceData.getUserId(context), deleteRadiusMarkerListener);
         httpDeleteRadiusMarker.execute();
+    }
+
+    public boolean handleRadiusMarkerClick(Context context, LatLng latLng, LatLng centreLatLng, double radius){
+        SharedPreferences settingsPreference = Objects.requireNonNull(context).getSharedPreferences("Radius_Marker_Settings", 0);
+        boolean stateExists = settingsPreference.getBoolean("stateExists", false);
+
+        if(stateExists){
+            float[] distance = new float[2];
+            Location.distanceBetween(latLng.latitude, latLng.longitude, centreLatLng.latitude, centreLatLng.longitude, distance);
+
+            return distance[0] <= radius;
+        }
+
+        return false;
     }
 
     public void updateMarkerRadius(double radius){
@@ -104,5 +118,9 @@ public class RadiusMarker {
 
     public LatLng getLatLng() {
         return latLng;
+    }
+
+    public double getRadius() {
+        return radius;
     }
 }

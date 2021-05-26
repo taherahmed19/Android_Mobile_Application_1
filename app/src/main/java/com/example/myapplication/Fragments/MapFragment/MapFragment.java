@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,6 +84,8 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
         this.searchFragment = new SearchFragment(this, this);
         this.searchAutocompleteFragment = new SearchAutocompleteFragment(this);
 
+        this.mapPresenter.getRadiusMarkerDb();
+
         configureMapRefreshButton();
         configureMapSearchButton();
         configureNewPostButton();
@@ -90,7 +93,6 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
         configureSupportMapFragment();
         configureSwitchButton();
 
-        this.mapPresenter.getRadiusMarkerDb();
     }
 
     @Override
@@ -221,26 +223,28 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-//                if(customMarkerBottomSheetDialog != null){
-//                    boolean clickedInsideArea = radiusMarkerHandler.handleRadiusMarkerClick(customMarkerBottomSheetDialog, context, fragmentManager, latLng);
-//
-//                    if(clickedInsideArea){
-//                        customMarkerBottomSheetDialog.openFragment(customMarkerBottomSheetDialog, fragmentManager);
-//                    }
-//                }
+                mapPresenter.openBottomSheetWithState(mMap, latLng);
             }
         });
     }
 
     @Override
     public void createBottomSheetFragment(GoogleMap mMap, LatLng latLng){
-        if (bottomSheetFragment != null) {
-            bottomSheetFragment.removeRadiusMarker();
-            bottomSheetFragment = null;
-        }
+        bottomSheetFragment = new BottomSheetFragment(mMap, latLng, this.mapPresenter.getRadiusMarker(), getFragmentManager());
 
-        bottomSheetFragment = new BottomSheetFragment(mMap, latLng, this.mapPresenter.getRadiusMarker());
         FragmentTransition.OpenFragment(getParentFragmentManager(), bottomSheetFragment, R.id.mapFeedSearchPointer, "");
+    }
+
+    @Override
+    public void openBottomSheetWithState(GoogleMap mMap, LatLng latLng){
+        boolean clickedInsideArea = mapPresenter.handleRadiusMarkerClick(latLng);
+
+        if (clickedInsideArea) {
+            bottomSheetFragment = new BottomSheetFragment(mMap, latLng, this.mapPresenter.getRadiusMarker(), getFragmentManager());
+            FragmentTransition.OpenFragment(getFragmentManager(), bottomSheetFragment, R.id.mapFeedSearchPointer, "");
+        }else{
+            Log.d("Print", "Clicked outside area ");
+        }
     }
 
     @Override

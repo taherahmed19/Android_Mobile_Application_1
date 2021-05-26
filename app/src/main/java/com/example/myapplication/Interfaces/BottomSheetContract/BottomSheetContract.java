@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.SeekBar;
 
 import com.example.myapplication.Fragments.BottomSheetFragment.BottomSheetFragment;
+import com.example.myapplication.Models.RadiusMarker.RadiusMarker;
 
 /**
  * Defines the contract between the BottomSheetFragment view {@link BottomSheetFragment} and the
@@ -18,9 +19,10 @@ public interface BottomSheetContract {
         void removeInAppButtonBackground();
         void setVoiceButtonClicked();
         void removeVoiceButtonBackground();
-        void closeBottomSheetView();
+        void closeBottomSheetView(RadiusMarker radiusMarker);
         void showRemoveDialog();
         void dismissRemoveDialog();
+        void handleRadiusMarkerRemoval(Boolean valid);
         Context getApplicationContext();
     }
 
