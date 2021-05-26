@@ -1,5 +1,6 @@
 package com.example.myapplication.Presenters.BottomSheetPresenter;
 
+import android.util.Log;
 import android.widget.SeekBar;
 
 import androidx.fragment.app.FragmentManager;
@@ -114,8 +115,13 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
         this.radiusMarker.removeMarker();
     }
 
+    public void setOriginalRadius(){
+        this.radiusMarker.setOriginalRadius(this.radiusMarker.getRadius());
+    }
+
     public void updateRadius(double radius){
-        this.radiusMarker.getRadiusMarker().setRadius(radius);
+        this.radiusMarker.updateRadius(radius);
+        Log.d("Print", "original " + this.radiusMarker.getOriginalRadius() + " current " + radius);
     }
 
     public double getRadiusMarkerRadius(){
@@ -128,5 +134,9 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
 
     public boolean isVoiceButtonClicked() {
         return this.bottomSheet.isVoiceButtonClicked();
+    }
+
+    public void resetRadiusMarkerSize(){
+        this.radiusMarker.updateRadius(this.radiusMarker.getOriginalRadius());
     }
 }

@@ -43,11 +43,13 @@ public class RadiusMarker {
     private LatLng latLng;
     private CircleOptions co;
     private double radius;
+    private double originalRadius;
 
     public RadiusMarker(GoogleMap mMap, LatLng latLng, double radius) {
         this.mMap = mMap;
         this.latLng = latLng;
         this.radius = radius;
+        this.originalRadius = radius;
         this.setInitialRadius(radius);
         this.createStartingMarker();
     }
@@ -139,5 +141,18 @@ public class RadiusMarker {
 
     public double getRadius() {
         return radius;
+    }
+
+    public void updateRadius(double radius){
+        this.radiusMarker.setRadius(radius);
+        this.radius = radius;
+    }
+
+    public double getOriginalRadius() {
+        return originalRadius;
+    }
+
+    public void setOriginalRadius(double originalRadius) {
+        this.originalRadius = originalRadius;
     }
 }

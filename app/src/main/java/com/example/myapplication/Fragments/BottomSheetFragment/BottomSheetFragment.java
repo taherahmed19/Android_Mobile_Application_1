@@ -118,6 +118,7 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
             bottomSheetPresenter.setNotificationsState();
             bottomSheetPresenter.resetNotificationsBackgroundState();
         }
+        this.bottomSheetPresenter.resetRadiusMarkerSize();
         this.getParentFragmentManager().popBackStack();
     }
 
@@ -167,6 +168,8 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
 
     @Override
     public void handleRadiusMarker(){
+        this.bottomSheetPresenter.setOriginalRadius();
+
         if(getActivity() != null){
             getActivity().onBackPressed();
         }
