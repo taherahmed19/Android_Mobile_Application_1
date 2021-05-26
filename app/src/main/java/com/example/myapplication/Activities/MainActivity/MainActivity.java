@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getApplicationContext().getSharedPreferences("Main_MapFeed_Map_State", 0).edit().clear().apply();
         getApplicationContext().getSharedPreferences("Map_Filter_Fragment", 0).edit().clear().apply();
         getApplicationContext().getSharedPreferences("Region_Geolocation_State", 0).edit().clear().apply();
+        getApplicationContext().getSharedPreferences("Radius_Marker_Settings", 0).edit().clear().apply();
     }
 
     @Override

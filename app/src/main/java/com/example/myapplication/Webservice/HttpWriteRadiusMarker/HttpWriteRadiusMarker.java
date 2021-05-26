@@ -34,14 +34,19 @@ public class HttpWriteRadiusMarker extends AsyncTask<String , Void ,String> {
     String lat;
     String lon;
     String radius;
+    int inApp;
+    int voice;
 
-    public HttpWriteRadiusMarker(Context context, int userId, int isMonitoring, String lat, String lon, String radius, SetRadiusMarkerListener setRadiusMarkerListener) {
+    public HttpWriteRadiusMarker(Context context, int userId, int isMonitoring, String lat, String lon, String radius,
+                                 int inApp, int voice, SetRadiusMarkerListener setRadiusMarkerListener) {
         this.context = context;
         this.userId = userId;
         this.isMonitoring = isMonitoring;
         this.lat = lat;
         this.lon = lon;
         this.radius = radius;
+        this.inApp = inApp;
+        this.voice = voice;
         this.setRadiusMarkerListener = setRadiusMarkerListener;
     }
 
@@ -78,8 +83,9 @@ public class HttpWriteRadiusMarker extends AsyncTask<String , Void ,String> {
             jsonObject.put("latitude", this.lat);
             jsonObject.put("longitude", this.lon);
             jsonObject.put("radius", this.radius);
+            jsonObject.put("inApp", this.inApp);
+            jsonObject.put("voice", this.voice);
 
-            Log.d("Print", "body - " + jsonObject.toString());
 
             BufferedOutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));

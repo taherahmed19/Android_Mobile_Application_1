@@ -92,12 +92,17 @@ public class HttpGetRadiusMarker extends AsyncTask<String , Void ,String> {
     @Override
     protected void onPostExecute(String json) {
         try {
+            Log.d("Print", "Response = " + json);
+
             if(json.length() > 0){
                 JSONObject jsonObject = new JSONObject(json);
                 double lat = jsonObject.getDouble("lat");
                 double lon = jsonObject.getDouble("lon");
                 double radius = jsonObject.getDouble("radius");
-                customMarkerListener.renderRadiusMarker(lat, lon, radius);
+                boolean inApp = jsonObject.getBoolean("inApp");
+                boolean voice = jsonObject.getBoolean("voice");
+
+                customMarkerListener.renderRadiusMarker(lat, lon, radius, inApp, voice);
             }
         } catch (JSONException e) {
             e.printStackTrace();

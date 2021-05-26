@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public interface CustomMarkerListener {
 
-    void renderRadiusMarker(double lat, double lon, double radius);
+    void renderRadiusMarker(double lat, double lon, double radius, boolean inApp, boolean voice);
     void addMarkerData(ArrayList<Marker> markers);
     void detectRadiusMarker();
 

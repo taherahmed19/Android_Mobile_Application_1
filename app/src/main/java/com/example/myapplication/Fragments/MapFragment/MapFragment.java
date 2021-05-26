@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -230,8 +231,10 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
 
     @Override
     public void createBottomSheetFragment(GoogleMap mMap, LatLng latLng){
+        if(bottomSheetFragment != null && bottomSheetFragment.isAdded()){
+            bottomSheetFragment.getFragmentManager().popBackStack();
+        }
         bottomSheetFragment = new BottomSheetFragment(mMap, latLng, this.mapPresenter.getRadiusMarker(), getFragmentManager());
-
         FragmentTransition.OpenFragment(getParentFragmentManager(), bottomSheetFragment, R.id.mapFeedSearchPointer, "");
     }
 

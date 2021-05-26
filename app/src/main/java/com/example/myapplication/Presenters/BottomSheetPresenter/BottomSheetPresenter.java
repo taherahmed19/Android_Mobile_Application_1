@@ -51,11 +51,9 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
     @Override
     public void handleRadiusMarker(boolean valid){
         if(valid){
-            //radiusMarkerStorage.saveSharedPreference(inAppButtonClicked, voiceButtonClicked, latLng);
             fragmentManager.popBackStack();
         }else{
             radiusMarker.removeMarker();
-            Toast.makeText(this.view.getApplicationContext(), this.view.getApplicationContext().getString(R.string.radius_marker_set_body), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -129,11 +127,18 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
     }
 
     public void writeRadiusMarkerDb(){
-        this.radiusMarker.writeRadiusMarkerDb(this.view.getApplicationContext(), this);
+        this.radiusMarker.writeRadiusMarkerDb(this.view.getApplicationContext(), this, bottomSheet.isInAppButtonClicked(), bottomSheet.isVoiceButtonClicked());
     }
 
     public void deleteRadiusMarkerDb(){
         this.radiusMarker.deleteRadiusMarkerDb(this.view.getApplicationContext(), this);
     }
 
+    public boolean isInAppButtonClicked() {
+        return this.bottomSheet.isInAppButtonClicked();
+    }
+
+    public boolean isVoiceButtonClicked() {
+        return this.bottomSheet.isVoiceButtonClicked();
+    }
 }

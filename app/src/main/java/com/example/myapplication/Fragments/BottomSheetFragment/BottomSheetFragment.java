@@ -47,14 +47,15 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
     Button radiusMarkerSaveButton;
     Dialog dialog;
 
-    GoogleMap mMap; LatLng latLng; RadiusMarker radiusMarker;
+    GoogleMap mMap;
+    LatLng latLng;
+    RadiusMarker radiusMarker;
 
     public BottomSheetFragment(GoogleMap mMap, LatLng latLng, RadiusMarker radiusMarker, FragmentManager fragmentManager) {
         this.mMap = mMap;
         this.latLng = latLng;
         this.radiusMarker = radiusMarker;
         this.bottomSheetPresenter = new BottomSheetPresenter(mMap, latLng, radiusMarker, fragmentManager, this);
-
     }
 
     @Override
@@ -71,7 +72,6 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
         initialiseComponents();
         configureCloseButton();
         configureInAppButton();
@@ -79,6 +79,9 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         configureSaveButton();
         configureSeekBar();
         configureVoiceButton();
+
+        bottomSheetPresenter.setNotificationsState();
+        bottomSheetPresenter.resetNotificationsBackgroundState();
     }
 
     @Override
@@ -119,14 +122,11 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         if (!stateExists){
             bottomSheetPresenter.removeMarker();
         }else{
-            bottomSheetPresenter.updateRadius(radiusMarker.getRadius());
-            radiusMarkerSeekBar.setProgress((int)radiusMarker.getRadius());
-
             String progressText = (int)radiusMarker.getRadius() + "m";
             radiusMarkerSeekBarProgress.setText(progressText);
-//
-//            bottomSheetPresenter.setNotificationsState();
-//            bottomSheetPresenter.resetNotificationsBackgroundState();
+
+            bottomSheetPresenter.setNotificationsState();
+            bottomSheetPresenter.resetNotificationsBackgroundState();
         }
         this.getFragmentManager().popBackStack();
     }
@@ -150,11 +150,12 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
     @Override
     public void handleSaveButtonClick(){
         bottomSheetPresenter.writeRadiusMarkerDb();
-        //radiusMarkerStorage.saveSharedPreference(inAppButtonClicked, voiceButtonClicked, latLng);
 
         SharedPreferences settingsPreference = Objects.requireNonNull(this.getApplicationContext()).getSharedPreferences("Radius_Marker_Settings", 0);
         SharedPreferences.Editor mapStateEditor = settingsPreference.edit();
         mapStateEditor.putBoolean("stateExists", true);
+        mapStateEditor.putBoolean("inAppNotifications", bottomSheetPresenter.isInAppButtonClicked());
+        mapStateEditor.putBoolean("voiceNotifications", bottomSheetPresenter.isVoiceButtonClicked());
         mapStateEditor.apply();
 
         getParentFragmentManager().popBackStack();
@@ -163,15 +164,6 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
     @Override
     public Context getApplicationContext(){
         return this.getContext();
-    }
-
-    public void removeExistingRadiusMarker(Context context){
-        bottomSheetPresenter.deleteRadiusMarkerDb();
-
-        bottomSheetPresenter.removeMarker();
-        if(isAdded()){
-            getFragmentManager().popBackStack();
-        }
     }
 
     private void initialiseComponents(){
@@ -278,7 +270,6 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
             @Override
             public void onClick(View view) {
                 bottomSheetPresenter.deleteRadiusMarkerDb();
-
             }
         });
     }

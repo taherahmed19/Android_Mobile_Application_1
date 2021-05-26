@@ -43,7 +43,6 @@ public class RadiusMarker {
     private Circle radiusMarker;
     private GoogleMap mMap;
     private LatLng latLng;
-    private float currentZoom;
     private CircleOptions co;
     private double radius;
 
@@ -53,7 +52,6 @@ public class RadiusMarker {
         this.radius = radius;
         this.createRadiusMarker(radius);
         this.createStartingMarker();
-        this.currentZoom = mMap.getCameraPosition().zoom;
     }
 
     public void createRadiusMarker(double radius){
@@ -74,12 +72,24 @@ public class RadiusMarker {
         }
     }
 
-    public void writeRadiusMarkerDb(Context context, SetRadiusMarkerListener setRadiusMarkerListener){
+    public void writeRadiusMarkerDb(Context context, SetRadiusMarkerListener setRadiusMarkerListener, boolean inApp, boolean voice){
+        int inAppClicked = 0;
+        int voiceClicked = 0;
+
+        if(inApp){
+            inAppClicked = 1;
+        }
+        if(voice){
+            voiceClicked = 1;
+        }
+
         HttpWriteRadiusMarker httpWriteRadiusMarker = new HttpWriteRadiusMarker(context,
                 LoginPreferenceData.getUserId(context), 1,
                 String.valueOf(this.radiusMarker.getCenter().latitude),
                 String.valueOf(this.radiusMarker.getCenter().longitude),
                 String.valueOf(this.radiusMarker.getRadius()),
+                inAppClicked,
+                voiceClicked,
                 setRadiusMarkerListener);
         httpWriteRadiusMarker.execute();
     }

@@ -18,6 +18,7 @@
 
     <string name="radius_marker_delete_title">Error</string>
     <string name="radius_marker_delete_body">Unable to delete radius marker. Please try again.</string>
+    <string name="radius_marker_delete_existing_marker_body">Removed existing radius marker</string>
 
     <string name="radius_marker_set_title">Error</string>
     <string name="radius_marker_set_body">Unable to add radius marker. Please try again.</string>

@@ -61,4 +61,11 @@ public class BottomSheet {
         }
     }
 
+    public boolean isInAppButtonClicked() {
+        return inAppButtonClicked;
+    }
+
+    public boolean isVoiceButtonClicked() {
+        return voiceButtonClicked;
+    }
 }

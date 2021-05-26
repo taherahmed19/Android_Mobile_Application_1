@@ -3,13 +3,16 @@ package com.example.myapplication.Presenters.MapPresenter;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.myapplication.Fragments.BottomSheetFragment.BottomSheetFragment;
+import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
 import com.example.myapplication.Models.InteractiveMap.InteractiveMap;
 import com.example.myapplication.Models.RadiusMarker.RadiusMarker;
+import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Webservice.HttpGetRadiusMarker.HttpGetRadiusMarker;
 import com.example.myapplication.Webservice.HttpMap.HttpMap;
@@ -24,7 +27,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class MapPresenter implements MapContract.Presenter, MapListener, CustomMarkerListener {
+public class MapPresenter implements MapContract.Presenter, MapListener, CustomMarkerListener, DeleteRadiusMarkerListener {
 
     MapContract.View view;
     InteractiveMap interactiveMap;
@@ -99,18 +102,41 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
     }
 
     @Override
-    public void renderRadiusMarker(double lat, double lon, double radius){
+    public void renderRadiusMarker(double lat, double lon, double radius, boolean inApp, boolean voice){
         this.radiusMarker = new RadiusMarker(this.interactiveMap.getMap(), new LatLng(lat, lon), radius);
+
         SharedPreferences settingsPreference = Objects.requireNonNull(this.view.getApplicationContext()).getSharedPreferences("Radius_Marker_Settings", 0);
         SharedPreferences.Editor mapStateEditor = settingsPreference.edit();
         mapStateEditor.putBoolean("stateExists", true);
+        mapStateEditor.putBoolean("inAppNotifications", inApp);
+        mapStateEditor.putBoolean("voiceNotifications", voice);
         mapStateEditor.apply();
     }
 
+    @Override
+    public void handleRadiusMarkerRemoval(boolean valid) {
+        if(!valid){
+            Toast.makeText(this.view.getApplicationContext(), this.view.getApplicationContext().getString(R.string.radius_marker_delete_body), Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(this.view.getApplicationContext(), this.view.getApplicationContext().getString(R.string.radius_marker_delete_existing_marker_body), Toast.LENGTH_LONG).show();
+        }
+    }
+
     public void createRadiusMarker(LatLng latLng){
+        SharedPreferences settingsPreference = Objects.requireNonNull(this.view.getApplicationContext()).getSharedPreferences("Radius_Marker_Settings", 0);
+        boolean stateExists = settingsPreference.getBoolean("stateExists", false);
+
+        if(stateExists){
+            radiusMarker.deleteRadiusMarkerDb(this.view.getApplicationContext(), this);
+            SharedPreferences.Editor mapStateEditor = settingsPreference.edit();
+            mapStateEditor.putBoolean("stateExists", false);
+            mapStateEditor.putBoolean("inAppNotifications", true);
+            mapStateEditor.putBoolean("voiceNotifications", false);
+            mapStateEditor.apply();
+        }
+
         if(radiusMarker != null){
             radiusMarker.removeMarker();
-
         }
         radiusMarker = new RadiusMarker(this.interactiveMap.getMap(), latLng, 0);
     }
