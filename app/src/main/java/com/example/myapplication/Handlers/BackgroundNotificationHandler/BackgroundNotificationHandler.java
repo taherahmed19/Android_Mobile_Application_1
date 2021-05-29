@@ -19,7 +19,7 @@ public class BackgroundNotificationHandler implements CurrentLocationListener {
     private double lng;
     private LatLng currentLatLng;
     private boolean runTTS;
-
+ 
     public BackgroundNotificationHandler(Context context, String category, String description, String lat, String lng) {
         this.context = context;
         this.category = category;

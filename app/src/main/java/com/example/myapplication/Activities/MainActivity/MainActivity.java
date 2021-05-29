@@ -42,9 +42,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         configureNavigation();
         resetSharedPreference();
         onNewIntent(getIntent());
-
-        String currentToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d("Print", "Current token " + currentToken);
     }
 
     @Override
