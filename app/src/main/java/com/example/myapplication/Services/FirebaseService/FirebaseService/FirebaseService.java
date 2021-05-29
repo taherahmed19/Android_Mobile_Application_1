@@ -21,7 +21,10 @@ import com.example.myapplication.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+
+import static java.nio.charset.StandardCharsets.*;
 
 public class FirebaseService extends FirebaseMessagingService {
 
@@ -34,6 +37,7 @@ public class FirebaseService extends FirebaseMessagingService {
     String firstName;
     String lastName;
     String rating;
+    String image;
 
     @Override
     public void onNewToken(@NonNull String token) {
@@ -62,7 +66,7 @@ public class FirebaseService extends FirebaseMessagingService {
         lastName = remoteMessage.getData().get("lastName");
         rating = remoteMessage.getData().get("rating");
 
-        Log.d("Remote message", userId + " " + markerId + " " + lat + " " + lng);
+        Log.d("Print", "Pass message to activity");
 
         if(!App.APP_VISIBLE){
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
@@ -85,6 +89,7 @@ public class FirebaseService extends FirebaseMessagingService {
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
             notificationManager.notify(1, notification);
         }else{
+            Log.d("Print", "Send intent to map fragment");
             Intent intent = new Intent(MapFragment.class.toString());
             addIntentExtras(intent, 1, isVoiceNotificationEnabled());
             sendBroadcast(intent);

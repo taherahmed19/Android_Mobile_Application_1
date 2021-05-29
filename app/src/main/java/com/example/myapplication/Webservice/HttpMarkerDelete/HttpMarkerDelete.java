@@ -37,7 +37,6 @@ public class HttpMarkerDelete extends AsyncTask<Void , Void ,String> {
         SSL.AllowSSLCertificates();
 
         String apiRequest = this.createApiQuery();
-        Log.d("Print", "Delete marker api request " + apiRequest);
 
         try {
             String response = handleRequest(apiRequest);

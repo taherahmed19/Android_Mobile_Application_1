@@ -69,4 +69,8 @@ public class LoginPresenter implements LoginContract.Presenter, LoginListener {
         view.submitSignIn();
         loginUser.makeApiCall(context);
     }
+
+    public BroadcastReceiverToken getToken() {
+        return token;
+    }
 }

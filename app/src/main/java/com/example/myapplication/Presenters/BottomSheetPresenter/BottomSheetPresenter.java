@@ -121,7 +121,6 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
 
     public void updateRadius(double radius){
         this.radiusMarker.updateRadius(radius);
-        Log.d("Print", "original " + this.radiusMarker.getOriginalRadius() + " current " + radius);
     }
 
     public double getRadiusMarkerRadius(){

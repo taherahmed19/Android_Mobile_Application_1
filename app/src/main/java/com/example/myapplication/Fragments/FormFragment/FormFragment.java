@@ -69,7 +69,6 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
     FormPresenter formPresenter;
 
     Dialog dialog;
-    FeedSubmitListener feedSubmitListener;
     boolean isConfiguredStaticMap;
 
     public FormFragment(FragmentManager fragmentSupport, ViewPager viewPager){
@@ -346,7 +345,7 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         String description = mapFeedDescription.getText().toString();
         int userID = LoginPreferenceData.getUserId(getActivity().getApplicationContext());
 
-        formPresenter.makeApiCall(userID, category, description, feedSubmitListener);
+        formPresenter.makeApiCall(userID, category, description, this);
     }
 
     void encodeImage(Bitmap photo){

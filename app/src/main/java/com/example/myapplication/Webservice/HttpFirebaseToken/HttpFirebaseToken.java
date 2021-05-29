@@ -68,7 +68,6 @@ public class HttpFirebaseToken extends AsyncTask<String , Void ,String> {
             jsonObject.put("userId", this.userId);
             jsonObject.put("token", this.firebaseToken);
 
-            Log.d("Print", "body " + jsonObject.toString());
 
             BufferedOutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));

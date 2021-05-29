@@ -1,5 +1,6 @@
 package com.example.myapplication.Handlers.RadiusMarkerNotificationHandler;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -47,12 +48,12 @@ public class RadiusMarkerNotificationHandler {
         radiusMarkerNotifButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("Print", "Notification clicked");
                 fragmentManager.popBackStack();
 
                 MarkerModalFragment markerModalFragment = new MarkerModalFragment(marker, viewPager);
                 FragmentTransition.Transition(fragmentManager, markerModalFragment, R.anim.right_animations, R.anim.left_animation,
                         R.id.mapModalContainer, "");
-
             }
         });
     }

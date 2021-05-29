@@ -16,11 +16,9 @@ import com.example.myapplication.R;
 public class MainFragment extends Fragment {
 
     LockableViewPager viewPager;
-    MapFragment mapFragment;
     SwiperAdapter swiperAdapter;
 
     public MainFragment(){
-        mapFragment = new MapFragment(viewPager);
         viewPager = null;
     }
 
@@ -43,7 +41,7 @@ public class MainFragment extends Fragment {
 
         viewPager = (LockableViewPager)getView().findViewById(R.id.viewPager);
         viewPager.setOffscreenPageLimit(0);
-        swiperAdapter = new SwiperAdapter(getChildFragmentManager(), mapFragment, viewPager);
+        swiperAdapter = new SwiperAdapter(getChildFragmentManager(), viewPager);
         viewPager.setAdapter(swiperAdapter);
         viewPager.setCurrentItem(0);
         viewPager.setSwipeable(false);

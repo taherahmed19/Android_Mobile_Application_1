@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 
 import com.example.myapplication.Interfaces.MarkerModalContract.MarkerModalContract;
 import com.example.myapplication.Models.Marker.Marker;
@@ -195,5 +196,13 @@ public class Modal implements MarkerModalContract.Model {
 
     public Bitmap getImage() {
         return this.image;
+    }
+
+    public void setEncodedImage(String encodedImage) {
+        this.encodedImage = encodedImage;
+    }
+
+    public String getEncodedImage() {
+        return encodedImage;
     }
 }

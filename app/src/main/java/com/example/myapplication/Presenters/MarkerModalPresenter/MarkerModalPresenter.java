@@ -79,7 +79,8 @@ public class MarkerModalPresenter implements MarkerListener, RatingsListener, Ma
     }
 
     public void updateModalEncodedImage(String encodedImage) {
-        this.marker.setEncodedImage(encodedImage);
+        this.marker.setEncodedImage(encodedImage);//note needed?
+        this.modal.setEncodedImage(encodedImage);
     }
 
     public void updateModalPostName() {
@@ -132,5 +133,9 @@ public class MarkerModalPresenter implements MarkerListener, RatingsListener, Ma
 
     public int getRating() {
         return this.modal.getRating();
+    }
+
+    public String getEncodedImage() {
+        return this.modal.getEncodedImage();
     }
 }

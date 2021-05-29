@@ -13,10 +13,9 @@ public class SwiperAdapter extends FragmentStatePagerAdapter{
     MapFragment mapFragment;
     LockableViewPager viewPager;
 
-    public SwiperAdapter(@NonNull FragmentManager fm, MapFragment mapFragment, LockableViewPager viewPager) {
+    public SwiperAdapter(@NonNull FragmentManager fm, LockableViewPager viewPager) {
         super(fm);
         fragmentManager = fm;
-        this.mapFragment = mapFragment;
         this.viewPager = viewPager;
     }
 
@@ -28,17 +27,13 @@ public class SwiperAdapter extends FragmentStatePagerAdapter{
         mapFragment = new MapFragment(viewPager);
         fragment = mapFragment;
 
-//        Bundle bundle = new Bundle();
-//        bundle.putInt("position", position + 1);
-//        fragment.setArguments(bundle);
-
         return fragment;
     }
 
 
     @Override
     public int getCount() {
-        return 2;
+        return 1;
     }
 
     @Override

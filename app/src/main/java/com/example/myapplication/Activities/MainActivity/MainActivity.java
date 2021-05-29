@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.example.myapplication.Presenters.MainPresenter.MainPresenter;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MainContract.View {
 
@@ -40,6 +42,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         configureNavigation();
         resetSharedPreference();
         onNewIntent(getIntent());
+
+        String currentToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d("Print", "Current token " + currentToken);
     }
 
     @Override

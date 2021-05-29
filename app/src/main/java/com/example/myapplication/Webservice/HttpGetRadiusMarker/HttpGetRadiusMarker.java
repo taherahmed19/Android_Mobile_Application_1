@@ -86,8 +86,6 @@ public class HttpGetRadiusMarker extends AsyncTask<String , Void ,String> {
     @Override
     protected void onPostExecute(String json) {
         try {
-            Log.d("Print", "Response = " + json);
-
             if(json.length() > 0){
                 JSONObject jsonObject = new JSONObject(json);
                 double lat = jsonObject.getDouble("lat");

@@ -27,6 +27,7 @@ import com.example.myapplication.Presenters.LoginPresenter.LoginPresenter;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
+import com.example.myapplication.Webservice.HttpFirebaseToken.HttpFirebaseToken;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.Objects;
@@ -130,9 +131,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             LoginPreferenceData.SaveLoginState(this, true, user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
 
             //send firebase token
-//            HttpFirebaseToken httpFirebaseToken = new HttpFirebaseToken(loginActivity.getApplicationContext(),
-//                    LoginPreferenceData.getUserId(loginActivity.getApplicationContext()), loginActivity.getToken());
-//            httpFirebaseToken.execute();
+            HttpFirebaseToken httpFirebaseToken = new HttpFirebaseToken(this.getApplicationContext(),
+                    LoginPreferenceData.getUserId(this.getApplicationContext()), loginPresenter.getToken().getToken());
+            httpFirebaseToken.execute();
 
             enterApplication();
         }else{
@@ -156,6 +157,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     public void onResume() {
         super.onResume();
         this.registerReceiver(receiver, new IntentFilter(LoginActivity.class.toString()));
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -280,8 +286,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         );
     }
 
-    BroadcastReceiver receiver = new BroadcastReceiver() {
 
+    /**
+     * Gets token when new token is generated from {FirebaseService.java}
+     */
+    BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String currentToken = FirebaseInstanceId.getInstance().getToken();
