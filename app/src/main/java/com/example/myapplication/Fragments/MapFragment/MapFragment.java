@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -27,8 +26,7 @@ import com.example.myapplication.Fragments.SearchAutocompleteFragment.SearchAuto
 import com.example.myapplication.Fragments.SearchFragment.SearchFragment;
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
 import com.example.myapplication.Fragments.RadiusMarkerNotificationFragment.RadiusMarkerNotificationFragment;
-import com.example.myapplication.Handlers.BackgroundNotificationHandler.BackgroundNotificationHandler;
-import com.example.myapplication.Models.RadiusMarker.RadiusMarker;
+import com.example.myapplication.Models.BackgroundNotification.BackgroundNotification;
 import com.example.myapplication.Interfaces.CurrentLocationListener.CurrentLocationListener;
 import com.example.myapplication.Interfaces.FragmentAutocompleteListener.FragmentAutocompleteListener;
 import com.example.myapplication.Interfaces.FragmentSearchListener.FragmentSearchListener;
@@ -83,7 +81,6 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
         this.currentLocation = new CurrentLocation(getActivity(), this);
         this.mapPresenter = new MapPresenter(this);
         this.mapPresenter.makeApiRequestForGoogleMap(getChildFragmentManager(), supportMapFragment);
-        this.searchFragment = new SearchFragment(this, this);
         this.searchAutocompleteFragment = new SearchAutocompleteFragment(this);
 
         this.mapPresenter.makeApiRequestGetRadiusMarker();
@@ -94,7 +91,6 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
         configureSpinner();
         configureSupportMapFragment();
         configureSwitchButton();
-
     }
 
     @Override
@@ -168,7 +164,7 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
 
     @Override
     public void handleSearchButtonClick() {
-        FragmentTransition.TransitionActivityResult(getParentFragmentManager(), searchFragment,
+        FragmentTransition.TransitionActivityResult(getParentFragmentManager(), new SearchFragment(this, this),
                 this, R.anim.top_animation, R.anim.down_animation, R.id.mapFeedSearchPointer, SearchFragment.REQUEST_CODE_SEARCH, SearchFragment.TAG);
 
         FragmentTransition.Transition(getParentFragmentManager(), searchAutocompleteFragment,
@@ -388,7 +384,7 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
 
             if (voiceEnabled) {
                 setMapLocation(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)));
-                new BackgroundNotificationHandler(getContext(), category, description, lat, lng);
+                new BackgroundNotification(getContext(), category, description, lat, lng);
             }
         }
     };

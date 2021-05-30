@@ -1,8 +1,7 @@
-package com.example.myapplication.Handlers.BackgroundNotificationHandler;
+package com.example.myapplication.Models.BackgroundNotification;
 
 import android.content.Context;
 import android.location.Location;
-import android.util.Log;
 
 import com.example.myapplication.Interfaces.CurrentLocationListener.CurrentLocationListener;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
@@ -10,7 +9,7 @@ import com.example.myapplication.Services.FirebaseService.TTSService.TTSService;
 import com.example.myapplication.Utils.Distance.Distance;
 import com.google.android.gms.maps.model.LatLng;
 
-public class BackgroundNotificationHandler implements CurrentLocationListener {
+public class BackgroundNotification implements CurrentLocationListener {
 
     Context context;
     private String category;
@@ -20,7 +19,7 @@ public class BackgroundNotificationHandler implements CurrentLocationListener {
     private LatLng currentLatLng;
     private boolean runTTS;
  
-    public BackgroundNotificationHandler(Context context, String category, String description, String lat, String lng) {
+    public BackgroundNotification(Context context, String category, String description, String lat, String lng) {
         this.context = context;
         this.category = category;
         this.description = description;

@@ -114,6 +114,10 @@ public class SearchFragment extends Fragment implements CurrentLocationListener,
         }else{
             if ((Boolean) mapFeedSearch.getTag()) {
                 mapFeedSearch.setBackgroundResource(R.drawable.input_border_error_no_radius);
+
+                if(listener == null){
+                    Log.d("Print", "Listener is null ? " + listener);
+                }
                 listener.onTriggerResultsClear();
             }
         }
