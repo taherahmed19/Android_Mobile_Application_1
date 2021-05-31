@@ -9,7 +9,7 @@ public interface LoginContract {
 
     interface View{
         void handleSignInAttempt(boolean valid, User user);
-        void submitSignIn();
+        boolean submitSignIn();
         void startRegisterActivity(BroadcastReceiverToken token);
         void validateEmailFocusChanged();
         void validatePasswordFocusChange();

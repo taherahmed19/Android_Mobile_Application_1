@@ -103,8 +103,6 @@
 
                 </LinearLayout>
 
-
-
                 <Button
                     android:id="@+id/loginSubmitButton"
                     android:layout_width="match_parent"
