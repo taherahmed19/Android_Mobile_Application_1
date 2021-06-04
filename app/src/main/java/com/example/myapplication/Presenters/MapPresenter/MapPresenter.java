@@ -2,24 +2,17 @@ package com.example.myapplication.Presenters.MapPresenter;
 
 import android.content.SharedPreferences;
 import android.location.Location;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.myapplication.Fragments.BottomSheetFragment.BottomSheetFragment;
-import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
-import com.example.myapplication.Models.InteractiveMap.InteractiveMap;
-import com.example.myapplication.Models.RadiusMarker.RadiusMarker;
-import com.example.myapplication.R;
-import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
-import com.example.myapplication.Webservice.HttpGetRadiusMarker.HttpGetRadiusMarker;
-import com.example.myapplication.Webservice.HttpMap.HttpMap;
 import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
+import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
 import com.example.myapplication.Interfaces.MapContract.MapContract;
 import com.example.myapplication.Interfaces.MapListener.MapListener;
+import com.example.myapplication.Models.InteractiveMap.InteractiveMap;
 import com.example.myapplication.Models.Marker.Marker;
+import com.example.myapplication.Models.RadiusMarker.RadiusMarker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -79,7 +72,7 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
         interactiveMap.moveCameraToCurrentLocation();
     }
 
-    public void setGoogleMakerLocation(Location location){
+    public void setGoogleMarkerLocation(Location location){
         this.interactiveMap.setUserLocationGoogleMarker(location);
     }
 
@@ -140,5 +133,9 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
 
     public void makeApiRequestGetRadiusMarker(){
         this.interactiveMap.makeApiRequestGetRadiusMarker(this.view.getApplicationContext(), this);
+    }
+
+    public LatLng getLocation(){
+        return this.interactiveMap.getLocation();
     }
 }

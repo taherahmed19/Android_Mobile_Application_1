@@ -55,7 +55,7 @@
                 android:layout_margin="20sp">
 
                 <ImageButton
-                    android:id="@+id/newPost"
+                    android:id="@+id/newPostButton"
                     android:layout_width="45sp"
                     android:layout_height="45sp"
                     android:src="@drawable/ic_add"

@@ -22,12 +22,9 @@ public class SwiperAdapter extends FragmentStatePagerAdapter{
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = null;
-
         mapFragment = new MapFragment(viewPager);
-        fragment = mapFragment;
 
-        return fragment;
+        return mapFragment;
     }
 
 

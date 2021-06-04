@@ -9,7 +9,9 @@ import com.example.myapplication.R;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -22,33 +24,40 @@ public class LoginActivityTest {
     public ActivityTestRule<LoginActivity> loginActivityActivityTestRule = new ActivityTestRule<LoginActivity>(LoginActivity.class);
 
     @Test
-    public void testLoginWithEmptyEmail(){
-        Espresso.onView(withId(R.id.loginEmail)).perform(typeText(""));
-        Espresso.closeSoftKeyboard();
-        Espresso.onView(withId(R.id.loginSubmitButton)).perform(click());
-        Espresso.onView(withId(R.id.loginEmailErrorMessage)).check(matches(withText("Field must be inputted")));
+    public void testLoginWithEmptyEmailError(){
+        onView(withId(R.id.loginEmail)).perform(typeText(""));
+        closeSoftKeyboard();
+        onView(withId(R.id.loginSubmitButton)).perform(click());
+        onView(withId(R.id.loginEmailErrorMessage)).check(matches(withText("Field must be inputted")));
     }
 
     @Test
-    public void testLoginWithEmptyPassword(){
-        Espresso.onView(withId(R.id.loginPassword)).perform(typeText(""));
+    public void testLoginWithEmptyPasswordError(){
+        onView(withId(R.id.loginPassword)).perform(typeText(""));
         Espresso.closeSoftKeyboard();
-        Espresso.onView(withId(R.id.loginSubmitButton)).perform(click());
-        Espresso.onView(withId(R.id.loginEmailErrorMessage)).check(matches(withText("Field must be inputted")));
+        onView(withId(R.id.loginSubmitButton)).perform(click());
+        onView(withId(R.id.loginEmailErrorMessage)).check(matches(withText("Field must be inputted")));
     }
 
     @Test
-    public void testLoginWithInvalidEmail(){
-        Espresso.onView(withId(R.id.loginEmail)).perform(typeText("email"));
-        Espresso.closeSoftKeyboard();
-        Espresso.onView(withId(R.id.loginPassword)).perform(click());
-        Espresso.onView(withId(R.id.loginEmailErrorMessage)).check(matches(withText("Enter a valid email")));
+    public void testLoginWithInvalidEmailError(){
+        onView(withId(R.id.loginEmail)).perform(typeText("email"));
+        closeSoftKeyboard();
+        onView(withId(R.id.loginPassword)).perform(click());
+        onView(withId(R.id.loginEmailErrorMessage)).check(matches(withText("Enter a valid email")));
     }
 
     @Test
-    public void openRegisterActivity(){
-        Espresso.onView(withId(R.id.loginRegisterButton)).perform(click());
-        Espresso.onView(withId(R.id.registerActivity)).check(matches(isDisplayed()));
+    public void testOpeningRegisterActivity(){
+        onView(withId(R.id.loginRegisterButton)).perform(click());
+        onView(withId(R.id.registerActivity)).check(matches(isDisplayed()));
     }
 
+    @Test
+    public void testLoginWithValidCredentials(){
+        onView(withId(R.id.loginEmail)).perform(typeText("email@email.com"));
+        onView(withId(R.id.loginPassword)).perform(typeText("password"));
+        onView(withId(R.id.loginSubmitButton)).perform(click());
+        onView(withId(R.id.homepage)).check(matches(isDisplayed()));
+    }
 }

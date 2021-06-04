@@ -6,11 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.viewpager.widget.ViewPager;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,24 +14,28 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
+
 import com.example.myapplication.Adapters.LockableViewPager.LockableViewPager;
 import com.example.myapplication.Fragments.BottomSheetFragment.BottomSheetFragment;
 import com.example.myapplication.Fragments.FormFragment.FormFragment;
-import com.example.myapplication.Fragments.SearchAutocompleteFragment.SearchAutocompleteFragment;
-import com.example.myapplication.Fragments.SearchFragment.SearchFragment;
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
 import com.example.myapplication.Fragments.RadiusMarkerNotificationFragment.RadiusMarkerNotificationFragment;
-import com.example.myapplication.Models.BackgroundNotification.BackgroundNotification;
+import com.example.myapplication.Fragments.SearchAutocompleteFragment.SearchAutocompleteFragment;
+import com.example.myapplication.Fragments.SearchFragment.SearchFragment;
 import com.example.myapplication.Interfaces.CurrentLocationListener.CurrentLocationListener;
 import com.example.myapplication.Interfaces.FragmentAutocompleteListener.FragmentAutocompleteListener;
 import com.example.myapplication.Interfaces.FragmentSearchListener.FragmentSearchListener;
 import com.example.myapplication.Interfaces.MapContract.MapContract;
+import com.example.myapplication.Models.BackgroundNotification.BackgroundNotification;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.Models.LoadingSpinner.LoadingSpinner;
 import com.example.myapplication.Models.Marker.Marker;
+import com.example.myapplication.Models.Place.Place;
 import com.example.myapplication.Presenters.MapPresenter.MapPresenter;
 import com.example.myapplication.R;
-import com.example.myapplication.Models.Place.Place;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Utils.StringConstants.StringConstants;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,6 +43,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
@@ -61,7 +61,6 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
     SearchAutocompleteFragment searchAutocompleteFragment;
     SearchFragment searchFragment;
     BottomSheetFragment bottomSheetFragment;
-
 
     public MapFragment(LockableViewPager viewPager) {
         this.viewPager = viewPager;
@@ -267,7 +266,7 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
     }
 
     public void updateUserLocation(Location location) {
-        mapPresenter.setGoogleMakerLocation(location);
+        mapPresenter.setGoogleMarkerLocation(location);
     }
 
     public void setMapLocation(LatLng latLng){
@@ -318,7 +317,7 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
     }
 
     void configureNewPostButton(){
-        final ImageButton newPost = (ImageButton) getView().findViewById(R.id.newPost);
+        final ImageButton newPost = (ImageButton) getView().findViewById(R.id.newPostButton);
         newPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -347,6 +346,10 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
                 Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
             }
         });
+    }
+
+    public BroadcastReceiver getReceiver() {
+        return receiver;
     }
 
     BroadcastReceiver receiver = new BroadcastReceiver() {

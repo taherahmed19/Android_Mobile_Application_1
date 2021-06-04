@@ -10,12 +10,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.viewpager.widget.ViewPager;
-
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -34,6 +28,11 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.myapplication.Activities.LocationSelectorActivity.LocationSelectorActivity;
 import com.example.myapplication.Adapters.CustomSpinnerAdapter.CustomSpinnerAdapter;
@@ -199,7 +198,7 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
             if(getActivity() != null){
                 Tools.HideKeyboard(getActivity());
             }
-            submitForm();
+            //submitForm();
         }
     }
 
@@ -464,26 +463,28 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         return false;
     }
 
-    boolean imageSelected(RelativeLayout imageButton, String encodedImage){
-        if(encodedImage.length() > 0){
-            removeErrorDrawable(imageButton);
-            removeImageErrorMessage();
-        }else{
+    boolean imageSelected(ImageButton imageButton, String encodedImage){
+        if(encodedImage == null){
             addErrorDrawable(imageButton);
             showImageErrorMessage();
+            return false;
+        }else{
+            if(encodedImage.length() > 0){
+                removeErrorDrawable(imageButton);
+                removeImageErrorMessage();
+            }
+            return encodedImage.length() > 0;
         }
-
-        return encodedImage.length() > 0;
     }
 
-    boolean locationSelected(Button button, LatLng chosenLocation){
+    boolean locationSelected(LatLng chosenLocation){
         if(chosenLocation != null){
             removeLocationErrorMessage();
         }else{
             showLocationErrorMessage();
         }
 
-        return chosenLocation == null;
+        return chosenLocation != null;
     }
 
     void configureLocationButton(){
@@ -498,7 +499,7 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
     }
 
     void configureMedia(){
-        RelativeLayout imageButton = (RelativeLayout) this.getView().findViewById(R.id.imageButton);
+        ImageButton imageButton = (ImageButton) this.getView().findViewById(R.id.imageButton);
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -572,14 +573,13 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
     boolean validate(){
         EditText mapFeedDescription = (EditText) getView().findViewById(R.id.mapFeedDescription);
         Spinner spinner = getView().findViewById(R.id.formSpinner);
-        RelativeLayout imageButton = (RelativeLayout) getView().findViewById(R.id.imageButton);
-        Button locationButton = (Button) getView().findViewById(R.id.locationButton);
+        ImageButton imageButton = (ImageButton) getView().findViewById(R.id.imageButton);
 
         boolean validSpinnerItem = spinnerFocusChange(spinner);
         boolean validDescription = descriptionFocusChange(mapFeedDescription);
         boolean validImage = imageSelected(imageButton, formPresenter.getEncodedImage());
-        boolean validLocation = locationSelected(locationButton, formPresenter.getChosenLocation());
+        boolean validLocation = locationSelected(formPresenter.getChosenLocation());
 
-        return validSpinnerItem && validDescription && validImage;
+        return validSpinnerItem && validDescription && validImage && validLocation;
     }
 }

@@ -258,14 +258,14 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/imageButton"
                     android:layout_width="match_parent"
                     android:layout_height="200sp"
                     android:background="@drawable/input_border">
 
                     <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:id="@+id/imageButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:src="@drawable/ic_image"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
@@ -279,6 +279,7 @@
                         android:scaleType="fitXY">
 
                     </ImageView>
+
                 </RelativeLayout>
 
                 <TextView

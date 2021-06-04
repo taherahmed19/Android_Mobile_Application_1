@@ -4,11 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,8 +15,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
-import com.example.myapplication.Webservice.HttpMapFeedSearchAutocomplete.HttpMapFeedSearchAutocomplete;
 import com.example.myapplication.Interfaces.CurrentLocationListener.CurrentLocationListener;
 import com.example.myapplication.Interfaces.FragmentSearchListener.FragmentSearchListener;
 import com.example.myapplication.Interfaces.SearchContract.SearchContract;
@@ -109,8 +106,8 @@ public class SearchFragment extends Fragment implements CurrentLocationListener,
                 mapFeedSearch.setBackgroundResource(R.drawable.map_search_input_border);
             }
 
-            HttpMapFeedSearchAutocomplete httpMapFeedSearchAutocomplete = new HttpMapFeedSearchAutocomplete(getContext(), listener);
-            httpMapFeedSearchAutocomplete.execute(s.toString());
+//            HttpMapFeedSearchAutocomplete httpMapFeedSearchAutocomplete = new HttpMapFeedSearchAutocomplete(getContext(), listener);
+//            httpMapFeedSearchAutocomplete.execute(s.toString());
         }else{
             if ((Boolean) mapFeedSearch.getTag()) {
                 mapFeedSearch.setBackgroundResource(R.drawable.input_border_error_no_radius);

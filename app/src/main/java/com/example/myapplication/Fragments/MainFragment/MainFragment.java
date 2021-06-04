@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.Adapters.LockableViewPager.LockableViewPager;
 import com.example.myapplication.Adapters.SwiperAdapter.SwiperAdapter;
-import com.example.myapplication.Fragments.MapFragment.MapFragment;
 import com.example.myapplication.R;
 
 public class MainFragment extends Fragment {
@@ -27,6 +26,7 @@ public class MainFragment extends Fragment {
     {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+
     }
 
     @Override
@@ -45,6 +45,10 @@ public class MainFragment extends Fragment {
         viewPager.setAdapter(swiperAdapter);
         viewPager.setCurrentItem(0);
         viewPager.setSwipeable(false);
+    }
+
+    public Fragment getCurrentFragment(){
+        return swiperAdapter.getItem(0);
     }
 
 }

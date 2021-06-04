@@ -71,11 +71,12 @@
 
                     <Button
                         android:id="@+id/mapFeedCurrentLocation"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:hint="@string/map_feed_search_current_location"
                         android:paddingLeft="10sp"
+                        android:paddingRight="10sp"
                         android:inputType="textNoSuggestions"
                         android:background="@android:color/transparent"
                         android:gravity="center_vertical">
