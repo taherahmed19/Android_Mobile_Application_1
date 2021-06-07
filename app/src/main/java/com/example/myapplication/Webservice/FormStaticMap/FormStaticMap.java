@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 
-import com.example.myapplication.Utils.Bitmap.BitmapHandler;
 import com.example.myapplication.Utils.SSL.SSL;
 
 public class FormStaticMap extends AsyncTask<String , Void ,String> {
@@ -21,7 +20,7 @@ public class FormStaticMap extends AsyncTask<String , Void ,String> {
     protected String doInBackground(String... strings) {
         SSL.AllowSSLCertificates();
 
-        this.bitmap = BitmapHandler.getGoogleMapThumbnail(strings[0]);
+       // this.bitmap = BitmapHandler.getGoogleMapThumbnail(strings[0]);
 
         return "";
     }

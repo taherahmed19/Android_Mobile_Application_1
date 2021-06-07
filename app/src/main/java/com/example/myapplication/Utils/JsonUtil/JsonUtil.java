@@ -5,6 +5,8 @@ import org.json.JSONObject;
 
 public class JsonUtil {
 
+
+    //Break into the classes and delete class
     public static int getInt(JSONObject jsonObject, String property){
         int num = -1;
 

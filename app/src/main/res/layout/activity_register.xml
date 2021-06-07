@@ -58,7 +58,7 @@
                         android:id="@+id/registerFirstNameErrorMessage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right"
+                        android:layout_gravity="left"
                         android:text="Field must be inputted"
                         android:textColor="#ff0033"
                         android:visibility="invisible"></TextView>
@@ -89,7 +89,7 @@
                         android:id="@+id/registerLastNameErrorMessage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right"
+                        android:layout_gravity="left"
                         android:text="Field must be inputted"
                         android:textColor="#ff0033"
                         android:visibility="invisible"></TextView>
@@ -120,7 +120,7 @@
                         android:id="@+id/registerEmailErrorMessage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right"
+                        android:layout_gravity="left"
                         android:text="Field must be inputted"
                         android:textColor="#ff0033"
                         android:visibility="invisible"></TextView>
@@ -151,7 +151,7 @@
                         android:id="@+id/registerPasswordErrorMessage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right"
+                        android:layout_gravity="left"
                         android:text="Field must be inputted"
                         android:textColor="#ff0033"
                         android:visibility="invisible"></TextView>
@@ -183,7 +183,7 @@
                         android:id="@+id/registerConfirmPasswordErrorMessage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right"
+                        android:layout_gravity="left"
                         android:text="Field must be inputted"
                         android:textColor="#ff0033"
                         android:visibility="invisible"></TextView>
@@ -211,7 +211,7 @@
         android:id="@+id/registerReturnButton"
         android:layout_width="50sp"
         android:layout_height="50sp"
-        android:background="@drawable/register_return_button"
+        android:background="@color/transparent"
         android:layout_margin="15sp"
         android:src="@drawable/ic_register_return_button">
 

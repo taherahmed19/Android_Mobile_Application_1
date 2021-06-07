@@ -1,6 +1,5 @@
 package com.example.myapplication.Fragments.FormFragment;
 
-import androidx.test.espresso.action.ViewActions;
 import androidx.test.rule.ActivityTestRule;
 
 import com.example.myapplication.Activities.MainActivity.MainActivity;
@@ -16,7 +15,6 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
@@ -53,25 +51,6 @@ public class FormFragmentTest {
         onView(withId(R.id.mapFeedDescription)).perform(typeText("An environmental issue"));
         closeSoftKeyboard();
         onView(withId(R.id.mapFeedDescription)).check(matches(withText("An environmental issue")));
-    }
-
-    @Test
-    public void testOpeningCamera()  {
-//        onView(withId(R.id.imageButton)).perform(scrollTo(), click());
-//        onView(withText("Camera"))
-//                .inRoot(isDialog())
-//                .check(matches(isDisplayed()))
-//                .perform(click());
-    }
-
-    @Test
-    public void testOpeningGallery()  {
-//        onView(withId(R.id.imageButton)).perform(scrollTo(), click());
-//        onView(withText("Gallery"))
-//                .inRoot(isDialog())
-//                .check(matches(isDisplayed()))
-//                .perform(click());
-//        onView(isRoot()).perform(ViewActions.pressBack());
     }
 
     @Test

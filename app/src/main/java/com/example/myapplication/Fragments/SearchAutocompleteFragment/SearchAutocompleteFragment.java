@@ -3,9 +3,6 @@ package com.example.myapplication.Fragments.SearchAutocompleteFragment;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.myapplication.Interfaces.FragmentAutocompleteListener.FragmentAutocompleteListener;
 import com.example.myapplication.Interfaces.SearchAutocompleteContract.SearchAutocompleteContract;
+import com.example.myapplication.Models.Place.Place;
 import com.example.myapplication.Presenters.SearchAutocompletePresenter.SearchAutocompletePresenter;
 import com.example.myapplication.R;
-import com.example.myapplication.Models.Place.Place;
 import com.example.myapplication.Utils.Tools.Tools;
 
 public class SearchAutocompleteFragment extends Fragment implements SearchAutocompleteContract.View {
@@ -108,10 +107,10 @@ public class SearchAutocompleteFragment extends Fragment implements SearchAutoco
         int paddingLeftRight = 20;
         int paddingTopBottom = 10;
         searchAutocompleteItemContainer.setPadding(
-                Tools.pixelsToDP(paddingLeftRight, getResources()),
-                Tools.pixelsToDP(paddingTopBottom, getResources()),
-                Tools.pixelsToDP(paddingLeftRight, getResources()),
-                Tools.pixelsToDP(paddingTopBottom, getResources()));
+                Tools.pixelsToDP(paddingLeftRight, getResources().getDisplayMetrics().density),
+                Tools.pixelsToDP(paddingTopBottom, getResources().getDisplayMetrics().density),
+                Tools.pixelsToDP(paddingLeftRight, getResources().getDisplayMetrics().density),
+                Tools.pixelsToDP(paddingTopBottom, getResources().getDisplayMetrics().density));
 
         itemImageView(searchAutocompleteItemContainer);
         itemFullText(searchAutocompleteItemContainer, mainText, secondText);
@@ -140,9 +139,9 @@ public class SearchAutocompleteFragment extends Fragment implements SearchAutoco
 
         int paddingLeftRight = 15;
         textContainer.setPadding(
-                Tools.pixelsToDP(paddingLeftRight, getResources()),
+                Tools.pixelsToDP(paddingLeftRight, getResources().getDisplayMetrics().density),
                 0,
-                Tools.pixelsToDP(paddingLeftRight, getResources()),
+                Tools.pixelsToDP(paddingLeftRight, getResources().getDisplayMetrics().density),
                 0);
 
         TextView mainTextView = itemMainText(mainText);

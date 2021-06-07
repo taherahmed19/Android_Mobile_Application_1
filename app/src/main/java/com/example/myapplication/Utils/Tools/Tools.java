@@ -1,26 +1,6 @@
 package com.example.myapplication.Utils.Tools;
 
 import android.app.Activity;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.inputmethod.InputMethodManager;
-
-import androidx.fragment.app.Fragment;
-
-import com.example.myapplication.Models.SpinnerItem.SpinnerItem;
-import com.example.myapplication.R;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,9 +8,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 
 public class Tools {
@@ -58,8 +35,8 @@ public class Tools {
         return response.toString();
     }
 
-    public static int pixelsToDP(int sizeInDp, Resources resources){
-        float scale = resources.getDisplayMetrics().density;
+    public static int pixelsToDP(int sizeInDp, float density){
+        float scale = density;
         int dpAsPixels = (int) (sizeInDp*scale + 0.5f);
 
         return dpAsPixels;

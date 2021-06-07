@@ -4,6 +4,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.example.myapplication.Activities.MainActivity.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.Utils.Distance.Distance;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -14,6 +15,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class MapFragmentTest {
@@ -26,6 +28,18 @@ public class MapFragmentTest {
     @Before
     public void setUp() throws Exception {
         mapFragment = new MapFragment(null);
+    }
+
+    @Test
+    public void testDistanceBetweenTwoPoints() {
+        double startingLat = 51.5285582;
+        double startingLng = -0.2416809;
+        double destinationLat = 51.566988;
+        double destinationLng = -0.1449927;
+
+        double distance = Distance.CalculatePointsDistance(startingLat, startingLng, destinationLat, destinationLng);
+
+        assertEquals(7953.97, distance, 0.1);
     }
 
     @Test

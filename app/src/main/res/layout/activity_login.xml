@@ -63,7 +63,7 @@
                         android:layout_height="wrap_content"
                         android:text="Field must be inputted"
                         android:textColor="#ff0033"
-                        android:layout_gravity="right"
+                        android:layout_gravity="left"
                         android:visibility="invisible">
                     </TextView>
 
@@ -97,7 +97,7 @@
                         android:layout_height="wrap_content"
                         android:text="Field must be inputted"
                         android:textColor="#ff0033"
-                        android:layout_gravity="right"
+                        android:layout_gravity="left"
                         android:visibility="invisible">
                     </TextView>
 
