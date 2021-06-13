@@ -104,7 +104,9 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
-        currentLocation.startLocationUpdates();
+//        currentLocation.startLocationUpdates();
+        Log.d("Print", "Permissions received");
+
     }
 
     @Override
@@ -265,6 +267,7 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
         return this.loadingSpinner;
     }
 
+    @Override
     public void updateUserLocation(Location location) {
         mapPresenter.setGoogleMarkerLocation(location);
     }

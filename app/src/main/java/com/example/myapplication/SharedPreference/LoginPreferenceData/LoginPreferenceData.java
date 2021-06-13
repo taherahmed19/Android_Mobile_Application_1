@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 public class LoginPreferenceData {
 
@@ -14,7 +13,7 @@ public class LoginPreferenceData {
     private static final String PREF_USER_LAST_NAME = "user_last_name";
     private static final String PREF_USER_EMAIL = "user_email";
 
-    private static SharedPreferences getSharedPreferences(Context context) {
+    public static SharedPreferences getSharedPreferences(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
 

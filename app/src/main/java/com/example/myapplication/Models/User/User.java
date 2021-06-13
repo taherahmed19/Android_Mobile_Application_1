@@ -4,8 +4,9 @@ public class User {
 
     int id;
     String firstName;
-    String LastName;
-    String Email;
+    String lastName;
+    String email;
+    String token;
 
     public User() {
     }
@@ -19,19 +20,19 @@ public class User {
     }
 
     public String getLastName() {
-        return LastName;
+        return this.lastName;
     }
 
     public void setLastName(String lastName) {
-        LastName = lastName;
+        this.lastName = lastName;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 
     public int getId() {
@@ -40,5 +41,13 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

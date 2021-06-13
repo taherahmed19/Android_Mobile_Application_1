@@ -3,10 +3,11 @@ package com.example.myapplication.Webservice.HttpGetRadiusMarker;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.util.Log;
+import android.widget.Toast;
 
 import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
 import com.example.myapplication.R;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
 
@@ -61,6 +62,9 @@ public class HttpGetRadiusMarker extends AsyncTask<String , Void ,String> {
             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
 
+            String basicAuth = "Bearer " + JWTToken.getToken(context);
+            urlConnection.setRequestProperty("Authorization", basicAuth);
+
             response = handleResponse();
         }catch (Exception e){
             e.printStackTrace();
@@ -84,10 +88,10 @@ public class HttpGetRadiusMarker extends AsyncTask<String , Void ,String> {
     }
 
     @Override
-    protected void onPostExecute(String json) {
+    protected void onPostExecute(String response) {
         try {
-            if(json.length() > 0){
-                JSONObject jsonObject = new JSONObject(json);
+            if(response != null && response.length() > 0){
+                JSONObject jsonObject = new JSONObject(response);
                 double lat = jsonObject.getDouble("lat");
                 double lon = jsonObject.getDouble("lon");
                 double radius = jsonObject.getDouble("radius");
@@ -97,6 +101,7 @@ public class HttpGetRadiusMarker extends AsyncTask<String , Void ,String> {
                 customMarkerListener.renderRadiusMarker(lat, lon, radius, inApp, voice);
             }
         } catch (JSONException e) {
+            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
             e.printStackTrace();
         }
     }

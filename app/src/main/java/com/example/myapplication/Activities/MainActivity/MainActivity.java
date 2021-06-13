@@ -3,7 +3,6 @@ package com.example.myapplication.Activities.MainActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,11 +21,9 @@ import com.example.myapplication.Interfaces.MainContract.MainContract;
 import com.example.myapplication.Presenters.MainPresenter.MainPresenter;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
-import com.example.myapplication.Utils.Tools.Tools;
 import com.google.android.material.navigation.NavigationView;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MainContract.View {
 
@@ -45,7 +42,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         configureNavigation();
         resetSharedPreference();
         onNewIntent(getIntent());
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        finish();
+        startActivity(getIntent());
     }
 
     @Override
@@ -153,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getApplicationContext().getSharedPreferences("Map_Filter_Fragment", 0).edit().clear().apply();
         getApplicationContext().getSharedPreferences("Region_Geolocation_State", 0).edit().clear().apply();
         getApplicationContext().getSharedPreferences("Radius_Marker_Settings", 0).edit().clear().apply();
+        getApplicationContext().getSharedPreferences("Jwt_token", 0).edit().clear().apply();
     }
 
     @Override

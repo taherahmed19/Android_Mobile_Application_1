@@ -7,11 +7,13 @@ import android.text.TextUtils;
 
 import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
 import com.example.myapplication.JsonBuilders.MapJsonBuilder.MapJsonBuilder;
+import com.example.myapplication.Models.LoadingSpinner.LoadingSpinner;
+import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.R;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
-import com.example.myapplication.Models.Marker.Marker;
-import com.example.myapplication.Models.LoadingSpinner.LoadingSpinner;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -73,6 +75,9 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
 
+            String basicAuth = "Bearer " + JWTToken.getToken(context);
+            urlConnection.setRequestProperty("Authorization", basicAuth);
+
             response = handleResponse();
         }catch (Exception e){
             e.printStackTrace();
@@ -96,7 +101,7 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
     }
 
     @Override
-    protected void onPostExecute(String str) {
+    protected void onPostExecute(String response) {
         this.loadingSpinner.hide();
         ArrayList<Marker> markers = this.mapJsonBuilder.getMarkers();
         if(this.markers != null){

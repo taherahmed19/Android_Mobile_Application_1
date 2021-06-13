@@ -4,10 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
 
@@ -64,10 +64,12 @@ public class HttpFirebaseToken extends AsyncTask<String , Void ,String> {
             urlConnection.setRequestMethod("POST");
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
 
+            String basicAuth = "Bearer " + JWTToken.getToken(context);
+            urlConnection.setRequestProperty("Authorization", basicAuth);
+
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("userId", this.userId);
             jsonObject.put("token", this.firebaseToken);
-
 
             BufferedOutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
@@ -103,10 +105,14 @@ public class HttpFirebaseToken extends AsyncTask<String , Void ,String> {
     @SuppressLint("ShowToast")
     @Override
     protected void onPostExecute(String response) {
-        boolean valid = Boolean.parseBoolean(response);
+        if(response != null && response.length() > 0){
+            boolean valid = Boolean.parseBoolean(response);
 
-        if(!valid){
-            Toast.makeText(this.context, "Unable to connect to application. Retry later.", Toast.LENGTH_LONG);
+            if(!valid){
+                Toast.makeText(this.context, "Unable to connect to application. Retry later.", Toast.LENGTH_LONG);
+            }
+        }else{
+            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
         }
     }
 

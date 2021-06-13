@@ -3,11 +3,11 @@ package com.example.myapplication.Webservice.HttpDeleteRadiusMarker;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.util.Log;
+import android.widget.Toast;
 
-import com.example.myapplication.Models.RadiusMarker.RadiusMarker;
 import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
 import com.example.myapplication.R;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
 
@@ -59,6 +59,9 @@ public class HttpDeleteRadiusMarker extends AsyncTask<String , Void ,String> {
             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
 
+            String basicAuth = "Bearer " + JWTToken.getToken(context);
+            urlConnection.setRequestProperty("Authorization", basicAuth);
+
             response = handleResponse();
         }catch (Exception e){
             e.printStackTrace();
@@ -82,9 +85,13 @@ public class HttpDeleteRadiusMarker extends AsyncTask<String , Void ,String> {
     }
 
     @Override
-    protected void onPostExecute(String str) {
-        boolean valid = Boolean.parseBoolean(str);
-        deleteRadiusMarkerListener.handleRadiusMarkerRemoval(valid);
+    protected void onPostExecute(String response) {
+        if (response != null && response.length() > 0) {
+            boolean valid = Boolean.parseBoolean(response);
+            deleteRadiusMarkerListener.handleRadiusMarkerRemoval(valid);
+        } else {
+            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
+        }
     }
 
     String createApiQuery(){

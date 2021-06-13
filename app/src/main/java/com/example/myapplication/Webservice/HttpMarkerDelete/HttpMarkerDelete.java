@@ -3,10 +3,11 @@ package com.example.myapplication.Webservice.HttpMarkerDelete;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.util.Log;
+import android.widget.Toast;
 
 import com.example.myapplication.Interfaces.MarkerListener.MarkerListener;
 import com.example.myapplication.R;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
 
@@ -58,6 +59,9 @@ public class HttpMarkerDelete extends AsyncTask<Void , Void ,String> {
             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
 
+            String basicAuth = "Bearer " + JWTToken.getToken(context);
+            urlConnection.setRequestProperty("Authorization", basicAuth);
+
             response = handleResponse();
         }catch (Exception e){
             e.printStackTrace();
@@ -81,9 +85,13 @@ public class HttpMarkerDelete extends AsyncTask<Void , Void ,String> {
     }
 
     @Override
-    protected void onPostExecute(String str) {
-        boolean postDeleted = Boolean.parseBoolean(str);
-        markerListener.deleteUserPost(postDeleted);
+    protected void onPostExecute(String response) {
+        if(response != null && response.length() > 0){
+            boolean postDeleted = Boolean.parseBoolean(response);
+            markerListener.deleteUserPost(postDeleted);
+        }else{
+            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
+        }
     }
 
     String createApiQuery(){

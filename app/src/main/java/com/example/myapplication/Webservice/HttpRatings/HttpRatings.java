@@ -3,9 +3,11 @@ package com.example.myapplication.Webservice.HttpRatings;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.example.myapplication.Interfaces.RatingsListener.RatingsListener;
 import com.example.myapplication.R;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
 
@@ -58,6 +60,9 @@ public class HttpRatings extends AsyncTask<String , Void ,String> {
             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
 
+            String basicAuth = "Bearer " + JWTToken.getToken(context);
+            urlConnection.setRequestProperty("Authorization", basicAuth);
+
             response = handleResponse();
         }catch (Exception e){
             e.printStackTrace();
@@ -81,9 +86,14 @@ public class HttpRatings extends AsyncTask<String , Void ,String> {
     }
 
     @Override
-    protected void onPostExecute(String str) {
-        boolean ratingUpdated = Boolean.parseBoolean(str);
-        ratingsListener.updateModalRating(ratingUpdated);
+    protected void onPostExecute(String response) {
+        if(response != null && response.length() > 0){
+            boolean ratingUpdated = Boolean.parseBoolean(response);
+            ratingsListener.updateModalRating(ratingUpdated);
+        }else{
+            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
+        }
+
     }
 
     String createApiQuery(){

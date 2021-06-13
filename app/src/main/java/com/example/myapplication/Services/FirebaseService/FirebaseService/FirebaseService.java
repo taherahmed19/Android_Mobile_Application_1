@@ -34,6 +34,7 @@ public class FirebaseService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         passTokenToActivity(token);
+        Log.d("Print", "New token " + token);
     }
 
     @Override
@@ -58,7 +59,6 @@ public class FirebaseService extends FirebaseMessagingService {
         lastName = remoteMessage.getData().get("lastName");
         rating = remoteMessage.getData().get("rating");
 
-        Log.d("Print", "Pass message to activity");
 
         if(!App.APP_VISIBLE){
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
@@ -81,7 +81,6 @@ public class FirebaseService extends FirebaseMessagingService {
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
             notificationManager.notify(1, notification);
         }else{
-            Log.d("Print", "Send intent to map fragment");
             Intent intent = new Intent(MapFragment.class.toString());
             addIntentExtras(intent, 1, isVoiceNotificationEnabled());
             sendBroadcast(intent);

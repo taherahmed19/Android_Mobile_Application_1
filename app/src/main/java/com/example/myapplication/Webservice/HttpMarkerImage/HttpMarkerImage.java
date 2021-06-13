@@ -3,6 +3,7 @@ package com.example.myapplication.Webservice.HttpMarkerImage;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.example.myapplication.Interfaces.MarkerImageListener.MarkerImageListener;
 import com.example.myapplication.R;
@@ -71,7 +72,11 @@ public class HttpMarkerImage extends AsyncTask<String , Void ,String> {
 
     @Override
     protected void onPostExecute(String response) {
-        markerImageListener.handleMarkerImage(response);
+        if (response != null && response.length() > 0) {
+            markerImageListener.handleMarkerImage(response);
+        } else {
+            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
+        }
     }
 
     String createApiQuery(){

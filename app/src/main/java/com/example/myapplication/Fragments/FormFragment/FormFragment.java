@@ -198,7 +198,7 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
             if(getActivity() != null){
                 Tools.HideKeyboard(getActivity());
             }
-            //submitForm();
+            submitForm();
         }
     }
 

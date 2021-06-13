@@ -4,9 +4,11 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.myapplication.Interfaces.FeedSubmitListener.FeedSubmitListener;
 import com.example.myapplication.R;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
 import com.google.android.gms.maps.model.LatLng;
@@ -76,6 +78,9 @@ public class HttpMarker extends AsyncTask<String , Void ,String> {
             urlConnection.setRequestMethod("POST");
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
 
+            String basicAuth = "Bearer " + JWTToken.getToken(context);
+            urlConnection.setRequestProperty("Authorization", basicAuth);
+
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("userId", this.userId);
             jsonObject.put("category", this.category);
@@ -83,6 +88,8 @@ public class HttpMarker extends AsyncTask<String , Void ,String> {
             jsonObject.put("lat", String.valueOf(this.chosenLocation.latitude));
             jsonObject.put("lng", String.valueOf(this.chosenLocation.longitude));
             jsonObject.put("encodedString", this.encodedImage);
+
+            Log.d("Print", "User id " + userId);
 
             BufferedOutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
@@ -105,8 +112,12 @@ public class HttpMarker extends AsyncTask<String , Void ,String> {
 
     @Override
     protected void onPostExecute(String response) {
-        boolean valid = Boolean.parseBoolean(response);
-        feedSubmitListener.handleSubmitStatusMessage(valid);
+        if(response != null && response.length() > 0){
+            boolean valid = Boolean.parseBoolean(response);
+            feedSubmitListener.handleSubmitStatusMessage(valid);
+        }else{
+            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
+        }
     }
 
     String createApiQuery(){

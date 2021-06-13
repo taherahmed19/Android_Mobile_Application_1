@@ -4,20 +4,25 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.example.myapplication.Interfaces.RegisterListener.RegisterListener;
 import com.example.myapplication.Models.RegisterUser.RegisterUser;
 import com.example.myapplication.Models.User.User;
 import com.example.myapplication.R;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.MessageFormat;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -64,13 +69,25 @@ public class HttpRegisterUser extends AsyncTask<String , Void ,String> {
         try {
             url = new URL(apiRequest);
             urlConnection = (HttpsURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("POST");
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
 
-            responseCode = urlConnection.getResponseCode();
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("firstName", this.registerUser.getFirstName());
+            jsonObject.put("lastName", this.registerUser.getLastName());
+            jsonObject.put("email", this.registerUser.getEmail());
+            jsonObject.put("password", this.registerUser.getPassword());
 
-            if(responseCode == HttpURLConnection.HTTP_OK){
-                response =  Tools.readStream(urlConnection.getInputStream());
-            }
+            BufferedOutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+            writer.write(jsonObject.toString());
+            writer.flush();
+            writer.close();
+            out.close();
+
+            urlConnection.connect();
+            response = handleResponse();
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -78,10 +95,28 @@ public class HttpRegisterUser extends AsyncTask<String , Void ,String> {
         return response;
     }
 
+    String handleResponse(){
+        try {
+            responseCode = urlConnection.getResponseCode();
+
+            if(responseCode == HttpURLConnection.HTTP_OK){
+                return Tools.readStream(urlConnection.getInputStream());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     @Override
-    protected void onPostExecute(String responseString) {
-        handleJSONResponse(responseString);
-        registerListener.handleRegistrationAttempt(validCredentials, user);
+    protected void onPostExecute(String response) {
+        if(response != null && response.length() > 0){
+            handleJSONResponse(response);
+            registerListener.handleRegistrationAttempt(validCredentials, user);
+        }else{
+            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
+        }
     }
 
     void handleJSONResponse(String jsonString){
@@ -92,15 +127,17 @@ public class HttpRegisterUser extends AsyncTask<String , Void ,String> {
             user.setFirstName(jsonObject.getString("userFirstName"));
             user.setLastName(jsonObject.getString("userLastName"));
             user.setEmail(jsonObject.getString("userEmail"));
+            user.setToken(jsonObject.getString("token"));
 
+            JWTToken.saveToken(context, user.getToken());
+
+            Log.d("Print", "Token = " + user.getToken());
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
     String createApiQuery(){
-        return MessageFormat.format(this.context.getResources().getString(R.string.webservice_register_endpoint),
-                this.registerUser.getFirstName(), this.registerUser.getLastName(),
-                this.registerUser.getEmail(), this.registerUser.getPassword());
+        return this.context.getResources().getString(R.string.webservice_register_endpoint);
     }
 }
