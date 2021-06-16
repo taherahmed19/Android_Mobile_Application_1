@@ -6,6 +6,7 @@ import android.content.Context;
 public interface MarkerModalContract {
 
     interface View{
+        void handleTokenExpiration();
        void handleCloseButtonClick();
        void handleImageDialogClose(Dialog dialog);
        void handleImageClick(Dialog dialog);

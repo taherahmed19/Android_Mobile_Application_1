@@ -36,6 +36,7 @@ import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Models.Place.Place;
 import com.example.myapplication.Presenters.MapPresenter.MapPresenter;
 import com.example.myapplication.R;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Utils.StringConstants.StringConstants;
 import com.google.android.gms.maps.GoogleMap;
@@ -270,6 +271,11 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
     @Override
     public void updateUserLocation(Location location) {
         mapPresenter.setGoogleMarkerLocation(location);
+    }
+
+    @Override
+    public void handleTokenExpiration(){
+        JWTToken.removeTokenSharedPref(this.getActivity());
     }
 
     public void setMapLocation(LatLng latLng){

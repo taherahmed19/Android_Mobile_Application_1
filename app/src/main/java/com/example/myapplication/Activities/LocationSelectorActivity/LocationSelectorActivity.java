@@ -1,8 +1,5 @@
 package com.example.myapplication.Activities.LocationSelectorActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,12 +7,16 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.Interfaces.CurrentLocationListener.CurrentLocationListener;
 import com.example.myapplication.Interfaces.LocationSelectorContract.LocationSelectorContract;
 import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.Presenters.LocationSelectorPresenter.LocationSelectorPresenter;
 import com.example.myapplication.R;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
 import com.example.myapplication.Utils.StringConstants.StringConstants;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -43,6 +44,11 @@ public class LocationSelectorActivity extends AppCompatActivity implements Curre
         currentLocation = new CurrentLocation(this,  this);
         locationSelectorPresenter = new LocationSelectorPresenter(this);
         locationSelectorPresenter.requestMap(getSupportFragmentManager(), supportMapFragment);
+    }
+
+    @Override
+    public void handleTokenExpiration(){
+        JWTToken.removeTokenSharedPref(this);
     }
 
     @Override
@@ -136,11 +142,15 @@ public class LocationSelectorActivity extends AppCompatActivity implements Curre
 
     @Override
     public void handleOnSubmitButtonClick() {
-        Intent output = new Intent();
-        output.putExtra(StringConstants.INTENT_LOCATION_SELECTOR_LAT, locationSelectorPresenter.getSelectedLocation().latitude);
-        output.putExtra(StringConstants.INTENT_LOCATION_SELECTOR_LNG, locationSelectorPresenter.getSelectedLocation().longitude);
-        setResult(RESULT_OK, output);
-        finish();
+        if(locationSelectorPresenter.getSelectedLocation() != null){
+            Intent output = new Intent();
+            output.putExtra(StringConstants.INTENT_LOCATION_SELECTOR_LAT, locationSelectorPresenter.getSelectedLocation().latitude);
+            output.putExtra(StringConstants.INTENT_LOCATION_SELECTOR_LNG, locationSelectorPresenter.getSelectedLocation().longitude);
+            setResult(RESULT_OK, output);
+            finish();
+        }else{
+            Toast.makeText(getApplicationContext(), "No location selected.", Toast.LENGTH_LONG);
+        }
     }
 
     @Override

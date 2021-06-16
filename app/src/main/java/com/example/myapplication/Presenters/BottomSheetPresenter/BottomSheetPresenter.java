@@ -1,20 +1,14 @@
 package com.example.myapplication.Presenters.BottomSheetPresenter;
 
-import android.util.Log;
 import android.widget.SeekBar;
 
-import androidx.fragment.app.FragmentManager;
-
-import com.example.myapplication.Models.BottomSheet.BottomSheet;
-import com.example.myapplication.Models.RadiusMarker.RadiusMarker;
 import com.example.myapplication.Interfaces.BottomSheetContract.BottomSheetContract;
 import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
 import com.example.myapplication.Interfaces.SetRadiusMarkerListener.SetRadiusMarkerListener;
-import com.example.myapplication.R;
+import com.example.myapplication.Models.BottomSheet.BottomSheet;
+import com.example.myapplication.Models.RadiusMarker.RadiusMarker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-
-import java.util.Objects;
 
 /**
  * Responsible for handling actions from the View and updating the UI as required.
@@ -52,7 +46,8 @@ public class BottomSheetPresenter implements BottomSheetContract.Presenter, SetR
     }
 
     public void makeApiRequestWriteRadiusMarker(){
-        this.radiusMarker.makeApiRequestWriteRadiusMarker(this.view.getApplicationContext(), this, bottomSheet.isInAppButtonClicked(), bottomSheet.isVoiceButtonClicked());
+        this.radiusMarker.makeApiRequestWriteRadiusMarker(this.view.getApplicationContext(), this,
+                bottomSheet.isInAppButtonClicked(), bottomSheet.isVoiceButtonClicked());
     }
 
     public void makeApiRequestDeleteRadiusMarker(){

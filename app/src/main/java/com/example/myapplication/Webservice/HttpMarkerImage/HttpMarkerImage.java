@@ -6,7 +6,9 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.example.myapplication.Interfaces.MarkerImageListener.MarkerImageListener;
+import com.example.myapplication.Interfaces.TokenExpirationListener.TokenExpirationListener;
 import com.example.myapplication.R;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
 
@@ -24,12 +26,15 @@ public class HttpMarkerImage extends AsyncTask<String , Void ,String> {
 
     Context context;
     int markerId;
-    MarkerImageListener markerImageListener;
 
-    public HttpMarkerImage(Context context, int markerId, MarkerImageListener markerImageListener) {
+    MarkerImageListener markerImageListener;
+    TokenExpirationListener tokenExpirationListener;
+
+    public HttpMarkerImage(Context context, int markerId, MarkerImageListener markerImageListener, TokenExpirationListener tokenExpirationListener) {
         this.context = context;
         this.markerId = markerId;
         this.markerImageListener = markerImageListener;
+        this.tokenExpirationListener = tokenExpirationListener;
     }
 
     @Override
@@ -58,11 +63,11 @@ public class HttpMarkerImage extends AsyncTask<String , Void ,String> {
             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
 
+            String basicAuth = "Bearer " + JWTToken.getToken(context);
+            urlConnection.setRequestProperty("Authorization", basicAuth);
+
             urlConnection.connect();
-            responseCode = urlConnection.getResponseCode();
-            if(responseCode == HttpURLConnection.HTTP_OK){
-                response =  Tools.readStream(urlConnection.getInputStream());
-            }
+            response = handleResponse();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -70,10 +75,30 @@ public class HttpMarkerImage extends AsyncTask<String , Void ,String> {
         return response;
     }
 
+    String handleResponse() {
+        try {
+            responseCode = urlConnection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                return Tools.readStream(urlConnection.getInputStream());
+            } else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return String.valueOf(responseCode);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     @Override
     protected void onPostExecute(String response) {
         if (response != null && response.length() > 0) {
-            markerImageListener.handleMarkerImage(response);
+            if (response.equals("401")) {
+                tokenExpirationListener.handleTokenExpiration();
+            } else {
+                markerImageListener.handleMarkerImage(response);
+            }
         } else {
             Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
         }

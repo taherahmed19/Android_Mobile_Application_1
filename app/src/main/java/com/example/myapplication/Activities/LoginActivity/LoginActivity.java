@@ -34,6 +34,7 @@ import java.util.Objects;
 public class LoginActivity extends AppCompatActivity implements LoginContract.View {
 
     LoginPresenter loginPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +115,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     public boolean submitSignIn(){
         if(validateAllFields()){
             loginPresenter.hashPassword();
-
             return true;
         }
 

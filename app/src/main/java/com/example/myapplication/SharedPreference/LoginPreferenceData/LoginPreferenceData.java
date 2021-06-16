@@ -26,7 +26,7 @@ public class LoginPreferenceData {
     }
 
     public static void clear(Context context){
-        getSharedPreferences(context).edit().remove(PREF_USER_LOGGED_IN).apply();
+        LoginPreferenceData.setUserLoggedIn(context, false);
         getSharedPreferences(context).edit().remove(PREF_USER_ID).apply();
         getSharedPreferences(context).edit().remove(PREF_USER_FIRST_NAME).apply();
         getSharedPreferences(context).edit().remove(PREF_USER_LAST_NAME).apply();

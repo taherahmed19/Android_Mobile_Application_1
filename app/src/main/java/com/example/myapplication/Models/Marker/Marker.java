@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.myapplication.Interfaces.MarkerImageListener.MarkerImageListener;
 import com.example.myapplication.Interfaces.MarkerListener.MarkerListener;
+import com.example.myapplication.Interfaces.TokenExpirationListener.TokenExpirationListener;
 import com.example.myapplication.Webservice.HttpMarkerDelete.HttpMarkerDelete;
 import com.example.myapplication.Webservice.HttpMarkerImage.HttpMarkerImage;
 
@@ -20,7 +21,8 @@ public class Marker {
     private int id;
     private int rating;
 
-    public Marker(int userId, String firstName, String lastName, String category, String description, String lat, String lng, String encodedImage, int id, int rating) {
+        public Marker(int userId, String firstName, String lastName, String category, String description,
+                  String lat, String lng, String encodedImage, int id, int rating) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.category = category;
@@ -33,13 +35,13 @@ public class Marker {
         this.rating = rating;
     }
 
-    public void makeApiCallDeleteMarker(Context context, MarkerListener markerListener){
-        HttpMarkerDelete httpMarkerDelete = new HttpMarkerDelete(context, id, markerListener);
+    public void makeApiCallDeleteMarker(Context context, MarkerListener markerListener, TokenExpirationListener tokenExpirationListener){
+        HttpMarkerDelete httpMarkerDelete = new HttpMarkerDelete(context, id, markerListener, tokenExpirationListener);
         httpMarkerDelete.execute();
     }
 
-    public void makeApiCallCreateGetMarkerImage(Context context, MarkerImageListener markerImageListener){
-        HttpMarkerImage httpMarkerImage = new HttpMarkerImage(context, id, markerImageListener);
+    public void makeApiCallCreateGetMarkerImage(Context context, MarkerImageListener markerImageListener, TokenExpirationListener tokenExpirationListener){
+        HttpMarkerImage httpMarkerImage = new HttpMarkerImage(context, id, markerImageListener, tokenExpirationListener);
         httpMarkerImage.execute();
     }
 

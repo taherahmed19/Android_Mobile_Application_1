@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.example.myapplication.Interfaces.RatingsListener.RatingsListener;
+import com.example.myapplication.Interfaces.TokenExpirationListener.TokenExpirationListener;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
 import com.example.myapplication.Utils.SSL.SSL;
@@ -25,13 +26,16 @@ public class HttpRatings extends AsyncTask<String , Void ,String> {
     Context context;
     String markerId;
     boolean isUpVote;
-    RatingsListener ratingsListener;
 
-    public HttpRatings(Context context, int markerId, boolean isUpVote, RatingsListener ratingsListener){
+    RatingsListener ratingsListener;
+    TokenExpirationListener tokenExpirationListener;
+
+    public HttpRatings(Context context, int markerId, boolean isUpVote, RatingsListener ratingsListener, TokenExpirationListener tokenExpirationListener){
         this.context = context;
         this.markerId = String.valueOf(markerId);
         this.isUpVote = isUpVote;
         this.ratingsListener = ratingsListener;
+        this.tokenExpirationListener = tokenExpirationListener;
     }
 
     @Override
@@ -77,7 +81,10 @@ public class HttpRatings extends AsyncTask<String , Void ,String> {
 
             if(responseCode == HttpURLConnection.HTTP_OK){
                 return Tools.readStream(urlConnection.getInputStream());
+            }else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return String.valueOf(responseCode);
             }
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -88,8 +95,12 @@ public class HttpRatings extends AsyncTask<String , Void ,String> {
     @Override
     protected void onPostExecute(String response) {
         if(response != null && response.length() > 0){
-            boolean ratingUpdated = Boolean.parseBoolean(response);
-            ratingsListener.updateModalRating(ratingUpdated);
+            if (response.equals("401")) {
+                tokenExpirationListener.handleTokenExpiration();
+            } else {
+                boolean ratingUpdated = Boolean.parseBoolean(response);
+                ratingsListener.updateModalRating(ratingUpdated);
+            }
         }else{
             Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
         }

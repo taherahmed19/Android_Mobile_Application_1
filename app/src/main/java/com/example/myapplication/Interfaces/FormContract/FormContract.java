@@ -2,12 +2,12 @@ package com.example.myapplication.Interfaces.FormContract;
 
 import android.content.Context;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.EditText;
 
 public interface FormContract {
 
     interface View{
+        void handleTokenExpiration();
         void openGallery();
         void openCamera();
         void handleCameraDialog();

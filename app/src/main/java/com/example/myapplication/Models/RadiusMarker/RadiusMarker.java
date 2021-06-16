@@ -3,35 +3,19 @@ package com.example.myapplication.Models.RadiusMarker;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.location.Location;
-import android.util.Log;
-import android.widget.SeekBar;
-import android.widget.Toast;
 
-import androidx.fragment.app.FragmentManager;
-
-import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
 import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
 import com.example.myapplication.Interfaces.SetRadiusMarkerListener.SetRadiusMarkerListener;
-import com.example.myapplication.R;
+import com.example.myapplication.Interfaces.TokenExpirationListener.TokenExpirationListener;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
-import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Webservice.HttpDeleteRadiusMarker.HttpDeleteRadiusMarker;
-import com.example.myapplication.Webservice.HttpGetRadiusMarker.HttpGetRadiusMarker;
 import com.example.myapplication.Webservice.HttpWriteRadiusMarker.HttpWriteRadiusMarker;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.VisibleRegion;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class RadiusMarker {
@@ -45,13 +29,16 @@ public class RadiusMarker {
     private double radius;
     private double originalRadius;
 
-    public RadiusMarker(GoogleMap mMap, LatLng latLng, double radius) {
+    TokenExpirationListener tokenExpirationListener;
+
+    public RadiusMarker(GoogleMap mMap, LatLng latLng, double radius, TokenExpirationListener tokenExpirationListener) {
         this.mMap = mMap;
         this.latLng = latLng;
         this.radius = radius;
         this.originalRadius = radius;
         this.setInitialRadius(radius);
         this.createStartingMarker();
+        this.tokenExpirationListener = tokenExpirationListener;
     }
 
     public void setInitialRadius(double radius){
@@ -76,7 +63,8 @@ public class RadiusMarker {
         }
     }
 
-    public void makeApiRequestWriteRadiusMarker(Context context, SetRadiusMarkerListener setRadiusMarkerListener, boolean inApp, boolean voice){
+    public void makeApiRequestWriteRadiusMarker(Context context, SetRadiusMarkerListener setRadiusMarkerListener,
+                                                boolean inApp, boolean voice){
         int inAppClicked = 0;
         int voiceClicked = 0;
 
@@ -94,13 +82,13 @@ public class RadiusMarker {
                 String.valueOf(this.radiusMarker.getRadius()),
                 inAppClicked,
                 voiceClicked,
-                setRadiusMarkerListener);
+                setRadiusMarkerListener, tokenExpirationListener);
         httpWriteRadiusMarker.execute();
     }
 
     public void makeApiRequestDeleteRadiusMarker(Context context, DeleteRadiusMarkerListener deleteRadiusMarkerListener){
         HttpDeleteRadiusMarker httpDeleteRadiusMarker = new HttpDeleteRadiusMarker(context,
-                LoginPreferenceData.getUserId(context), deleteRadiusMarkerListener);
+                LoginPreferenceData.getUserId(context), deleteRadiusMarkerListener, tokenExpirationListener);
         httpDeleteRadiusMarker.execute();
     }
 

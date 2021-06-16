@@ -9,13 +9,13 @@ import android.widget.EditText;
 
 import com.example.myapplication.Interfaces.FeedSubmitListener.FeedSubmitListener;
 import com.example.myapplication.Interfaces.FormContract.FormContract;
-import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
+import com.example.myapplication.Interfaces.TokenExpirationListener.TokenExpirationListener;
 import com.example.myapplication.Webservice.HttpMarker.HttpMarker;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.ByteArrayOutputStream;
 
-public class FormPresenter implements FormContract.Presenter {
+public class FormPresenter implements FormContract.Presenter, TokenExpirationListener {
 
     FormContract.View view;
     LatLng chosenLocation;
@@ -24,6 +24,11 @@ public class FormPresenter implements FormContract.Presenter {
 
     public FormPresenter(FormContract.View view) {
         this.view = view;
+    }
+
+    @Override
+    public void handleTokenExpiration() {
+        this.view.handleTokenExpiration();
     }
 
     public void handleLocationButtonClick(){
@@ -58,7 +63,8 @@ public class FormPresenter implements FormContract.Presenter {
     }
 
     public void makeApiCall(int userID, String category, String description, FeedSubmitListener feedSubmitListener){
-        HttpMarker httpMarker = new HttpMarker(view.getApplicationContext(), userID, category, description, chosenLocation ,feedSubmitListener, this.encodedImage);
+        HttpMarker httpMarker = new HttpMarker(view.getApplicationContext(), userID, category, description,
+                chosenLocation ,feedSubmitListener, this.encodedImage, this );
         httpMarker.execute();
     }
 

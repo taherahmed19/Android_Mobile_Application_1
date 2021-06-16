@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.LatLng;
 public interface MapContract {
 
     interface View{
+        void handleTokenExpiration();
         void handleRadiusMarkerRemoval(Boolean valid);
         void openBottomSheetWithState(GoogleMap mMap, LatLng latLng);
         void createBottomSheetFragment(GoogleMap mMap, LatLng latLng);

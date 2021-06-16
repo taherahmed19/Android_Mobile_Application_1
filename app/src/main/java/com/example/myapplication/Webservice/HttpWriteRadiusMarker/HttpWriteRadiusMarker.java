@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.example.myapplication.Interfaces.SetRadiusMarkerListener.SetRadiusMarkerListener;
+import com.example.myapplication.Interfaces.TokenExpirationListener.TokenExpirationListener;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
 import com.example.myapplication.Utils.SSL.SSL;
@@ -29,6 +30,7 @@ public class HttpWriteRadiusMarker extends AsyncTask<String , Void ,String> {
     Context context;
 
     SetRadiusMarkerListener setRadiusMarkerListener;
+    TokenExpirationListener tokenExpirationListener;
 
     int userId;
     int isMonitoring;
@@ -39,7 +41,8 @@ public class HttpWriteRadiusMarker extends AsyncTask<String , Void ,String> {
     int voice;
 
     public HttpWriteRadiusMarker(Context context, int userId, int isMonitoring, String lat, String lon, String radius,
-                                 int inApp, int voice, SetRadiusMarkerListener setRadiusMarkerListener) {
+                                 int inApp, int voice, SetRadiusMarkerListener setRadiusMarkerListener,
+                                 TokenExpirationListener tokenExpirationListener) {
         this.context = context;
         this.userId = userId;
         this.isMonitoring = isMonitoring;
@@ -49,6 +52,7 @@ public class HttpWriteRadiusMarker extends AsyncTask<String , Void ,String> {
         this.inApp = inApp;
         this.voice = voice;
         this.setRadiusMarkerListener = setRadiusMarkerListener;
+        this.tokenExpirationListener = tokenExpirationListener;
     }
 
     @Override
@@ -114,6 +118,8 @@ public class HttpWriteRadiusMarker extends AsyncTask<String , Void ,String> {
 
             if(responseCode == HttpURLConnection.HTTP_OK){
                 return Tools.readStream(urlConnection.getInputStream());
+            }else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return String.valueOf(responseCode);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -125,8 +131,12 @@ public class HttpWriteRadiusMarker extends AsyncTask<String , Void ,String> {
     @Override
     protected void onPostExecute(String response) {
         if(response != null && response.length() > 0){
-            boolean valid = Boolean.parseBoolean(response);
-            setRadiusMarkerListener.handleRadiusMarker(valid);
+            if (response.equals("401")) {
+                tokenExpirationListener.handleTokenExpiration();
+            } else {
+                boolean valid = Boolean.parseBoolean(response);
+                setRadiusMarkerListener.handleRadiusMarker(valid);
+            }
         }else{
             Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
         }

@@ -3,10 +3,10 @@ package com.example.myapplication.Webservice.HttpMarker;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.myapplication.Interfaces.FeedSubmitListener.FeedSubmitListener;
+import com.example.myapplication.Interfaces.TokenExpirationListener.TokenExpirationListener;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
 import com.example.myapplication.Utils.SSL.SSL;
@@ -23,7 +23,7 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class HttpMarker extends AsyncTask<String , Void ,String> {
+public class HttpMarker extends AsyncTask<String, Void, String> {
 
     HttpsURLConnection urlConnection;
     URL url;
@@ -39,8 +39,11 @@ public class HttpMarker extends AsyncTask<String , Void ,String> {
     LatLng chosenLocation;
 
     FeedSubmitListener feedSubmitListener;
+    TokenExpirationListener tokenExpirationListener;
 
-    public HttpMarker(Context context, int userId, String category, String description, LatLng chosenLocation, FeedSubmitListener feedSubmitListener, String encodedImage){
+    public HttpMarker(Context context, int userId, String category, String description,
+                      LatLng chosenLocation, FeedSubmitListener feedSubmitListener, String encodedImage,
+                      TokenExpirationListener tokenExpirationListener) {
         this.server_response = "";
         this.context = context;
         this.userId = userId;
@@ -49,6 +52,7 @@ public class HttpMarker extends AsyncTask<String , Void ,String> {
         this.chosenLocation = chosenLocation;
         this.encodedImage = encodedImage;
         this.feedSubmitListener = feedSubmitListener;
+        this.tokenExpirationListener = tokenExpirationListener;
     }
 
     @Override
@@ -60,7 +64,7 @@ public class HttpMarker extends AsyncTask<String , Void ,String> {
         try {
             String response = handleRequest(apiRequest);
 
-            if(!TextUtils.isEmpty(response)){
+            if (!TextUtils.isEmpty(response)) {
                 return response;
             }
         } catch (Exception e) {
@@ -70,7 +74,7 @@ public class HttpMarker extends AsyncTask<String , Void ,String> {
         return "";
     }
 
-    String handleRequest(String apiRequest){
+    String handleRequest(String apiRequest) {
         String response = null;
         try {
             url = new URL(apiRequest);
@@ -89,8 +93,6 @@ public class HttpMarker extends AsyncTask<String , Void ,String> {
             jsonObject.put("lng", String.valueOf(this.chosenLocation.longitude));
             jsonObject.put("encodedString", this.encodedImage);
 
-            Log.d("Print", "User id " + userId);
-
             BufferedOutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
             writer.write(jsonObject.toString());
@@ -99,28 +101,45 @@ public class HttpMarker extends AsyncTask<String , Void ,String> {
             out.close();
 
             urlConnection.connect();
-            responseCode = urlConnection.getResponseCode();
-            if(responseCode == HttpURLConnection.HTTP_OK){
-                response =  Tools.readStream(urlConnection.getInputStream());
-            }
-        }catch (Exception e){
+            response = handleResponse();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return response;
     }
 
+    String handleResponse() {
+        try {
+            responseCode = urlConnection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                return Tools.readStream(urlConnection.getInputStream());
+            } else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return String.valueOf(responseCode);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     @Override
     protected void onPostExecute(String response) {
-        if(response != null && response.length() > 0){
-            boolean valid = Boolean.parseBoolean(response);
-            feedSubmitListener.handleSubmitStatusMessage(valid);
-        }else{
+        if (response != null && response.length() > 0) {
+            if (response.equals("401")) {
+                tokenExpirationListener.handleTokenExpiration();
+            } else {
+                boolean valid = Boolean.parseBoolean(response);
+                feedSubmitListener.handleSubmitStatusMessage(valid);
+            }
+        } else {
             Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
         }
     }
 
-    String createApiQuery(){
+    String createApiQuery() {
         return this.context.getResources().getString(R.string.webservice_insert_post_endpoint);
     }
 }

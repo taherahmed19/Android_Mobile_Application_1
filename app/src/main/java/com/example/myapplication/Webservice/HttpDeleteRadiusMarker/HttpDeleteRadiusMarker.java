@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
+import com.example.myapplication.Interfaces.TokenExpirationListener.TokenExpirationListener;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
 import com.example.myapplication.Utils.SSL.SSL;
@@ -24,13 +25,15 @@ public class HttpDeleteRadiusMarker extends AsyncTask<String , Void ,String> {
     int responseCode;
     Context context;
     DeleteRadiusMarkerListener deleteRadiusMarkerListener;
+    TokenExpirationListener tokenExpirationListener;
 
     String userId;
 
-    public HttpDeleteRadiusMarker(Context context, int userId, DeleteRadiusMarkerListener deleteRadiusMarkerListener) {
+    public HttpDeleteRadiusMarker(Context context, int userId, DeleteRadiusMarkerListener deleteRadiusMarkerListener, TokenExpirationListener tokenExpirationListener) {
         this.context = context;
         this.userId = String.valueOf(userId);
         this.deleteRadiusMarkerListener = deleteRadiusMarkerListener;
+        this.tokenExpirationListener = tokenExpirationListener;
     }
 
     @Override
@@ -76,6 +79,8 @@ public class HttpDeleteRadiusMarker extends AsyncTask<String , Void ,String> {
 
             if(responseCode == HttpURLConnection.HTTP_OK){
                 return Tools.readStream(urlConnection.getInputStream());
+            }else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return String.valueOf(responseCode);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -87,8 +92,12 @@ public class HttpDeleteRadiusMarker extends AsyncTask<String , Void ,String> {
     @Override
     protected void onPostExecute(String response) {
         if (response != null && response.length() > 0) {
-            boolean valid = Boolean.parseBoolean(response);
-            deleteRadiusMarkerListener.handleRadiusMarkerRemoval(valid);
+            if (response.equals("401")) {
+                tokenExpirationListener.handleTokenExpiration();
+            } else {
+                boolean valid = Boolean.parseBoolean(response);
+                deleteRadiusMarkerListener.handleRadiusMarkerRemoval(valid);
+            }
         } else {
             Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
         }

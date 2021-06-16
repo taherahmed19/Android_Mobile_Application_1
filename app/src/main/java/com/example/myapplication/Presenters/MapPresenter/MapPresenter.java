@@ -10,6 +10,7 @@ import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerLis
 import com.example.myapplication.Interfaces.DeleteRadiusMarkerListener.DeleteRadiusMarkerListener;
 import com.example.myapplication.Interfaces.MapContract.MapContract;
 import com.example.myapplication.Interfaces.MapListener.MapListener;
+import com.example.myapplication.Interfaces.TokenExpirationListener.TokenExpirationListener;
 import com.example.myapplication.Models.InteractiveMap.InteractiveMap;
 import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Models.RadiusMarker.RadiusMarker;
@@ -20,7 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class MapPresenter implements MapContract.Presenter, MapListener, CustomMarkerListener, DeleteRadiusMarkerListener {
+public class MapPresenter implements MapContract.Presenter, MapListener, CustomMarkerListener, DeleteRadiusMarkerListener, TokenExpirationListener {
 
     MapContract.View view;
     InteractiveMap interactiveMap;
@@ -28,6 +29,11 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
 
     public MapPresenter(MapContract.View view) {
         this.view = view;
+    }
+
+    @Override
+    public void handleTokenExpiration() {
+        this.view.handleTokenExpiration();
     }
 
     @Override
@@ -51,7 +57,7 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
 
     @Override
     public void renderRadiusMarker(double lat, double lon, double radius, boolean inApp, boolean voice){
-        this.radiusMarker = new RadiusMarker(this.interactiveMap.getMap(), new LatLng(lat, lon), radius);
+        this.radiusMarker = new RadiusMarker(this.interactiveMap.getMap(), new LatLng(lat, lon), radius, this);
         this.radiusMarker.saveRadiusMarkerSettings(this.view.getApplicationContext(), inApp, voice, true);
     }
 
@@ -96,7 +102,7 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
     }
 
     public void makeApiRequestForGoogleMap(FragmentManager fragmentManager, SupportMapFragment supportMapFragment){
-        this.interactiveMap = new InteractiveMap(supportMapFragment, view.getApplicationContext(), fragmentManager, this);
+        this.interactiveMap = new InteractiveMap(supportMapFragment, view.getApplicationContext(), fragmentManager, this, this);
         this.interactiveMap.makeApiRequestForMap(view.getLoadingSpinner(), view.getApplicationContext(), this);
     }
 
@@ -112,7 +118,7 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
         if(radiusMarker != null){
             radiusMarker.removeMarker();
         }
-        radiusMarker = new RadiusMarker(this.interactiveMap.getMap(), latLng, 0);
+        radiusMarker = new RadiusMarker(this.interactiveMap.getMap(), latLng, 0, this);
     }
 
     public void createBottomSheetFragment(LatLng latLng){
@@ -124,7 +130,11 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
     }
 
     public boolean handleRadiusMarkerClick(LatLng latLng){
-        return radiusMarker.handleRadiusMarkerClick(this.view.getApplicationContext(), latLng, this.radiusMarker.getLatLng(), this.radiusMarker.getRadius());
+        if(this.radiusMarker != null){
+            return radiusMarker.handleRadiusMarkerClick(this.view.getApplicationContext(), latLng, this.radiusMarker.getLatLng(), this.radiusMarker.getRadius());
+        }
+
+        return false;
     }
 
     public RadiusMarker getRadiusMarker(){

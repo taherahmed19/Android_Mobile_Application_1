@@ -4,14 +4,15 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
+import com.example.myapplication.Interfaces.TokenExpirationListener.TokenExpirationListener;
 import com.example.myapplication.JsonBuilders.MapJsonBuilder.MapJsonBuilder;
 import com.example.myapplication.Models.LoadingSpinner.LoadingSpinner;
 import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
-import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Utils.SSL.SSL;
 import com.example.myapplication.Utils.Tools.Tools;
 
@@ -35,13 +36,15 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
     MapJsonBuilder mapJsonBuilder;
 
     CustomMarkerListener customMarkerListener;
+    TokenExpirationListener tokenExpirationListener;
 
-    public HttpMap(LoadingSpinner loadingSpinner, Context context, CustomMarkerListener customMarkerListener){
+    public HttpMap(LoadingSpinner loadingSpinner, Context context, CustomMarkerListener customMarkerListener, TokenExpirationListener tokenExpirationListener){
         this.customMarkerListener = customMarkerListener;
         this.context = context;
         this.markers = new ArrayList<>();
         this.loadingSpinner = loadingSpinner;
         this.mapJsonBuilder = new MapJsonBuilder(this.markers);
+        this.tokenExpirationListener = tokenExpirationListener;
     }
 
     @Override
@@ -59,7 +62,7 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
             String response = handleRequest(apiRequest);
 
             if(!TextUtils.isEmpty(response)){
-                this.mapJsonBuilder.parseJson(response);
+                return response;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,6 +95,8 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
 
             if(responseCode == HttpURLConnection.HTTP_OK){
                 return Tools.readStream(urlConnection.getInputStream());
+            }else if(responseCode == HttpURLConnection.HTTP_UNAUTHORIZED){
+                return String.valueOf(responseCode);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -102,11 +107,20 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
 
     @Override
     protected void onPostExecute(String response) {
-        this.loadingSpinner.hide();
-        ArrayList<Marker> markers = this.mapJsonBuilder.getMarkers();
-        if(this.markers != null){
-            customMarkerListener.addMarkerData(markers);
-            customMarkerListener.detectRadiusMarker();
+        if (response != null && response.length() > 0) {
+            if(response.equals("401")){
+                tokenExpirationListener.handleTokenExpiration();
+            }else{
+                this.mapJsonBuilder.parseJson(response);
+                this.loadingSpinner.hide();
+                ArrayList<Marker> markers = this.mapJsonBuilder.getMarkers();
+                if (this.markers != null) {
+                    customMarkerListener.addMarkerData(markers);
+                    customMarkerListener.detectRadiusMarker();
+                }
+            }
+        } else {
+            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
         }
     }
 

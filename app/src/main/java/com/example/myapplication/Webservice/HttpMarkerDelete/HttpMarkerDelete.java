@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.example.myapplication.Interfaces.MarkerListener.MarkerListener;
+import com.example.myapplication.Interfaces.TokenExpirationListener.TokenExpirationListener;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
 import com.example.myapplication.Utils.SSL.SSL;
@@ -25,12 +26,15 @@ public class HttpMarkerDelete extends AsyncTask<Void , Void ,String> {
 
     Context context;
     String markerId;
-    MarkerListener markerListener;
 
-    public HttpMarkerDelete(Context context, int markerId, MarkerListener markerListener){
+    MarkerListener markerListener;
+    TokenExpirationListener tokenExpirationListener;
+
+    public HttpMarkerDelete(Context context, int markerId, MarkerListener markerListener, TokenExpirationListener tokenExpirationListener){
         this.context = context;
         this.markerId = String.valueOf(markerId);
         this.markerListener = markerListener;
+        this.tokenExpirationListener = tokenExpirationListener;
     }
 
     @Override
@@ -76,7 +80,10 @@ public class HttpMarkerDelete extends AsyncTask<Void , Void ,String> {
 
             if(responseCode == HttpURLConnection.HTTP_OK){
                 return Tools.readStream(urlConnection.getInputStream());
+            }else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return String.valueOf(responseCode);
             }
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -87,8 +94,12 @@ public class HttpMarkerDelete extends AsyncTask<Void , Void ,String> {
     @Override
     protected void onPostExecute(String response) {
         if(response != null && response.length() > 0){
-            boolean postDeleted = Boolean.parseBoolean(response);
-            markerListener.deleteUserPost(postDeleted);
+            if (response.equals("401")) {
+                tokenExpirationListener.handleTokenExpiration();
+            } else {
+                boolean postDeleted = Boolean.parseBoolean(response);
+                markerListener.deleteUserPost(postDeleted);
+            }
         }else{
             Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
         }

@@ -7,12 +7,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +19,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
 import com.example.myapplication.Interfaces.MarkerModalContract.MarkerModalContract;
+import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Presenters.MarkerModalPresenter.MarkerModalPresenter;
 import com.example.myapplication.R;
-import com.example.myapplication.Models.Marker.Marker;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.github.chrisbanes.photoview.PhotoView;
 
@@ -71,6 +70,11 @@ public class MarkerModalFragment extends Fragment implements MarkerModalContract
         configureUpVoteButton();
         configureRatingButtons();
         configureUserRatingState();
+    }
+
+    @Override
+    public void handleTokenExpiration(){
+        JWTToken.removeTokenSharedPref(Objects.requireNonNull(this.getActivity()));
     }
 
     @Override

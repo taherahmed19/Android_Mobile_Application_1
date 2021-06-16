@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
+import com.example.myapplication.Interfaces.TokenExpirationListener.TokenExpirationListener;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
 import com.example.myapplication.Utils.SSL.SSL;
@@ -28,12 +29,15 @@ public class HttpGetRadiusMarker extends AsyncTask<String , Void ,String> {
     Context context;
 
     String userId;
-    CustomMarkerListener customMarkerListener;
 
-    public HttpGetRadiusMarker(Context context, int userId, CustomMarkerListener customMarkerListener) {
+    CustomMarkerListener customMarkerListener;
+    TokenExpirationListener tokenExpirationListener;
+
+    public HttpGetRadiusMarker(Context context, int userId, CustomMarkerListener customMarkerListener, TokenExpirationListener tokenExpirationListener) {
         this.context = context;
         this.userId = String.valueOf(userId);
         this.customMarkerListener = customMarkerListener;
+        this.tokenExpirationListener = tokenExpirationListener;
     }
 
     @Override
@@ -79,6 +83,8 @@ public class HttpGetRadiusMarker extends AsyncTask<String , Void ,String> {
 
             if(responseCode == HttpURLConnection.HTTP_OK){
                 return Tools.readStream(urlConnection.getInputStream());
+            }else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return String.valueOf(responseCode);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -91,14 +97,18 @@ public class HttpGetRadiusMarker extends AsyncTask<String , Void ,String> {
     protected void onPostExecute(String response) {
         try {
             if(response != null && response.length() > 0){
-                JSONObject jsonObject = new JSONObject(response);
-                double lat = jsonObject.getDouble("lat");
-                double lon = jsonObject.getDouble("lon");
-                double radius = jsonObject.getDouble("radius");
-                boolean inApp = jsonObject.getBoolean("inApp");
-                boolean voice = jsonObject.getBoolean("voice");
+                if (response.equals("401")) {
+                    tokenExpirationListener.handleTokenExpiration();
+                } else {
+                    JSONObject jsonObject = new JSONObject(response);
+                    double lat = jsonObject.getDouble("lat");
+                    double lon = jsonObject.getDouble("lon");
+                    double radius = jsonObject.getDouble("radius");
+                    boolean inApp = jsonObject.getBoolean("inApp");
+                    boolean voice = jsonObject.getBoolean("voice");
 
-                customMarkerListener.renderRadiusMarker(lat, lon, radius, inApp, voice);
+                    customMarkerListener.renderRadiusMarker(lat, lon, radius, inApp, voice);
+                }
             }
         } catch (JSONException e) {
             Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);

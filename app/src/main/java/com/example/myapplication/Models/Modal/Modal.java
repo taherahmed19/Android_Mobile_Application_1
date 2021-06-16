@@ -6,9 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
 
 import com.example.myapplication.Interfaces.MarkerModalContract.MarkerModalContract;
+import com.example.myapplication.Interfaces.TokenExpirationListener.TokenExpirationListener;
 import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Presenters.MarkerModalPresenter.MarkerModalPresenter;
 import com.example.myapplication.Webservice.HttpRatings.HttpRatings;
@@ -28,8 +28,9 @@ public class Modal implements MarkerModalContract.Model {
     boolean isDownVoteClicked;
 
     MarkerModalPresenter markerModalPresenter;
+    TokenExpirationListener tokenExpirationListener;
 
-    public Modal(String encodedImage, String firstName, String lastName, MarkerModalPresenter markerModalPresenter) {
+    public Modal(String encodedImage, String firstName, String lastName, MarkerModalPresenter markerModalPresenter, TokenExpirationListener tokenExpirationListener) {
         this.markerModalPresenter = markerModalPresenter;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -37,9 +38,10 @@ public class Modal implements MarkerModalContract.Model {
         this.altName = "";
         this.userPost = "";
         this.image = null;
-        originalRating = 0;
-        rating = 0;
-        ratingTemp = 0;
+        this.originalRating = 0;
+        this.rating = 0;
+        this.ratingTemp = 0;
+        this.tokenExpirationListener = tokenExpirationListener;
     }
 
     public void decodeImage() {
@@ -88,7 +90,7 @@ public class Modal implements MarkerModalContract.Model {
     }
 
     public void makeApiCall(Context context, Marker marker) {
-        HttpRatings httpRatings = new HttpRatings(context, marker.getId(), isUpVoteClicked, markerModalPresenter);
+        HttpRatings httpRatings = new HttpRatings(context, marker.getId(), isUpVoteClicked, markerModalPresenter, tokenExpirationListener);
         httpRatings.execute("");
     }
 

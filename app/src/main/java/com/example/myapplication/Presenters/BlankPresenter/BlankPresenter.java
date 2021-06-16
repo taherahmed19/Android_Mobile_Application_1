@@ -10,7 +10,7 @@ public class BlankPresenter implements BlankContract.Presenter {
         this.view = view;
     }
 
-    public void renderActivities(){
+    public void loadStartActivity(){
         view.loadStartActivity();
     }
 }

@@ -43,6 +43,7 @@ import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.Models.SpinnerItem.SpinnerItem;
 import com.example.myapplication.Presenters.FormPresenter.FormPresenter;
 import com.example.myapplication.R;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Utils.StringConstants.StringConstants;
 import com.example.myapplication.Utils.Tools.Tools;
@@ -131,6 +132,11 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
                 this.startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
         }
+    }
+
+    @Override
+    public void handleTokenExpiration(){
+        JWTToken.removeTokenSharedPref(this.getActivity());
     }
 
     @Override
@@ -530,29 +536,35 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
     }
 
     void openCameraDialog(){
-        dialog = new Dialog(this.getContext());
-        dialog.setContentView(R.layout.camera_dialog);
-        dialog.show();
+        try{
+            dialog = new Dialog(Objects.requireNonNull(this.getContext()));
+            dialog.setContentView(R.layout.camera_dialog);
+            dialog.show();
+        }catch (Exception e){
+            Toast.makeText(getContext(), "Error", Toast.LENGTH_LONG);
+        }
 
-        Window window = dialog.getWindow();
-        window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        if(dialog != null){
+            Window window = dialog.getWindow();
+            window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
-        Button openCameraBtn = (Button) dialog.findViewById(R.id.openCameraBtn);
-        Button openGalleryBtn = (Button) dialog.findViewById(R.id.openGalleryBtn);
+            Button openCameraBtn = (Button) dialog.findViewById(R.id.openCameraBtn);
+            Button openGalleryBtn = (Button) dialog.findViewById(R.id.openGalleryBtn);
 
-        openCameraBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                formPresenter.openCamera();
-            }
-        });
+            openCameraBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    formPresenter.openCamera();
+                }
+            });
 
-        openGalleryBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                formPresenter.openGallery();
-            }
-        });
+            openGalleryBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    formPresenter.openGallery();
+                }
+            });
+        }
     }
 
     ArrayList<SpinnerItem> configureMarkerSpinner(){

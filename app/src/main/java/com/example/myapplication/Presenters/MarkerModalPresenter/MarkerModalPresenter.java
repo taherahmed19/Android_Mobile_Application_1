@@ -7,10 +7,11 @@ import com.example.myapplication.Interfaces.MarkerImageListener.MarkerImageListe
 import com.example.myapplication.Interfaces.MarkerListener.MarkerListener;
 import com.example.myapplication.Interfaces.MarkerModalContract.MarkerModalContract;
 import com.example.myapplication.Interfaces.RatingsListener.RatingsListener;
+import com.example.myapplication.Interfaces.TokenExpirationListener.TokenExpirationListener;
 import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Models.Modal.Modal;
 
-public class MarkerModalPresenter implements MarkerListener, RatingsListener, MarkerImageListener {
+public class MarkerModalPresenter implements MarkerListener, RatingsListener, MarkerImageListener, TokenExpirationListener {
 
     MarkerModalContract.View view;
     Marker marker;
@@ -19,7 +20,7 @@ public class MarkerModalPresenter implements MarkerListener, RatingsListener, Ma
     public MarkerModalPresenter(MarkerModalContract.View view, Marker marker) {
         this.view = view;
         this.marker = marker;
-        this.modal = new Modal(marker.getEncodedImage(), marker.getFirstName(), marker.getLastName(), this);
+        this.modal = new Modal(marker.getEncodedImage(), marker.getFirstName(), marker.getLastName(), this, this);
     }
 
     @Override
@@ -40,6 +41,11 @@ public class MarkerModalPresenter implements MarkerListener, RatingsListener, Ma
     @Override
     public void saveModalRatingState(int rating) {
         this.view.saveModalRatingState(rating);
+    }
+
+    @Override
+    public void handleTokenExpiration() {
+        this.view.handleTokenExpiration();
     }
 
     public void handleCloseButtonClick() {
@@ -67,11 +73,11 @@ public class MarkerModalPresenter implements MarkerListener, RatingsListener, Ma
     }
 
     public void makeApiCallDeleteMarker() {
-        this.marker.makeApiCallDeleteMarker(this.view.getApplicationContext(), this);
+        this.marker.makeApiCallDeleteMarker(this.view.getApplicationContext(), this, this);
     }
 
     public void makeApiCallCreateGetMarkerImage() {
-        this.marker.makeApiCallCreateGetMarkerImage(this.view.getApplicationContext(), this);
+        this.marker.makeApiCallCreateGetMarkerImage(this.view.getApplicationContext(), this, this);
     }
 
     public void decodeModalImage() {
@@ -138,4 +144,5 @@ public class MarkerModalPresenter implements MarkerListener, RatingsListener, Ma
     public String getEncodedImage() {
         return this.modal.getEncodedImage();
     }
+
 }

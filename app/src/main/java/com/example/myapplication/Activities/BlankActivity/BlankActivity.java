@@ -1,10 +1,10 @@
 package com.example.myapplication.Activities.BlankActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.Activities.LoginActivity.LoginActivity;
 import com.example.myapplication.Activities.MainActivity.MainActivity;
@@ -23,14 +23,29 @@ public class BlankActivity extends AppCompatActivity implements BlankContract.Vi
         setContentView(R.layout.activity_blank);
 
         this.blankPresenter = new BlankPresenter(this);
-        this.blankPresenter.renderActivities();
+        this.blankPresenter.loadStartActivity();
+
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        this.blankPresenter.renderActivities();
+        this.blankPresenter.loadStartActivity();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                this.blankPresenter.loadStartActivity();
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                // Write your code if there's no result
+            }
+        }
+    } //onActivityResult
 
     @Override
     public void loadStartActivity(){
@@ -44,7 +59,8 @@ public class BlankActivity extends AppCompatActivity implements BlankContract.Vi
         }
 
         Intent newActivity = new Intent(this, activity);
-        this.startActivity(newActivity);
+        startActivityForResult(newActivity, 1);
+
     }
 
 }
