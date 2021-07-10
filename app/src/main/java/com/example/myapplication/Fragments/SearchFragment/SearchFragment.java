@@ -26,6 +26,7 @@ import com.example.myapplication.Models.CurrentLocation.CurrentLocation;
 import com.example.myapplication.Presenters.SearchPresenter.SearchPresenter;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.StringConstants.StringConstants;
+import com.example.myapplication.Webservice.HttpMapFeedSearchAutocomplete.HttpMapFeedSearchAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.jetbrains.annotations.NotNull;
@@ -106,7 +107,7 @@ public class SearchFragment extends Fragment implements CurrentLocationListener,
                 mapFeedSearch.setBackgroundResource(R.drawable.map_search_input_border);
             }
 
-//            HttpMapFeedSearchAutocomplete httpMapFeedSearchAutocomplete = new HttpMapFeedSearchAutocomplete(getContext(), listener);
+            HttpMapFeedSearchAutocomplete httpMapFeedSearchAutocomplete = new HttpMapFeedSearchAutocomplete(getContext(), listener);
 //            httpMapFeedSearchAutocomplete.execute(s.toString());
         }else{
             if ((Boolean) mapFeedSearch.getTag()) {

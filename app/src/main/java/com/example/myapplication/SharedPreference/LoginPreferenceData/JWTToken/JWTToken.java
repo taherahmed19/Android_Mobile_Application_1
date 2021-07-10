@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 
-import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData.LoginPreferenceData;
 
-import static com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData.getSharedPreferences;
+import static com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData.LoginPreferenceData.getSharedPreferences;
 
 public class JWTToken {
 

@@ -24,7 +24,7 @@ import com.example.myapplication.Models.BroadcastReceiverToken.BroadcastReceiver
 import com.example.myapplication.Models.User.User;
 import com.example.myapplication.Presenters.LoginPresenter.LoginPresenter;
 import com.example.myapplication.R;
-import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
 import com.example.myapplication.Webservice.HttpFirebaseToken.HttpFirebaseToken;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         configureLoginSubmitButton();
         configurePassword();
         configureRegisterButton();
+        configureFirebaseToken();
         hideKeyboard();
     }
 
@@ -150,7 +151,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     @Override
-    protected void onRestart() {
+    public void onRestart() {
         super.onRestart();
         finish();
         startActivity(getIntent());
@@ -179,6 +180,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     void enterApplication(){
         FragmentTransition.StartActivity(this, MainActivity.class);
+    }
+
+    void configureFirebaseToken(){
+        loginPresenter.updateBroadcastReceiverToken(FirebaseInstanceId.getInstance().getToken());
     }
 
     void configureLoginSubmitButton(){
@@ -305,7 +310,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             }else{
                 token = currentToken;
             }
-
             loginPresenter.updateBroadcastReceiverToken(token);
         }
     };

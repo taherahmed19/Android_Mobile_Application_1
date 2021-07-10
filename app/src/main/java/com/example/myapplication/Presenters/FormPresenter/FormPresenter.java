@@ -49,7 +49,7 @@ public class FormPresenter implements FormContract.Presenter, TokenExpirationLis
 
     public void updateEncodedImage(Bitmap photo){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        photo.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] imageBytes = baos.toByteArray();
         this.encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
     }

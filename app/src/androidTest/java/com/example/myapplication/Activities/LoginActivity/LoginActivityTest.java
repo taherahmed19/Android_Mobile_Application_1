@@ -1,9 +1,8 @@
-package com.example.myapplication.Presenters.LoginPresenter;
+package com.example.myapplication.Activities.LoginActivity;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.rule.ActivityTestRule;
 
-import com.example.myapplication.Activities.LoginActivity.LoginActivity;
 import com.example.myapplication.R;
 
 import org.junit.Rule;

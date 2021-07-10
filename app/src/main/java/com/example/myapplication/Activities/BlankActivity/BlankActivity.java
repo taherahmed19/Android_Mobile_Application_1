@@ -11,7 +11,7 @@ import com.example.myapplication.Activities.MainActivity.MainActivity;
 import com.example.myapplication.Interfaces.BlankContract.BlankContract;
 import com.example.myapplication.Presenters.BlankPresenter.BlankPresenter;
 import com.example.myapplication.R;
-import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData.LoginPreferenceData;
 
 public class BlankActivity extends AppCompatActivity implements BlankContract.View {
 

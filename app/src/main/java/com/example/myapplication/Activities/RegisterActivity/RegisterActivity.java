@@ -1,7 +1,5 @@
 package com.example.myapplication.Activities.RegisterActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,15 +12,17 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.myapplication.Activities.MainActivity.MainActivity;
-import com.example.myapplication.Webservice.HttpFirebaseToken.HttpFirebaseToken;
 import com.example.myapplication.Interfaces.RegisterContract.RegisterContract;
 import com.example.myapplication.Models.BroadcastReceiverToken.BroadcastReceiverToken;
 import com.example.myapplication.Models.User.User;
 import com.example.myapplication.Presenters.RegisterPresenter.RegisterPresenter;
 import com.example.myapplication.R;
-import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Utils.FragmentTransition.FragmentTransition;
+import com.example.myapplication.Webservice.HttpFirebaseToken.HttpFirebaseToken;
 
 public class RegisterActivity extends AppCompatActivity implements RegisterContract.View {
 

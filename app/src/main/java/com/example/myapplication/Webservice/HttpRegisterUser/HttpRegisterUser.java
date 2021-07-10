@@ -115,7 +115,7 @@ public class HttpRegisterUser extends AsyncTask<String , Void ,String> {
             handleJSONResponse(response);
             registerListener.handleRegistrationAttempt(validCredentials, user);
         }else{
-            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
+            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG).show();
         }
     }
 

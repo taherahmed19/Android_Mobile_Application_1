@@ -87,6 +87,8 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
             jsonObject.put("email", this.loginUser.getEmail());
             jsonObject.put("password", this.loginUser.getPassword());
 
+            Log.d("Print", "request " + this.loginUser.getEmail() + " " + this.loginUser.getPassword());
+
             BufferedOutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
             writer.write(jsonObject.toString());

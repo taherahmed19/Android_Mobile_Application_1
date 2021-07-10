@@ -10,5 +10,4 @@ public class HashingTool {
         return Hashing.sha256().hashString(input, Charset.defaultCharset()).toString();
     }
 
-
 }

@@ -138,7 +138,7 @@ public class HttpWriteRadiusMarker extends AsyncTask<String , Void ,String> {
                 setRadiusMarkerListener.handleRadiusMarker(valid);
             }
         }else{
-            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
+            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG).show();
         }
     }
 

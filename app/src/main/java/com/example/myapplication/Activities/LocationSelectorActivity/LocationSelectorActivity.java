@@ -1,10 +1,12 @@
 package com.example.myapplication.Activities.LocationSelectorActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -43,7 +45,7 @@ public class LocationSelectorActivity extends AppCompatActivity implements Curre
 
         currentLocation = new CurrentLocation(this,  this);
         locationSelectorPresenter = new LocationSelectorPresenter(this);
-        locationSelectorPresenter.requestMap(getSupportFragmentManager(), supportMapFragment);
+        locationSelectorPresenter.makeApiRequestForFormMap(getSupportFragmentManager(), supportMapFragment);
     }
 
     @Override
@@ -140,16 +142,18 @@ public class LocationSelectorActivity extends AppCompatActivity implements Curre
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
     }
 
+    @SuppressLint("ShowToast")
     @Override
     public void handleOnSubmitButtonClick() {
-        if(locationSelectorPresenter.getSelectedLocation() != null){
+        if(locationSelectorPresenter.getSelectedLocation().getLatLng() != null){
             Intent output = new Intent();
-            output.putExtra(StringConstants.INTENT_LOCATION_SELECTOR_LAT, locationSelectorPresenter.getSelectedLocation().latitude);
-            output.putExtra(StringConstants.INTENT_LOCATION_SELECTOR_LNG, locationSelectorPresenter.getSelectedLocation().longitude);
+            output.putExtra(StringConstants.INTENT_LOCATION_SELECTOR_LAT, locationSelectorPresenter.getSelectedLocation().getLatLng().latitude);
+            output.putExtra(StringConstants.INTENT_LOCATION_SELECTOR_LNG, locationSelectorPresenter.getSelectedLocation().getLatLng().longitude);
             setResult(RESULT_OK, output);
             finish();
         }else{
-            Toast.makeText(getApplicationContext(), "No location selected.", Toast.LENGTH_LONG);
+            Log.d("print", "No location");
+            Toast.makeText(getApplicationContext(), "No location selected.", Toast.LENGTH_LONG).show();
         }
     }
 

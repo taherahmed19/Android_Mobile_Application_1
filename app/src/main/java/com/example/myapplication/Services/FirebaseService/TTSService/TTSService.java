@@ -2,7 +2,6 @@ package com.example.myapplication.Services.FirebaseService.TTSService;
 
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
-import android.util.Log;
 
 import java.util.Locale;
 
@@ -25,7 +24,6 @@ public class TTSService implements TextToSpeech.OnInitListener {
             } else {
                 speak();
             }
-        } else {
         }
     }
 
@@ -37,7 +35,5 @@ public class TTSService implements TextToSpeech.OnInitListener {
             mTTS.speak(message, TextToSpeech.QUEUE_ADD, null);
             mTTS.playSilence(500, TextToSpeech.QUEUE_ADD, null);
         }
-
-
     }
 }

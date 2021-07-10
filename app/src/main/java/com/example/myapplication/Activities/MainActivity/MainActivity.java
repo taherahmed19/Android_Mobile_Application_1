@@ -15,12 +15,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
-import com.example.myapplication.Fragments.SearchAutocompleteFragment.SearchAutocompleteFragment;
+import com.example.myapplication.Fragments.SearchResultsFragment.SearchResultsFragment;
 import com.example.myapplication.Fragments.SearchFragment.SearchFragment;
 import com.example.myapplication.Interfaces.MainContract.MainContract;
 import com.example.myapplication.Presenters.MainPresenter.MainPresenter;
 import com.example.myapplication.R;
-import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData.LoginPreferenceData;
 import com.google.android.material.navigation.NavigationView;
 
 import org.jetbrains.annotations.NotNull;
@@ -171,14 +171,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void handleBackPressMapFragments(Fragment fragment) {
         SearchFragment searchFragment = (SearchFragment) fragment.getChildFragmentManager().findFragmentByTag(SearchFragment.TAG);
-        SearchAutocompleteFragment searchAutocompleteFragment = (SearchAutocompleteFragment) fragment.getChildFragmentManager().findFragmentByTag(SearchAutocompleteFragment.TAG);
+        SearchResultsFragment searchResultsFragment = (SearchResultsFragment) fragment.getChildFragmentManager().findFragmentByTag(SearchResultsFragment.TAG);
 
         if(searchFragment != null){
             searchFragment.getFragmentManager().popBackStack();
         }
 
-        if(searchAutocompleteFragment != null){
-            searchAutocompleteFragment.getFragmentManager().popBackStack();
+        if(searchResultsFragment != null){
+            searchResultsFragment.getFragmentManager().popBackStack();
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.myapplication.SharedPreference.LoginPreferenceData;
+package com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
 
 import android.app.Activity;
 import android.content.Context;

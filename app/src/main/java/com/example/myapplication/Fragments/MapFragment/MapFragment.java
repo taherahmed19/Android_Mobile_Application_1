@@ -23,7 +23,7 @@ import com.example.myapplication.Fragments.BottomSheetFragment.BottomSheetFragme
 import com.example.myapplication.Fragments.FormFragment.FormFragment;
 import com.example.myapplication.Fragments.MarkerModalFragment.MarkerModalFragment;
 import com.example.myapplication.Fragments.RadiusMarkerNotificationFragment.RadiusMarkerNotificationFragment;
-import com.example.myapplication.Fragments.SearchAutocompleteFragment.SearchAutocompleteFragment;
+import com.example.myapplication.Fragments.SearchResultsFragment.SearchResultsFragment;
 import com.example.myapplication.Fragments.SearchFragment.SearchFragment;
 import com.example.myapplication.Interfaces.CurrentLocationListener.CurrentLocationListener;
 import com.example.myapplication.Interfaces.FragmentAutocompleteListener.FragmentAutocompleteListener;
@@ -59,7 +59,7 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
     CurrentLocation currentLocation;
 
     MapPresenter mapPresenter;
-    SearchAutocompleteFragment searchAutocompleteFragment;
+    SearchResultsFragment searchResultsFragment;
     SearchFragment searchFragment;
     BottomSheetFragment bottomSheetFragment;
 
@@ -80,8 +80,8 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
         this.loadingSpinner = new LoadingSpinner((ProgressBar) Objects.requireNonNull(getView()).findViewById(R.id.feedLoadingSpinner));
         this.currentLocation = new CurrentLocation(getActivity(), this);
         this.mapPresenter = new MapPresenter(this);
-        this.mapPresenter.makeApiRequestForGoogleMap(getChildFragmentManager(), supportMapFragment);
-        this.searchAutocompleteFragment = new SearchAutocompleteFragment(this);
+        this.mapPresenter.makeApiRequestForMainMap(getChildFragmentManager(), supportMapFragment);
+        this.searchResultsFragment = new SearchResultsFragment(this);
 
         this.mapPresenter.makeApiRequestGetRadiusMarker();
 
@@ -117,12 +117,12 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
 
     @Override
     public void onSearchTextChanged(Place place, String mainText, String secondText) {
-        searchAutocompleteFragment.buildAutocompleteSearchItem(place, mainText, secondText);
+        searchResultsFragment.buildAutocompleteSearchItem(place, mainText, secondText);
     }
 
     @Override
     public void onTriggerResultsClear() {
-        searchAutocompleteFragment.clearAutocomplete();
+        searchResultsFragment.clearAutocomplete();
     }
 
     @Override
@@ -169,8 +169,8 @@ public class MapFragment extends Fragment implements FragmentSearchListener,
         FragmentTransition.TransitionActivityResult(getParentFragmentManager(), new SearchFragment(this, this),
                 this, R.anim.top_animation, R.anim.down_animation, R.id.mapFeedSearchPointer, SearchFragment.REQUEST_CODE_SEARCH, SearchFragment.TAG);
 
-        FragmentTransition.Transition(getParentFragmentManager(), searchAutocompleteFragment,
-                R.anim.right_animations, R.anim.left_animation, R.id.mapFeedSearchAutoPointer, SearchAutocompleteFragment.TAG);
+        FragmentTransition.Transition(getParentFragmentManager(), searchResultsFragment,
+                R.anim.right_animations, R.anim.left_animation, R.id.mapFeedSearchAutoPointer, SearchResultsFragment.TAG);
     }
 
     @Override

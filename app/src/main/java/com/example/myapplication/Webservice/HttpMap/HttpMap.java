@@ -120,7 +120,7 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
                 }
             }
         } else {
-            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
+            Toast.makeText(context, "Error, Try again late?", Toast.LENGTH_LONG).show();
         }
     }
 

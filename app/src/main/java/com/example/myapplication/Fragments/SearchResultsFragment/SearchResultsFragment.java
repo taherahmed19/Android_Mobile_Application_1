@@ -1,4 +1,4 @@
-package com.example.myapplication.Fragments.SearchAutocompleteFragment;
+package com.example.myapplication.Fragments.SearchResultsFragment;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -21,9 +21,9 @@ import com.example.myapplication.Presenters.SearchAutocompletePresenter.SearchAu
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.Tools.Tools;
 
-public class SearchAutocompleteFragment extends Fragment implements SearchAutocompleteContract.View {
+public class SearchResultsFragment extends Fragment implements SearchAutocompleteContract.View {
 
-    public final static String TAG = SearchAutocompleteFragment.class.getName();
+    public final static String TAG = SearchResultsFragment.class.getName();
 
     SearchAutocompletePresenter searchAutocompletePresenter;
     FragmentAutocompleteListener listener;
@@ -31,7 +31,7 @@ public class SearchAutocompleteFragment extends Fragment implements SearchAutoco
     ScrollView searchAutocompleteContainer;
     LinearLayout searchAutocompleteSubContainer;
 
-    public SearchAutocompleteFragment(FragmentAutocompleteListener listener) {
+    public SearchResultsFragment(FragmentAutocompleteListener listener) {
         this.listener = listener;
     }
 

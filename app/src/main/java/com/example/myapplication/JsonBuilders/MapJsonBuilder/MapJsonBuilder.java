@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Utils.JsonUtil.JsonUtil;
-import com.example.myapplication.Utils.Tools.Tools;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +52,8 @@ public class MapJsonBuilder {
             String lng = JsonUtil.getString(data.getJSONObject(i), "Lng");
             String encodedImage = JsonUtil.getString(data.getJSONObject(i), "Image");
             int rating = JsonUtil.getInt(data.getJSONObject(i), "Rating");
+
+            Log.d("Print", "Image " + encodedImage);
 
             markers.add(new Marker(userId, firstName, lastName, category, description, lat, lng, encodedImage, id, rating));
 

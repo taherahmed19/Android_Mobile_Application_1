@@ -43,8 +43,8 @@ public class LocationSelectorPresenter implements LocationSelectorContract.Prese
         this.selectedLocation.setLatLng(latLng);
     }
 
-    public LatLng getSelectedLocation(){
-        return this.selectedLocation.getLatLng();
+    public SelectedLocation getSelectedLocation(){
+        return this.selectedLocation;
     }
 
     public void handleOnGoogleMapClick(GoogleMap mMap, LatLng latLng){
@@ -59,8 +59,10 @@ public class LocationSelectorPresenter implements LocationSelectorContract.Prese
         this.view.handleOnReturnButtonClick();
     }
 
-    public void requestMap(FragmentManager fragmentManager, SupportMapFragment supportMapFragment){
-        this.interactiveMap = new InteractiveMap(supportMapFragment, this.view.getContext(), fragmentManager, this, this);
+    public void makeApiRequestForFormMap(FragmentManager fragmentManager,
+                                         SupportMapFragment supportMapFragment){
+        this.interactiveMap = new InteractiveMap(supportMapFragment,
+                this.view.getContext(), fragmentManager, this, this);
     }
 
     public void setUserLocationGoogleMarker(Location location) {

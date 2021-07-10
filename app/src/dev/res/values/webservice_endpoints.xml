@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-<!--    <string name="webservice_register_endpoint">https://10.0.2.2:443/api/registeruser?firstname={0}&amp;lastname={1}&amp;email={2}&amp;password={3}</string>-->
     <string name="webservice_register_endpoint">https://10.0.2.2:443/api/register/authenticate</string>
-<!--    <string name="webservice_login_endpoint">https://10.0.2.2:443/api/userSignIn?email={0}&amp;password={1}</string>-->
     <string name="webservice_login_endpoint">https://10.0.2.2:443/api/login/authenticate</string>
 
     <string name="webservice_insert_post_endpoint">https://10.0.2.2:443/api/insertPost</string>

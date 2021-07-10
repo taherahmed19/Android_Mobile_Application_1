@@ -29,7 +29,6 @@ public class FirebaseService extends FirebaseMessagingService {
     String firstName;
     String lastName;
     String rating;
-    String image;
 
     @Override
     public void onNewToken(@NonNull String token) {

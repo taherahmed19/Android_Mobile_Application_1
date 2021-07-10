@@ -101,9 +101,14 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
         }
     }
 
-    public void makeApiRequestForGoogleMap(FragmentManager fragmentManager, SupportMapFragment supportMapFragment){
-        this.interactiveMap = new InteractiveMap(supportMapFragment, view.getApplicationContext(), fragmentManager, this, this);
-        this.interactiveMap.makeApiRequestForMap(view.getLoadingSpinner(), view.getApplicationContext(), this);
+    public void makeApiRequestForMainMap(FragmentManager fragmentManager,
+                                         SupportMapFragment supportMapFragment){
+        this.interactiveMap = new InteractiveMap(supportMapFragment,
+                view.getApplicationContext(), fragmentManager,
+                this, this);
+
+        this.interactiveMap.makeApiRequestForMap(view.getLoadingSpinner(),
+                view.getApplicationContext(), this);
     }
 
     public void createRadiusMarker(LatLng latLng){

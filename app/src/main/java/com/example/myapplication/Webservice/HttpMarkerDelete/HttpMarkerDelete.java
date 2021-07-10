@@ -101,7 +101,7 @@ public class HttpMarkerDelete extends AsyncTask<Void , Void ,String> {
                 markerListener.deleteUserPost(postDeleted);
             }
         }else{
-            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
+            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG).show();
         }
     }
 

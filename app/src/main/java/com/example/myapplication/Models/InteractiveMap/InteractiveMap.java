@@ -17,7 +17,7 @@ import com.example.myapplication.Interfaces.TokenExpirationListener.TokenExpirat
 import com.example.myapplication.Models.LoadingSpinner.LoadingSpinner;
 import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.R;
-import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Webservice.HttpGetRadiusMarker.HttpGetRadiusMarker;
 import com.example.myapplication.Webservice.HttpMap.HttpMap;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -74,9 +74,6 @@ public class InteractiveMap implements OnMapReadyCallback, LocationSelectorContr
 
         mapListener.handleMapClick(mMap);
         mapListener.handleMarkerClick(mMap);
-
-        //error with location activity
-        //MapOnClickHandler onClickHandler = new MapOnClickHandler(context, mMap, fragmentManager);
     }
 
     public void addDataSetMarkers(ArrayList<Marker> markers) {
@@ -111,7 +108,6 @@ public class InteractiveMap implements OnMapReadyCallback, LocationSelectorContr
                 .icon(markerIcon));
 
         marker.setTag(markers.get(i));
-
         googleMarkers.add(marker);
     }
 

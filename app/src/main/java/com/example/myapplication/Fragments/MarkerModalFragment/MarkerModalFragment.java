@@ -27,7 +27,7 @@ import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Presenters.MarkerModalPresenter.MarkerModalPresenter;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
-import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData.LoginPreferenceData;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.Objects;

@@ -44,7 +44,7 @@ import com.example.myapplication.Models.SpinnerItem.SpinnerItem;
 import com.example.myapplication.Presenters.FormPresenter.FormPresenter;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.JWTToken.JWTToken;
-import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData;
+import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData.LoginPreferenceData;
 import com.example.myapplication.Utils.StringConstants.StringConstants;
 import com.example.myapplication.Utils.Tools.Tools;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -541,7 +541,7 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
             dialog.setContentView(R.layout.camera_dialog);
             dialog.show();
         }catch (Exception e){
-            Toast.makeText(getContext(), "Error", Toast.LENGTH_LONG);
+            Toast.makeText(getContext(), "Error", Toast.LENGTH_LONG).show();
         }
 
         if(dialog != null){

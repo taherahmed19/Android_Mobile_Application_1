@@ -102,7 +102,7 @@ public class HttpRatings extends AsyncTask<String , Void ,String> {
                 ratingsListener.updateModalRating(ratingUpdated);
             }
         }else{
-            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
+            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG).show();
         }
 
     }

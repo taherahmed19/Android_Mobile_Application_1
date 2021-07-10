@@ -111,7 +111,7 @@ public class HttpGetRadiusMarker extends AsyncTask<String , Void ,String> {
                 }
             }
         } catch (JSONException e) {
-            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
+            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
     }

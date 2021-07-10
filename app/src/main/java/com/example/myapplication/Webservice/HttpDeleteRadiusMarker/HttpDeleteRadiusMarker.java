@@ -99,7 +99,7 @@ public class HttpDeleteRadiusMarker extends AsyncTask<String , Void ,String> {
                 deleteRadiusMarkerListener.handleRadiusMarkerRemoval(valid);
             }
         } else {
-            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG);
+            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG).show();
         }
     }
 
