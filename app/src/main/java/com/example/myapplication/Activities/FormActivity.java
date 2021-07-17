@@ -1,4 +1,4 @@
-package com.example.myapplication.Fragments.FormFragment;
+package com.example.myapplication.Activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -55,7 +55,7 @@ import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
-public class FormFragment extends Fragment implements FeedSubmitListener, CurrentLocationListener, FormContract.View {
+public class FormActivity extends Fragment implements FeedSubmitListener, CurrentLocationListener, FormContract.View {
 
     public static final int GALLERY_REQUEST = 1000;
     public static final int CAMERA_REQUEST = 1888;
@@ -67,7 +67,7 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
     Dialog dialog;
     boolean isConfiguredStaticMap;
 
-    public FormFragment(FragmentManager fragmentSupport, ViewPager viewPager){
+    public FormActivity(FragmentManager fragmentSupport, ViewPager viewPager){
         this.fragmentSupport = fragmentSupport;
         this.viewPager = viewPager;
     }

@@ -14,7 +14,6 @@ public interface MapContract {
         void openBottomSheetWithState(GoogleMap mMap, LatLng latLng);
         void createBottomSheetFragment(GoogleMap mMap, LatLng latLng);
         void handleRadiusMarkerMapClick(GoogleMap mMap);
-        void handleSearchButtonClick();
         void handleNewPostButtonClick();
         void hideSpinner();
         void addMarkersListener(GoogleMap mMap);

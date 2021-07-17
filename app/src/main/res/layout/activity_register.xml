@@ -7,8 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".Activities.LoginActivity.LoginActivity"
     android:background="@drawable/login_activity_background"
-    android:id="@+id/registerActivity"
-    >
+    android:id="@+id/registerActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -19,8 +18,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical"
-            android:paddingLeft="70sp"
-            android:paddingRight="70sp">
+            android:paddingRight="50sp"
+            android:paddingLeft="50sp">
 
             <ImageView
                 android:layout_width="wrap_content"

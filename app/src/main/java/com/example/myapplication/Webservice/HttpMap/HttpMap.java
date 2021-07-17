@@ -118,9 +118,10 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
                     customMarkerListener.addMarkerData(markers);
                     customMarkerListener.detectRadiusMarker();
                 }
+
             }
         } else {
-            Toast.makeText(context, "Error, Try again late?", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Error, Try again later", Toast.LENGTH_LONG).show();
         }
     }
 

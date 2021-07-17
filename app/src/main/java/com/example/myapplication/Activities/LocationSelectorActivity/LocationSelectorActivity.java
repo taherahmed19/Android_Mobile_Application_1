@@ -3,7 +3,6 @@ package com.example.myapplication.Activities.LocationSelectorActivity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,8 +24,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import org.jetbrains.annotations.NotNull;
 
 public class LocationSelectorActivity extends AppCompatActivity implements CurrentLocationListener, LocationSelectorContract.View {
 
@@ -51,15 +48,6 @@ public class LocationSelectorActivity extends AppCompatActivity implements Curre
     @Override
     public void handleTokenExpiration(){
         JWTToken.removeTokenSharedPref(this);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
-        if (requestCode == CurrentLocation.MY_PERMISSIONS_REQUEST_FINE_LOCATION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                currentLocation.accessGeolocation();
-            }
-        }
     }
 
     @Override

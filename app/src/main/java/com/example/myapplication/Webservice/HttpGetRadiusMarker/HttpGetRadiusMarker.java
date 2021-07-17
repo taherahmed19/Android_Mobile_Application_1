@@ -3,6 +3,7 @@ package com.example.myapplication.Webservice.HttpGetRadiusMarker;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.myapplication.Interfaces.CustomMarkerListener.CustomMarkerListener;
@@ -100,12 +101,14 @@ public class HttpGetRadiusMarker extends AsyncTask<String , Void ,String> {
                 if (response.equals("401")) {
                     tokenExpirationListener.handleTokenExpiration();
                 } else {
+
                     JSONObject jsonObject = new JSONObject(response);
-                    double lat = jsonObject.getDouble("lat");
-                    double lon = jsonObject.getDouble("lon");
-                    double radius = jsonObject.getDouble("radius");
+                    double lat = Double.parseDouble(jsonObject.getString("lat"));
+                    double lon = Double.parseDouble(jsonObject.getString("lon"));
+                    double radius = Double.parseDouble(jsonObject.getString("radius"));
                     boolean inApp = jsonObject.getBoolean("inApp");
                     boolean voice = jsonObject.getBoolean("voice");
+                    Log.d("Print", "Render radius marker " + response);
 
                     customMarkerListener.renderRadiusMarker(lat, lon, radius, inApp, voice);
                 }

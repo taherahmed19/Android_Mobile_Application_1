@@ -1,0 +1,264 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:id="@+id/userFeedForm"
+    android:background="#00000000"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:id="@+id/userForm"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/form_border"
+        >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bottom_border"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="15sp"
+                android:paddingLeft="15sp"
+                android:paddingRight="15sp"
+                android:paddingBottom="10sp"
+                >
+
+
+                <ImageButton
+                    android:id="@+id/formClose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_routing_search_close"
+                    android:background="@android:color/transparent">
+                </ImageButton>
+
+                <ImageButton
+                    android:id="@+id/mapFeedSubmit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_routing_search_submit"
+                    android:background="@android:color/transparent">
+                </ImageButton>
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="20sp"
+            android:paddingRight="20sp"
+            android:scrollbars="none"
+            android:overScrollMode="never">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="20sp"
+                android:paddingBottom="20sp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="20sp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Category"
+                            android:textSize="20sp"
+                            android:textColor="#000"
+                            android:layout_marginBottom="10sp"
+                            android:layout_alignParentLeft="true"/>
+
+                    </RelativeLayout>
+
+                    <Spinner
+                        android:id="@+id/formSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_custom_spinner"
+                        />
+
+                    <TextView
+                        android:id="@+id/spinnerError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/form_category_error"
+                        android:textColor="#B9E91E1E"
+                        android:visibility="invisible">
+
+                    </TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="20sp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Description"
+                            android:textSize="20sp"
+                            android:textColor="#000"
+                            android:layout_marginBottom="10sp"/>
+
+                        <!--                    <ImageButton-->
+                        <!--                        android:layout_width="wrap_content"-->
+                        <!--                        android:layout_height="wrap_content"-->
+                        <!--                        android:layout_alignParentRight="true"-->
+                        <!--                        android:layout_alignParentTop="true"-->
+                        <!--                        android:background="@drawable/feed_form_error_background"-->
+                        <!--                        android:src="@drawable/ic_feed_form_error">-->
+                        <!--                    </ImageButton>-->
+
+                    </RelativeLayout>
+
+                    <EditText
+                        android:id="@+id/mapFeedDescription"
+                        android:layout_width="fill_parent"
+                        android:layout_height="80sp"
+                        android:background="@drawable/input_border"
+                        android:hint="Enter a description for the issue"
+                        android:paddingLeft="10sp"
+                        android:paddingRight="10sp"
+                        android:minLines="3"
+                        android:scrollbarAlwaysDrawVerticalTrack="true"
+                        android:overScrollMode="always"
+                        android:scrollbarStyle="insideInset"
+                        android:scrollbars="vertical"/>
+
+                    <TextView
+                        android:id="@+id/descriptionError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/form_description_error"
+                        android:textColor="#B9E91E1E"
+                        android:visibility="invisible">
+                    </TextView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="20sp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Geolocation"
+                        android:textSize="20sp"
+                        android:textColor="#000"
+                        android:layout_marginBottom="10sp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/locationButton"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/button_border_2"
+                            android:text="Set location"
+                            android:textColor="#FFF"
+                            android:textAllCaps="false"
+                            android:textSize="16dp">
+
+                        </Button>
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/locationError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/form_location_error"
+                        android:textColor="#B9E91E1E"
+                        android:visibility="invisible">
+                    </TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Image"
+                            android:textSize="20sp"
+                            android:textColor="#000"
+                            android:layout_marginBottom="10sp"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200sp"
+                        android:background="@drawable/input_border">
+
+                        <ImageButton
+                            android:id="@+id/imageButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_image"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:background="@android:color/transparent">
+                        </ImageButton>
+
+                        <ImageView
+                            android:id="@+id/postImageView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY">
+
+                        </ImageView>
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/imageError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/form_image_error"
+                        android:textColor="#B9E91E1E"
+                        android:visibility="invisible">
+                    </TextView>
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</RelativeLayout>

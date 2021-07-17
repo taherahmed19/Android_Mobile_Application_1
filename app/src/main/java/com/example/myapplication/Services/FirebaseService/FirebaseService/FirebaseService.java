@@ -59,6 +59,8 @@ public class FirebaseService extends FirebaseMessagingService {
         rating = remoteMessage.getData().get("rating");
 
 
+        Log.d("Print", "Received " + remoteMessage.getData().toString());
+
         if(!App.APP_VISIBLE){
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 

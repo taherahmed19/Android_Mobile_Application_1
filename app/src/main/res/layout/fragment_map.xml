@@ -88,16 +88,7 @@
                 android:background="@drawable/map_search_button"
                 android:layout_margin="20sp"/>
 
-            <ImageButton
-                android:id="@+id/mapSearchButton"
-                android:layout_width="45sp"
-                android:layout_height="45sp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:src="@drawable/ic_routing_search"
-                android:background="@drawable/map_search_button"
-                android:layout_margin="20sp">
-            </ImageButton>
+
 
 
         </RelativeLayout>
@@ -110,4 +101,5 @@
         </RelativeLayout>
 
     </FrameLayout>
+
 </RelativeLayout>

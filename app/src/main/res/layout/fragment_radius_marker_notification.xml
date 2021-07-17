@@ -9,65 +9,57 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:weightSum="1"
         android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/radiusMarkerNotifButton"
-            android:layout_width="300sp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingTop="15sp"
-            android:paddingBottom="15sp">
+            android:paddingBottom="15sp"
+            android:layout_weight="0.5">
 
-        <ImageView
-            android:layout_width="45sp"
-            android:layout_height="45sp"
-            android:src="@drawable/google_pin"
-            android:layout_marginRight="10sp">
+            <ImageView
+                android:layout_width="45sp"
+                android:layout_height="45sp"
+                android:src="@drawable/google_pin"
+                android:layout_marginRight="10sp">
 
-        </ImageView>
+            </ImageView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginRight="20sp">
-
-            <TextView
-                android:id="@+id/radiusMarkerCategoryText"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New marker"
-                android:textSize="18sp"
-                android:textColor="#424242"
-                android:textStyle="normal">
-            </TextView>
+                android:orientation="vertical"
+                android:layout_gravity="center">
 
-            <TextView
-                android:id="@+id/radiusMarkerDescriptionText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="A new marker has been posted..."
-                android:textSize="14sp"
-                android:textColor="#424242"
-                android:textStyle="normal"
-                android:maxLines="1"
-                android:ellipsize="end">
-            </TextView>
+                <TextView
+                    android:id="@+id/radiusMarkerCategoryText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="New marker"
+                    android:textSize="18sp"
+                    android:textColor="#424242"
+                    android:textStyle="normal"
+                    android:layout_gravity="center">
+                </TextView>
 
-        </LinearLayout>
+            </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/radiusMarkerNotifCloseButton"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@drawable/radius_marker_notif_dialog_clear_bg"
             android:drawablePadding="0dp"
             android:orientation="vertical"
             android:layout_gravity="center"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_weight="0.5">
 
             <ImageView
                 android:layout_width="wrap_content"

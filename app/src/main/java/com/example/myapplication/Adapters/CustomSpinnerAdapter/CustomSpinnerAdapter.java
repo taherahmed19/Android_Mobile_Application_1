@@ -5,16 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
-import com.example.myapplication.R;
 import com.example.myapplication.Models.SpinnerItem.SpinnerItem;
+import com.example.myapplication.R;
 
 import java.util.ArrayList;
 
@@ -80,9 +78,6 @@ public class CustomSpinnerAdapter extends ArrayAdapter<SpinnerItem> {
         list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_16)));
         list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_17)));
         list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_18)));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_19)));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_20)));
-        list.add(new SpinnerItem(context.getString(R.string.form_spinner_item_21)));
 
         return list;
     }

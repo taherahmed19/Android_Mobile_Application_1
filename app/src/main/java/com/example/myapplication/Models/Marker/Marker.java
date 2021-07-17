@@ -6,6 +6,7 @@ import com.example.myapplication.Interfaces.MarkerImageListener.MarkerImageListe
 import com.example.myapplication.Interfaces.MarkerListener.MarkerListener;
 import com.example.myapplication.Interfaces.TokenExpirationListener.TokenExpirationListener;
 import com.example.myapplication.Webservice.HttpMarkerDelete.HttpMarkerDelete;
+import com.example.myapplication.Webservice.HttpMarkerImage.HttpMarkerImage;
 
 public class Marker {
 
@@ -40,8 +41,8 @@ public class Marker {
     }
 
     public void makeApiCallCreateGetMarkerImage(Context context, MarkerImageListener markerImageListener, TokenExpirationListener tokenExpirationListener){
-//        HttpMarkerImage httpMarkerImage = new HttpMarkerImage(context, id, markerImageListener, tokenExpirationListener);
-//        httpMarkerImage.execute();
+        HttpMarkerImage httpMarkerImage = new HttpMarkerImage(context, id, markerImageListener, tokenExpirationListener);
+        httpMarkerImage.execute();
     }
 
     public String getFirstName() {

@@ -2,25 +2,22 @@
 <resources>
     <!-- Spinner Category's -->
     <string name="form_spinner_item_1">Select a category</string>
-    <string name="form_spinner_item_2">Environment</string>
-    <string name="form_spinner_item_3">Weather</string>
-    <string name="form_spinner_item_4">People</string>
-    <string name="form_spinner_item_5">Abandoned vehicles</string>
-    <string name="form_spinner_item_6">Bus stops</string>
-    <string name="form_spinner_item_7">Car parking</string>
-    <string name="form_spinner_item_8">Dog fouling</string>
-    <string name="form_spinner_item_9">Flyposting</string>
-    <string name="form_spinner_item_10">Graffiti</string>
-    <string name="form_spinner_item_11">Parks/landscapes</string>
-    <string name="form_spinner_item_12">Pavements/footpaths</string>
-    <string name="form_spinner_item_13">Potholes</string>
-    <string name="form_spinner_item_14">Public toilets</string>
-    <string name="form_spinner_item_15">Road traffic signs</string>
-    <string name="form_spinner_item_16">Roads/highways</string>
-    <string name="form_spinner_item_17">Rubbish (refuse and recycling)</string>
-    <string name="form_spinner_item_18">Street cleaning</string>
-    <string name="form_spinner_item_19">Street lighting</string>
-    <string name="form_spinner_item_20">Street nameplates</string>
-    <string name="form_spinner_item_21">Traffic lights</string>
+    <string name="form_spinner_item_2">Abandoned vehicles</string>
+    <string name="form_spinner_item_3">Bus stops</string>
+    <string name="form_spinner_item_4">Car parking</string>
+    <string name="form_spinner_item_5">Dog fouling</string>
+    <string name="form_spinner_item_6">Flyposting</string>
+    <string name="form_spinner_item_7">Graffiti</string>
+    <string name="form_spinner_item_8">Parks/landscapes</string>
+    <string name="form_spinner_item_9">Pavements/footpaths</string>
+    <string name="form_spinner_item_10">Potholes</string>
+    <string name="form_spinner_item_11">Public toilets</string>
+    <string name="form_spinner_item_12">Road traffic signs</string>
+    <string name="form_spinner_item_13">Roads/highways</string>
+    <string name="form_spinner_item_14">Rubbish (refuse and recycling)</string>
+    <string name="form_spinner_item_15">Street cleaning</string>
+    <string name="form_spinner_item_16">Street lighting</string>
+    <string name="form_spinner_item_17">Street nameplates</string>
+    <string name="form_spinner_item_18">Traffic lights</string>
 
 </resources>

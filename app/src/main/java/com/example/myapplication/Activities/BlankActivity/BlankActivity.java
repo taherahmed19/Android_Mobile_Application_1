@@ -3,6 +3,7 @@ package com.example.myapplication.Activities.BlankActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +13,7 @@ import com.example.myapplication.Interfaces.BlankContract.BlankContract;
 import com.example.myapplication.Presenters.BlankPresenter.BlankPresenter;
 import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData.LoginPreferenceData;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class BlankActivity extends AppCompatActivity implements BlankContract.View {
 
@@ -25,6 +27,7 @@ public class BlankActivity extends AppCompatActivity implements BlankContract.Vi
         this.blankPresenter = new BlankPresenter(this);
         this.blankPresenter.loadStartActivity();
 
+        Log.d("Print", "Firebase token "+ FirebaseInstanceId.getInstance().getToken());
     }
 
     @Override

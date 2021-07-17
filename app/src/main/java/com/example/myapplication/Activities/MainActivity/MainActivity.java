@@ -12,11 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.Fragments.MapFragment.MapFragment;
-import com.example.myapplication.Fragments.SearchResultsFragment.SearchResultsFragment;
-import com.example.myapplication.Fragments.SearchFragment.SearchFragment;
 import com.example.myapplication.Interfaces.MainContract.MainContract;
 import com.example.myapplication.Presenters.MainPresenter.MainPresenter;
 import com.example.myapplication.R;
@@ -63,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        mainPresenter.handleBackPressed();
+        //mainPresenter.handleBackPressed();
     }
 
     @Override
@@ -159,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getApplicationContext().getSharedPreferences("Jwt_token", 0).edit().clear().apply();
     }
 
-    @Override
+   /* @Override
     public void handleBackPressed() {
         Fragment fragment = (Fragment) this.getSupportFragmentManager().findFragmentByTag("findThisFragment");
 
@@ -180,5 +177,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(searchResultsFragment != null){
             searchResultsFragment.getFragmentManager().popBackStack();
         }
-    }
+    }*/
 }

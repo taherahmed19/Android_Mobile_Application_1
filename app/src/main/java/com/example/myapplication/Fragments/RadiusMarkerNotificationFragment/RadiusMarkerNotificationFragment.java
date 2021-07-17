@@ -2,7 +2,6 @@ package com.example.myapplication.Fragments.RadiusMarkerNotificationFragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,9 +48,6 @@ public class RadiusMarkerNotificationFragment extends Fragment {
         TextView radiusMarkerCategoryText = this.getView().findViewById(R.id.radiusMarkerCategoryText);
         String category = marker.getCategory();
         radiusMarkerCategoryText.setText(Character.toUpperCase(category.charAt(0)) + category.substring(1));
-
-        TextView radiusMarkerDescriptionText = (TextView) this.getView().findViewById(R.id.radiusMarkerDescriptionText);
-        radiusMarkerDescriptionText.setText(marker.getDescription());
     }
 
     private void configureNotificationTriggerButton(){

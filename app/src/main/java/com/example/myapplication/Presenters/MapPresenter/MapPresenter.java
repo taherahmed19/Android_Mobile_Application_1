@@ -66,10 +66,6 @@ public class MapPresenter implements MapContract.Presenter, MapListener, CustomM
         this.view.handleRadiusMarkerRemoval(valid);
     }
 
-    public void handleSearchButtonClick(){
-        view.handleSearchButtonClick();
-    }
-
     public void handleNewPostButtonClick(){
         view.handleNewPostButtonClick();
     }
