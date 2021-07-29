@@ -47,16 +47,28 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         this.bottomSheetPresenter = new BottomSheetPresenter(mMap, latLng, radiusMarker,  this);
     }
 
+    /**
+     * initial method to execute for activity
+     * @param savedInstanceState instance
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * second method to execute for activity
+     * @param savedInstanceState instance
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_custom_marker_bottom, container, false);
     }
 
+    /**
+     * once view elements are rendered
+     * @param savedInstanceState instance
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -72,6 +84,11 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         bottomSheetPresenter.resetNotificationsBackgroundState();
     }
 
+    /**
+     * progress bar - custom to follow radius constraints
+     * @param seekBar XML
+     * @param progress progress bar value
+     */
     @Override
     public void updateRadiusMarkerSeekBar(SeekBar seekBar, int progress){
         seekBar.setProgress(progress);
@@ -80,28 +97,44 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         bottomSheetPresenter.updateRadius(progress);
     }
 
+    /**
+     * custom notification background colour - XML
+     */
     @Override
     public void setInAppButtonClicked(){
         radiusMarkerInAppButton.setBackground(getResources().getDrawable(R.drawable.custom_marker_bottom_background_clicked));
         radiusMarkerVoiceButton.setBackgroundResource(0);
     }
 
+    /**
+     * custom notification background colour - XML
+     */
     @Override
     public void removeInAppButtonBackground(){
         radiusMarkerInAppButton.setBackgroundResource(0);
     }
 
+    /**
+     * custom notification background colour - XML
+     */
     @Override
     public void setVoiceButtonClicked(){
         radiusMarkerVoiceButton.setBackground(getResources().getDrawable(R.drawable.custom_marker_bottom_background_clicked));
         radiusMarkerInAppButton.setBackgroundResource(0);
     }
 
+    /**
+     * custom notification background colour - XML
+     */
     @Override
     public void removeVoiceButtonBackground(){
         radiusMarkerVoiceButton.setBackgroundResource(0);
     }
 
+    /**
+     * Close bottom fragment from user view - dependent on local storage data.
+     * @param radiusMarker
+     */
     @Override
     public void closeBottomSheetView(RadiusMarker radiusMarker){
         SharedPreferences settingsPreference = Objects.requireNonNull(getContext()).getSharedPreferences("Radius_Marker_Settings", 0);
@@ -120,6 +153,9 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         this.getParentFragmentManager().popBackStack();
     }
 
+    /**
+     * shouw dialog removal on UI
+     */
     @Override
     public void showRemoveDialog(){
         dialog.setContentView(R.layout.radius_marker_dialog);
@@ -131,11 +167,17 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         }
     }
 
+    /**
+     * delete dialog removal from UI
+     */
     @Override
     public void dismissRemoveDialog(){
         dialog.dismiss();
     }
 
+    /**
+     * save information to local storage
+     */
     @Override
     public void handleSaveButtonClick(){
         bottomSheetPresenter.makeApiRequestWriteRadiusMarker();
@@ -150,6 +192,10 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         getParentFragmentManager().popBackStack();
     }
 
+    /**
+     * remove radius marker - custom error message if error from web service
+     * @param valid
+     */
     @Override
     public void handleRadiusMarkerRemoval(Boolean valid){
         if(!valid){
@@ -164,6 +210,9 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         }
     }
 
+    /**
+     * initial radius marker
+     */
     @Override
     public void handleRadiusMarker(){
         this.bottomSheetPresenter.setOriginalRadius();
@@ -173,11 +222,18 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         }
     }
 
+    /**
+     * application context for fragment - diff from activity
+     * @return
+     */
     @Override
     public Context getApplicationContext(){
         return this.getContext();
     }
 
+    /**
+     * Configure XML
+     */
     private void initialiseComponents(){
         if(this.getView() != null && this.getContext() != null){
             radiusMarkerSeekBar = (SeekBar) this.getView().findViewById(R.id.radiusMarkerSeekBar);
@@ -190,6 +246,9 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         }
     }
 
+    /**
+     * Configure XML
+     */
     private void configureSeekBar(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String progressText =  "";
@@ -222,6 +281,9 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         });
     }
 
+    /**
+     * Configure XML
+     */
     private void configureInAppButton(){
         radiusMarkerInAppButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,6 +293,9 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         });
     }
 
+    /**
+     * Configure XML
+     */
     private void configureVoiceButton(){
         radiusMarkerVoiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,6 +305,9 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         });
     }
 
+    /**
+     * Configure XML
+     */
     private void configureCloseButton(){
         radiusMarkerCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -249,6 +317,9 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         });
     }
 
+    /**
+     * Configure XML
+     */
     private void configureRemoveButton(){
         SharedPreferences settingsPreference = Objects.requireNonNull(this.getContext()).getSharedPreferences("Radius_Marker_Settings", 0);
         boolean stateExists = settingsPreference.getBoolean("stateExists", false);
@@ -268,6 +339,9 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         });
     }
 
+    /**
+     * Configure XML
+     */
     private void configureRemoveDialog(){
         Button radiusMarkerDialogCloseButton = (Button) dialog.findViewById(R.id.radiusMarkerDialogCloseButton);
         radiusMarkerDialogCloseButton.setOnClickListener(new View.OnClickListener() {
@@ -286,6 +360,9 @@ public class BottomSheetFragment extends Fragment implements BottomSheetContract
         });
     }
 
+    /**
+     * Configure XML
+     */
     private void configureSaveButton(){
         radiusMarkerSaveButton = (Button) Objects.requireNonNull(this.getView()).findViewById(R.id.radiusMarkerSaveButton);
 

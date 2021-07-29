@@ -6,7 +6,6 @@
 
     <string name="webservice_insert_post_endpoint">https://jellymaps.com/api/insertPost</string>
 
-    <string name="webservice_update_marker_rating">https://jellymaps.com/api/insertRating?markerId={0}&amp;isUpVote={1}</string>
     <string name="webservice_delete_marker">https://jellymaps.com/api/deletemarker?markerId={0}</string>
 
     <string name="webservice_marker_image">https://jellymaps.com/api/getmarkerimage?markerId={0}</string>

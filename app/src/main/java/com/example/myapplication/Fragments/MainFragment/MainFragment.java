@@ -21,24 +21,39 @@ public class MainFragment extends Fragment {
         viewPager = null;
     }
 
+    /**
+     * lifecyle method - retain instance to save state
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-
     }
 
+    /**
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_main_map, container, false);
     }
 
+    /**
+     * render components - element visible
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        //viewpage enables refreshing of activities and fragments
         viewPager = (LockableViewPager)getView().findViewById(R.id.viewPager);
         viewPager.setOffscreenPageLimit(0);
         swiperAdapter = new SwiperAdapter(getChildFragmentManager(), viewPager);
@@ -46,9 +61,4 @@ public class MainFragment extends Fragment {
         viewPager.setCurrentItem(0);
         viewPager.setSwipeable(false);
     }
-
-    public Fragment getCurrentFragment(){
-        return swiperAdapter.getItem(0);
-    }
-
 }

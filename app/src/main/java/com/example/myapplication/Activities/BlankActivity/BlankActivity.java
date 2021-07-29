@@ -15,10 +15,15 @@ import com.example.myapplication.R;
 import com.example.myapplication.SharedPreference.LoginPreferenceData.LoginPreferenceData.LoginPreferenceData;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+
 public class BlankActivity extends AppCompatActivity implements BlankContract.View {
 
     BlankPresenter blankPresenter;
 
+    /**
+     * initial method to execute for activity
+     * @param savedInstanceState instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,12 +35,21 @@ public class BlankActivity extends AppCompatActivity implements BlankContract.Vi
         Log.d("Print", "Firebase token "+ FirebaseInstanceId.getInstance().getToken());
     }
 
+    /**
+     * Executed after GPS permissions enabled to re-render the mao
+     */
     @Override
     protected void onRestart() {
         super.onRestart();
         this.blankPresenter.loadStartActivity();
     }
 
+    /**
+     * To execute once returned from main activity.
+     * @param requestCode request from activity
+     * @param resultCode response from custom class
+     * @param data data to parse
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -44,12 +58,14 @@ public class BlankActivity extends AppCompatActivity implements BlankContract.Vi
             if(resultCode == Activity.RESULT_OK){
                 this.blankPresenter.loadStartActivity();
             }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                // Write your code if there's no result
-            }
-        }
-    } //onActivityResult
 
+        }
+    }
+
+    /**
+     * Decide which activity to render.
+     * Dependent on if user if logged in
+     */
     @Override
     public void loadStartActivity(){
         boolean userLoggedIn = LoginPreferenceData.getUserLoggedIn(this);
@@ -62,8 +78,8 @@ public class BlankActivity extends AppCompatActivity implements BlankContract.Vi
         }
 
         Intent newActivity = new Intent(this, activity);
+        //request code for onActivityResult
         startActivityForResult(newActivity, 1);
-
     }
 
 }

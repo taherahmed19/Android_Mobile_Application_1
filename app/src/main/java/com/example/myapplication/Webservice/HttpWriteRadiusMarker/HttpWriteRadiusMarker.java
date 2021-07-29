@@ -40,6 +40,19 @@ public class HttpWriteRadiusMarker extends AsyncTask<String , Void ,String> {
     int inApp;
     int voice;
 
+    /**
+     * Constructor to write notification area to web service
+     * @param context application context
+     * @param userId user db reference
+     * @param isMonitoring settings
+     * @param lat settings
+     * @param lon settings
+     * @param radius settings
+     * @param inApp settings
+     * @param voice settings
+     * @param setRadiusMarkerListener listener after response
+     * @param tokenExpirationListener token expiration
+     */
     public HttpWriteRadiusMarker(Context context, int userId, int isMonitoring, String lat, String lon, String radius,
                                  int inApp, int voice, SetRadiusMarkerListener setRadiusMarkerListener,
                                  TokenExpirationListener tokenExpirationListener) {
@@ -55,6 +68,11 @@ public class HttpWriteRadiusMarker extends AsyncTask<String , Void ,String> {
         this.tokenExpirationListener = tokenExpirationListener;
     }
 
+    /**
+     * Background method for async class - not working off main thread
+     * @param strings
+     * @return
+     */
     @Override
     protected String doInBackground(String... strings) {
         SSL.AllowSSLCertificates();
@@ -74,10 +92,16 @@ public class HttpWriteRadiusMarker extends AsyncTask<String , Void ,String> {
         return "";
     }
 
-    String handleRequest(String apiRequest){
+    /**
+     * make request to the web service
+     * POST data with token
+     * @param request
+     * @return
+     */
+    String handleRequest(String request){
         String response = null;
         try {
-            url = new URL(apiRequest);
+            url = new URL(request);
             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
@@ -112,6 +136,10 @@ public class HttpWriteRadiusMarker extends AsyncTask<String , Void ,String> {
         return response;
     }
 
+    /**
+     * code to handle response from the web service
+     * @return
+     */
     String handleResponse(){
         try {
             responseCode = urlConnection.getResponseCode();
@@ -128,6 +156,11 @@ public class HttpWriteRadiusMarker extends AsyncTask<String , Void ,String> {
         return null;
     }
 
+    /**
+     * Handle response data
+     * Activity will handle radius marker UI interactions based on valid response
+     * @param response
+     */
     @Override
     protected void onPostExecute(String response) {
         if(response != null && response.length() > 0){

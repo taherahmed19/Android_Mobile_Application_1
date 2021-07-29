@@ -54,11 +54,22 @@ public class MapFragment extends Fragment implements
         this.viewPager = viewPager;
     }
 
+    /**
+     * lifecycle for application
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_map, container, false);
     }
 
+    /**
+     * components rendered to screen - requires presenter to be instantiated here.
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -78,24 +89,39 @@ public class MapFragment extends Fragment implements
         configureSwitchButton();
     }
 
+    /**
+     * activity result when returning from fragment
+     * @param requestCode custom request code
+     * @param resultCode custom response code defined in fragment
+     * @param data custom data to be parsed
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         this.showSpinner();
     }
 
+    /**
+     * lifecycle - location listener
+     */
     @Override
     public void onStart() {
         super.onStart();
         currentLocation.startLocationUpdates();
     }
 
+    /**
+     * lifecyle - stop location listener
+     */
     @Override
     public void onStop() {
         super.onStop();
         currentLocation.stopLocationUpdates();
     }
 
+    /**
+     * lifecycle - remove broadcast receiver
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -107,6 +133,9 @@ public class MapFragment extends Fragment implements
         }
     }
 
+    /**
+     * lifecycle - set broadcast receiver to listen from request from service.
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -121,12 +150,22 @@ public class MapFragment extends Fragment implements
         }
     }
 
+    /**
+     * Render form fragment into the UI - main activity will remain in background process to enable
+     * easy refreshing of the map
+     */
     @Override
     public void handleNewPostButtonClick(){
         FormFragment fragment = new FormFragment(getFragmentManager(), viewPager);
         FragmentTransition.Transition(getParentFragmentManager(), fragment, R.anim.right_animations, R.anim.left_animation, R.id.mapFeedSearchPointer, "");
     }
 
+    /**
+     * Detect user clicking on a marker on the map -
+     * Create new modal fragment to display marker details
+     * @param marker marker object - not conflict with default google marker
+     * @return
+     */
     @Override
     public boolean handleMarkerClick(com.google.android.gms.maps.model.Marker marker){
         if(!marker.getTag().equals(getString(R.string.default_constant))){
@@ -141,6 +180,10 @@ public class MapFragment extends Fragment implements
         return false;
     }
 
+    /**
+     * marker listener method
+     * @param mMap map instance
+     */
     @Override
     public void addMarkersListener(GoogleMap mMap){
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -151,6 +194,9 @@ public class MapFragment extends Fragment implements
         });
     }
 
+    /**
+     * remove spinner from UI - called after successful response from web service
+     */
     @Override
     public void hideSpinner(){
         if(this.loadingSpinner != null){
@@ -158,6 +204,12 @@ public class MapFragment extends Fragment implements
         }
     }
 
+    /**
+     * notification area click listener
+     * map long click to ensure user has to hold map for 1 second
+     * map click equals default click
+     * @param mMap
+     */
     @Override
     public void handleRadiusMarkerMapClick(GoogleMap mMap){
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
@@ -176,6 +228,12 @@ public class MapFragment extends Fragment implements
         });
     }
 
+    /**
+     * Create new notification area
+     * Removes existing notification area if exists
+     * @param mMap map instance
+     * @param latLng center coordinate of notification area
+     */
     @Override
     public void createBottomSheetFragment(GoogleMap mMap, LatLng latLng){
         if(bottomSheetFragment != null && bottomSheetFragment.isAdded()){
@@ -185,6 +243,12 @@ public class MapFragment extends Fragment implements
         FragmentTransition.OpenFragment(getParentFragmentManager(), bottomSheetFragment, R.id.mapFeedSearchPointer, "");
     }
 
+    /**
+     * If notification area is existing - open fragment with existing state
+     * Without this method the fragment data will reset.
+     * @param mMap map instance
+     * @param latLng coords for notification area
+     */
     @Override
     public void openBottomSheetWithState(GoogleMap mMap, LatLng latLng){
         boolean clickedInsideArea = mapPresenter.handleRadiusMarkerClick(latLng);
@@ -197,6 +261,11 @@ public class MapFragment extends Fragment implements
         }
     }
 
+    /**
+     * method to be called after response from web service
+     * Toast to create UI dialog to user to display information
+     * @param valid
+     */
     @Override
     public void handleRadiusMarkerRemoval(Boolean valid){
         if(!valid){
@@ -206,48 +275,83 @@ public class MapFragment extends Fragment implements
         }
     }
 
+    /**
+     * application context for fragment
+     * @return
+     */
     @Override
     public Context getApplicationContext(){
         return this.getContext();
     }
 
+    /**
+     * @return loading spinner instance
+     */
     @Override
     public LoadingSpinner getLoadingSpinner(){
         return this.loadingSpinner;
     }
 
+    /**
+     * update user current location marker
+     * @param location
+     */
     @Override
     public void updateUserLocation(Location location) {
         mapPresenter.setGoogleMarkerLocation(location);
     }
 
+    /**
+     * To be called once token expired - remove token from local storage
+     */
     @Override
     public void handleTokenExpiration(){
         JWTToken.removeTokenSharedPref(this.getActivity());
     }
 
+    /**
+     * set specific tiles to be rendered for user - updated once user moves map
+     * @param latLng
+     */
     public void setMapLocation(LatLng latLng){
         mapPresenter.setMapLocation(latLng);
     }
 
+    /**
+     * add marker
+     * @param viewPager
+     * @param markerModel
+     */
     public void triggerMarkerOnMap(ViewPager viewPager, Marker markerModel){
         mapPresenter.addMarkerToMap(viewPager, markerModel);
     }
 
+    /**
+     * add spinner to UI
+     */
     public void showSpinner(){
         if(this.loadingSpinner != null){
             this.loadingSpinner.show();
         }
     }
 
+    /**
+     * support map fragment required by map in XML file
+     */
     void configureSupportMapFragment(){
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
     }
 
+    /**
+     * configure XML
+     */
     void configureSpinner(){
         this.loadingSpinner = new LoadingSpinner((ProgressBar) getView().findViewById(R.id.feedLoadingSpinner));
     }
 
+    /**
+     * configure XML
+     */
     void configureNewPostButton(){
         final ImageButton newPost = (ImageButton) getView().findViewById(R.id.newPostButton);
         newPost.setOnClickListener(new View.OnClickListener() {
@@ -258,6 +362,9 @@ public class MapFragment extends Fragment implements
         });
     }
 
+    /**
+     * configure XML
+     */
     void configureSwitchButton(){
         final ImageButton mapLocationResetBtn = (ImageButton) getView().findViewById(R.id.mapLocationResetBtn);
 
@@ -269,6 +376,9 @@ public class MapFragment extends Fragment implements
         });
     }
 
+    /**
+     * configure XML
+     */
     void configureMapRefreshButton(){
         final ImageButton mapRefreshBtn = (ImageButton) getView().findViewById(R.id.mapRefreshBtn);
 
@@ -280,6 +390,9 @@ public class MapFragment extends Fragment implements
         });
     }
 
+    /**
+     * @return broadcast receiver instance
+     */
     public BroadcastReceiver getReceiver() {
         return receiver;
     }
@@ -288,6 +401,8 @@ public class MapFragment extends Fragment implements
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            //Get data from FirebaseService.
+
             boolean voiceEnabled = Objects.requireNonNull(intent.getExtras()).getBoolean("voiceEnabled");
             int openNotification = Objects.requireNonNull(intent.getExtras()).getInt("openNotification");
             int userId = Integer.parseInt(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("userId")));
@@ -298,11 +413,12 @@ public class MapFragment extends Fragment implements
             String lng = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("lng"));
             String firstName = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("firstName"));
             String lastName = Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("lastName"));
-            int rating = Integer.parseInt(Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("rating")));
 
-            Marker markerModel = new Marker(userId, firstName, lastName, category, description, lat, lng, null, markerId, rating);
+            Marker markerModel = new Marker(userId, firstName, lastName, category, description, lat, lng, null, markerId);
 
             triggerMarkerOnMap(viewPager, markerModel);
+
+            //conditions depending on user notification settings.
 
             if (!voiceEnabled && openNotification == 0) {
                 MarkerModalFragment markerModalFragment = new MarkerModalFragment(markerModel, viewPager);

@@ -39,6 +39,12 @@ public class HttpRegisterUser extends AsyncTask<String , Void ,String> {
     User user;
     RegisterUser registerUser;
 
+    /**
+     * Constructor to request web service to register new user
+     * @param context application context
+     * @param registerListener listener after response
+     * @param registerUser Form object
+     */
     public HttpRegisterUser(Context context, RegisterListener registerListener, RegisterUser registerUser) {
         this.context = context;
         this.registerListener = registerListener;
@@ -46,6 +52,11 @@ public class HttpRegisterUser extends AsyncTask<String , Void ,String> {
         this.user = new User();
     }
 
+    /**
+     * Background method for async class - not working off main thread
+     * @param strings
+     * @return
+     */
     @Override
     protected String doInBackground(String... strings) {
         SSL.AllowSSLCertificates();
@@ -64,10 +75,16 @@ public class HttpRegisterUser extends AsyncTask<String , Void ,String> {
         return null;
     }
 
-    String handleRequest(String apiRequest){
+    /**
+     * make request to the web service
+     * POST data without token
+     * @param request
+     * @return
+     */
+    String handleRequest(String request){
         String response = null;
         try {
-            url = new URL(apiRequest);
+            url = new URL(request);
             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
@@ -95,6 +112,10 @@ public class HttpRegisterUser extends AsyncTask<String , Void ,String> {
         return response;
     }
 
+    /**
+     * code to handle response from the web service
+     * @return
+     */
     String handleResponse(){
         try {
             responseCode = urlConnection.getResponseCode();
@@ -109,8 +130,14 @@ public class HttpRegisterUser extends AsyncTask<String , Void ,String> {
         return null;
     }
 
+    /**
+     * Handle response data
+     * @param response
+     */
     @Override
     protected void onPostExecute(String response) {
+        Log.d("Print" , "Response === " + response);
+
         if(response != null && response.length() > 0){
             handleJSONResponse(response);
             registerListener.handleRegistrationAttempt(validCredentials, user);
@@ -119,6 +146,10 @@ public class HttpRegisterUser extends AsyncTask<String , Void ,String> {
         }
     }
 
+    /**
+     * parse json data after response. Data will need to be stored within shared preferences for usage in side nav, form etc.
+     * @param jsonString
+     */
     void handleJSONResponse(String jsonString){
         try {
             JSONObject jsonObject = new JSONObject(jsonString);

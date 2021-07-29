@@ -27,6 +27,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private MainPresenter mainPresenter;
     private DrawerLayout drawerLayout;
 
+    /**
+     * initial method to execute for activity
+     * @param savedInstanceState instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +45,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         onNewIntent(getIntent());
     }
 
+    /**
+     * for GPS permission result
+     * @param requestCode request code from activity
+     * @param permissions premission type
+     * @param grantResults result value
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -48,6 +58,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(getIntent());
     }
 
+    /**
+     * Side nav functionality
+     * @param item menu item
+     * @return boolean
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.nav_sign_out) {
@@ -63,6 +78,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //mainPresenter.handleBackPressed();
     }
 
+    /**
+     * Intent to be received from Firebase service
+     * @param intent instance inject from service.
+     */
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -78,15 +97,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mapFragmentIntent.putExtra("lng", intent.getExtras().getString("lng"));
             mapFragmentIntent.putExtra("firstName", intent.getExtras().getString("firstName"));
             mapFragmentIntent.putExtra("lastName", intent.getExtras().getString("lastName"));
-            mapFragmentIntent.putExtra("rating", intent.getExtras().getString("rating"));
             sendBroadcast(mapFragmentIntent);
         }
     }
 
+    /**
+     * Configure XML
+     */
     void configureDrawerLayout(){
         drawerLayout = this.findViewById(R.id.homepage);
     }
 
+    /**
+     * Configure XML
+     */
     void configureHeaderMenuButton(){
         ImageButton userMenu = (ImageButton) this.findViewById(R.id.userMenu);
 
@@ -99,6 +123,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    /**
+     * XML layout order
+     */
     void configureNavigation(){
         configureNavigationListener();
         configureNavHeaderName();
@@ -106,11 +133,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         configureNavHeaderUserIcon();
     }
 
+    /**
+     * Configure XML
+     */
     void configureNavigationListener(){
         NavigationView navigationView = (NavigationView) this.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    /**
+     * Configure XML
+     */
     void configureNavHeaderName(){
         String firstName = LoginPreferenceData.getUserFirstName(this);
         String lastName = LoginPreferenceData.getUserLastName(this);
@@ -124,6 +157,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         text.setText(concatName);
     }
 
+    /**
+     * Configure XML
+     */
     void configureNavHeaderEmail(){
         String email = LoginPreferenceData.getUserEmail(this);
 
@@ -134,6 +170,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         text.setText(email);
     }
 
+    /**
+     * Configure XML
+     */
     void configureNavHeaderUserIcon(){
         String firstName = LoginPreferenceData.getUserFirstName(this);
         String lastName = LoginPreferenceData.getUserLastName(this);
@@ -147,6 +186,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nav_header_name_logo.setText(concatInitials);
     }
 
+    /**
+     * Reset local storage
+     */
     void resetSharedPreference(){
         getApplicationContext().getSharedPreferences("Main_Fragment_Map_State", 0).edit().clear().apply();
         getApplicationContext().getSharedPreferences("Main_MapFeed_Map_State", 0).edit().clear().apply();

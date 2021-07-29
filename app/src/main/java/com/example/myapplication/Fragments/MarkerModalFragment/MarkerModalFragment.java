@@ -36,25 +36,38 @@ public class MarkerModalFragment extends Fragment implements MarkerModalContract
 
     ViewPager viewPager;
     MarkerModalPresenter markerModalPresenter;
-    ImageButton upVoteButton;
-    ImageButton downVoteButton;
 
     public MarkerModalFragment(Marker marker, ViewPager viewPager) {
         this.viewPager = viewPager;
         this.markerModalPresenter = new MarkerModalPresenter(this, marker);
     }
 
+    /**
+     * lifecyle
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * lifecycle
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_marker_modal, container, false);
     }
 
+    /**
+     * lifecycle - render elements here
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -65,34 +78,20 @@ public class MarkerModalFragment extends Fragment implements MarkerModalContract
         configureDeleteButton();
         configureMedia();
         configureName();
-        configureRating();
-        configureDownVoteButton();
-        configureUpVoteButton();
-        configureRatingButtons();
-        configureUserRatingState();
     }
 
+    /**
+     * To be executed if response from web service is null
+     */
     @Override
     public void handleTokenExpiration(){
         JWTToken.removeTokenSharedPref(Objects.requireNonNull(this.getActivity()));
     }
 
-    @Override
-    public void updateModalRating(boolean response) {
-        if (response) {
-            this.markerModalPresenter.updateRating();
-            this.markerModalPresenter.saveSettingsSharedPreference();
-            this.updateRatingValue(this.markerModalPresenter.getRating());
-        } else {
-            Toast.makeText(getContext(), getContext().getString(R.string.post_rating_body), Toast.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    public void saveModalRatingState(int rating) {
-        this.updateRatingValue(rating);
-    }
-
+    /**
+     * refresh map after successful response from web service
+     * @param response
+     */
     @Override
     public void closeUserPost(boolean response) {
         if (response) {
@@ -103,6 +102,11 @@ public class MarkerModalFragment extends Fragment implements MarkerModalContract
         }
     }
 
+    /**
+     * Seperately render image from other data
+     * Utilises once opening marker from notification
+     * @param encodedString base 64 string of image
+     */
     @Override
     public void addImageToModal(String encodedString) {
         if (TextUtils.isEmpty(encodedString)) {
@@ -113,22 +117,37 @@ public class MarkerModalFragment extends Fragment implements MarkerModalContract
         }
     }
 
+    /**
+     * return from modal to main activity
+     */
     @Override
     public void handleCloseButtonClick() {
         getParentFragmentManager().popBackStack();
     }
 
+    /**
+     * close image back to marker modal
+     * @param dialog dialog instance
+     */
     @Override
     public void handleImageDialogClose(Dialog dialog) {
         dialog.dismiss();
     }
 
+    /**
+     * Open full screen of image
+     * @param dialog dialog instance
+     */
     @Override
     public void handleImageClick(Dialog dialog) {
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.BLACK));
         dialog.show();
     }
 
+    /**
+     * Render dialog to remove marker
+     * Colors rendered from colors.xml
+     */
     @Override
     public void createMarkerDeletionDialog() {
         new AlertDialog.Builder(getContext())
@@ -145,122 +164,19 @@ public class MarkerModalFragment extends Fragment implements MarkerModalContract
                 .getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.error_red));
     }
 
+    /**
+     * Fragment context
+     * @return
+     */
     @Override
     public Context getApplicationContext() {
         return this.getContext();
     }
 
-    @Override
-    public void handleUpVoteButtonClick() {
-        markerModalPresenter.handleUpVoteButtonClick();
-    }
-
-    @Override
-    public void handleDownVoteButtonClick() {
-        markerModalPresenter.handleDownVoteButtonClick();
-    }
-
-    @Override
-    public void setUpVote() {
-        upVoteButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_upvote_arrow_clicked));
-        downVoteButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_downvote_arrow));
-    }
-
-    @Override
-    public void setDownVote() {
-        downVoteButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_downvote_arrow_clicked));
-        upVoteButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_upvote_arrow));
-    }
-
-    @Override
-    public void removeVote() {
-        upVoteButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_upvote_arrow));
-        downVoteButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_downvote_arrow));
-    }
-
-    void updateRatingValue(int rating) {
-        TextView markerRating = (TextView) Objects.requireNonNull(this.getView()).findViewById(R.id.markerRating);
-        markerRating.setText(String.valueOf(rating));
-    }
-
-    void configureCloseButton() {
-        ImageButton modalCloseButton = (ImageButton) Objects.requireNonNull(this.getView()).findViewById(R.id.modalCloseButton);
-        modalCloseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                markerModalPresenter.handleCloseButtonClick();
-            }
-        });
-    }
-
-    void configureUpVoteButton() {
-        this.upVoteButton = (ImageButton) Objects.requireNonNull(this.getView()).findViewById(R.id.upVoteButton);
-    }
-
-    void configureDownVoteButton() {
-        this.downVoteButton = (ImageButton) Objects.requireNonNull(this.getView()).findViewById(R.id.downVoteButton);
-    }
-
-    void configureRatingButtons() {
-        upVoteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                markerModalPresenter.handleUpVoteButtonClick();
-            }
-        });
-
-        downVoteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                markerModalPresenter.handleDownVoteButtonClick();
-            }
-        });
-    }
-
-    void configureUserRatingState() {
-        markerModalPresenter.configureUserRatingState();
-    }
-
-    void configureRating() {
-        TextView markerRating = (TextView) Objects.requireNonNull(this.getView()).findViewById(R.id.markerRating);
-        String rating = String.valueOf(this.markerModalPresenter.getMarker().getRating());
-        markerRating.setText(rating);
-    }
-
-    void configureCategory() {
-        TextView modalCategory = Objects.requireNonNull(this.getView()).findViewById(R.id.modalCategory);
-        String category = this.markerModalPresenter.getMarker().getCategory();
-        category = category.substring(0, 1).toUpperCase() + category.substring(1);
-
-        modalCategory.setText(category);
-    }
-
-    void configureDescription() {
-        String description = this.markerModalPresenter.getMarker().getDescription();
-        TextView modalDescription = (TextView) Objects.requireNonNull(this.getView()).findViewById(R.id.modalDescription);
-
-        modalDescription.setText(description);
-    }
-
-    void configureName() {
-        this.markerModalPresenter.updateModalPostName();
-        TextView text = Objects.requireNonNull(this.getView()).findViewById(R.id.marker_user_name);
-
-        if (this.markerModalPresenter.getMarker().getUserId() == LoginPreferenceData.getUserId(this.getContext())) {
-            text.setText(markerModalPresenter.getUserPost());
-        } else {
-            text.setText(markerModalPresenter.getAltName());
-        }
-    }
-
-    void configureMedia() {
-        if (this.markerModalPresenter.getMarker().getEncodedImage() == null) {
-            markerModalPresenter.makeApiCallCreateGetMarkerImage();
-        } else {
-            renderImage();
-        }
-    }
-
+    /**
+     * Configure XMl
+     * Image handling from XML to object
+     */
     void renderImage() {
         this.markerModalPresenter.decodeModalImage();
 
@@ -294,6 +210,68 @@ public class MarkerModalFragment extends Fragment implements MarkerModalContract
         });
     }
 
+    /**
+     * Configure XML
+     */
+    void configureCloseButton() {
+        ImageButton modalCloseButton = (ImageButton) Objects.requireNonNull(this.getView()).findViewById(R.id.modalCloseButton);
+        modalCloseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                markerModalPresenter.handleCloseButtonClick();
+            }
+        });
+    }
+
+    /**
+     * Configure XML
+     */
+    void configureCategory() {
+        TextView modalCategory = Objects.requireNonNull(this.getView()).findViewById(R.id.modalCategory);
+        String category = this.markerModalPresenter.getMarker().getCategory();
+        category = category.substring(0, 1).toUpperCase() + category.substring(1);
+
+        modalCategory.setText(category);
+    }
+
+    /**
+     * Configure XML
+     */
+    void configureDescription() {
+        String description = this.markerModalPresenter.getMarker().getDescription();
+        TextView modalDescription = (TextView) Objects.requireNonNull(this.getView()).findViewById(R.id.modalDescription);
+
+        modalDescription.setText(description);
+    }
+
+    /**
+     * Configure XML
+     */
+    void configureName() {
+        this.markerModalPresenter.updateModalPostName();
+        TextView text = Objects.requireNonNull(this.getView()).findViewById(R.id.marker_user_name);
+
+        if (this.markerModalPresenter.getMarker().getUserId() == LoginPreferenceData.getUserId(this.getContext())) {
+            text.setText(markerModalPresenter.getUserPost());
+        } else {
+            text.setText(markerModalPresenter.getAltName());
+        }
+    }
+
+    /**
+     * Configure XML
+     */
+    void configureMedia() {
+        if (this.markerModalPresenter.getMarker().getEncodedImage() == null) {
+            markerModalPresenter.makeApiCallCreateGetMarkerImage();
+        } else {
+            renderImage();
+        }
+    }
+
+    /**
+     * Configure XML
+     */
     void configureDeleteButton() {
         Button markerDeleteButton = (Button) Objects.requireNonNull(this.getView()).findViewById(R.id.markerDeleteButton);
 
@@ -303,6 +281,10 @@ public class MarkerModalFragment extends Fragment implements MarkerModalContract
         }
     }
 
+    /**
+     * Configure XML
+     * @param markerDeleteButton xml
+     */
     void configureMarkerDeleteDialog(Button markerDeleteButton) {
         markerDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override

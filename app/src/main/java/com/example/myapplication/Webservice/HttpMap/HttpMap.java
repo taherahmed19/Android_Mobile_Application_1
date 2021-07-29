@@ -38,7 +38,16 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
     CustomMarkerListener customMarkerListener;
     TokenExpirationListener tokenExpirationListener;
 
-    public HttpMap(LoadingSpinner loadingSpinner, Context context, CustomMarkerListener customMarkerListener, TokenExpirationListener tokenExpirationListener){
+    /**
+     * Constructor for map data from web service
+     * All markers and associated data
+     * @param loadingSpinner spinner xml element
+     * @param context application context
+     * @param customMarkerListener marker listener to populate map
+     * @param tokenExpirationListener listener for token expiration
+     */
+    public HttpMap(LoadingSpinner loadingSpinner, Context context,
+                   CustomMarkerListener customMarkerListener, TokenExpirationListener tokenExpirationListener){
         this.customMarkerListener = customMarkerListener;
         this.context = context;
         this.markers = new ArrayList<>();
@@ -47,11 +56,20 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
         this.tokenExpirationListener = tokenExpirationListener;
     }
 
+    /**
+     * Show loading spinner prior to sending request
+     * Needed to display to user that request to web service is being made
+     */
     @Override
     protected void onPreExecute() {
         this.loadingSpinner.show();
     }
 
+    /**
+     * Background method for async class - not working off main thread
+     * @param strings
+     * @return
+     */
     @Override
     protected String doInBackground(String... strings) {
         SSL.AllowSSLCertificates();
@@ -71,13 +89,20 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
         return "";
     }
 
-    String handleRequest(String apiRequest){
+    /**
+     * make request to the web service
+     * POST data to web service
+     * @param request
+     * @return
+     */
+    String handleRequest(String request){
         String response = null;
         try {
-            url = new URL(apiRequest);
+            url = new URL(request);
             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
 
+            //Auth token to use Web service Action endpoints
             String basicAuth = "Bearer " + JWTToken.getToken(context);
             urlConnection.setRequestProperty("Authorization", basicAuth);
 
@@ -89,6 +114,11 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
         return response;
     }
 
+    /**
+     * code to handle response from the web service
+     * Also handle 401 status code
+     * @return
+     */
     String handleResponse(){
         try {
             responseCode = urlConnection.getResponseCode();
@@ -105,15 +135,22 @@ public class HttpMap extends AsyncTask<String , Void ,String> {
         return null;
     }
 
+    /**
+     * Handle response data
+     * remove local token if 401
+     * @param response
+     */
     @Override
     protected void onPostExecute(String response) {
         if (response != null && response.length() > 0) {
             if(response.equals("401")){
                 tokenExpirationListener.handleTokenExpiration();
             }else{
+                //Handle marker map visualisations
                 this.mapJsonBuilder.parseJson(response);
                 this.loadingSpinner.hide();
                 ArrayList<Marker> markers = this.mapJsonBuilder.getMarkers();
+
                 if (this.markers != null) {
                     customMarkerListener.addMarkerData(markers);
                     customMarkerListener.detectRadiusMarker();

@@ -19,10 +19,9 @@ public class Marker {
     private String encodedImage;
     private int userId;
     private int id;
-    private int rating;
 
         public Marker(int userId, String firstName, String lastName, String category, String description,
-                  String lat, String lng, String encodedImage, int id, int rating) {
+                  String lat, String lng, String encodedImage, int id) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.category = category;
@@ -32,7 +31,6 @@ public class Marker {
         this.encodedImage = encodedImage;
         this.id = id;
         this.userId = userId;
-        this.rating = rating;
     }
 
     public void makeApiCallDeleteMarker(Context context, MarkerListener markerListener, TokenExpirationListener tokenExpirationListener){
@@ -107,14 +105,6 @@ public class Marker {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
     }
 
     public int getUserId() {

@@ -84,7 +84,4 @@ public class FormPresenter implements FormContract.Presenter, TokenExpirationLis
         this.view.openCamera();
     }
 
-    public void openGallery(){
-        this.view.openGallery();
-    }
 }

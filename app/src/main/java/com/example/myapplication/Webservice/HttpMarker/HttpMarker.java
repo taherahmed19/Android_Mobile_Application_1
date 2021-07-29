@@ -41,6 +41,17 @@ public class HttpMarker extends AsyncTask<String, Void, String> {
     FeedSubmitListener feedSubmitListener;
     TokenExpirationListener tokenExpirationListener;
 
+    /**
+     * Constructor to request marker data
+     * @param context application context
+     * @param userId user id for web service sql query
+     * @param category form data
+     * @param description form data
+     * @param chosenLocation form data
+     * @param feedSubmitListener custom listener for response method
+     * @param encodedImage base 64 string image
+     * @param tokenExpirationListener token exipration listener
+     */
     public HttpMarker(Context context, int userId, String category, String description,
                       LatLng chosenLocation, FeedSubmitListener feedSubmitListener, String encodedImage,
                       TokenExpirationListener tokenExpirationListener) {
@@ -55,6 +66,11 @@ public class HttpMarker extends AsyncTask<String, Void, String> {
         this.tokenExpirationListener = tokenExpirationListener;
     }
 
+    /**
+     * Background method for async class - not working off main thread
+     * @param strings
+     * @return
+     */
     @Override
     protected String doInBackground(String... strings) {
         SSL.AllowSSLCertificates();
@@ -74,14 +90,21 @@ public class HttpMarker extends AsyncTask<String, Void, String> {
         return "";
     }
 
-    String handleRequest(String apiRequest) {
+    /**
+     * make request to the web service
+     * POST data to web service
+     * @param request
+     * @return
+     */
+    String handleRequest(String request) {
         String response = null;
         try {
-            url = new URL(apiRequest);
+            url = new URL(request);
             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
 
+            //auth token and header
             String basicAuth = "Bearer " + JWTToken.getToken(context);
             urlConnection.setRequestProperty("Authorization", basicAuth);
 
@@ -109,6 +132,11 @@ public class HttpMarker extends AsyncTask<String, Void, String> {
         return response;
     }
 
+    /**
+     * code to handle response from the web service
+     * Also handle 401 status code
+     * @return
+     */
     String handleResponse() {
         try {
             responseCode = urlConnection.getResponseCode();
@@ -125,6 +153,11 @@ public class HttpMarker extends AsyncTask<String, Void, String> {
         return null;
     }
 
+    /**
+     * Handle response data
+     * remove local token if 401
+     * @param response
+     */
     @Override
     protected void onPostExecute(String response) {
         if (response != null && response.length() > 0) {

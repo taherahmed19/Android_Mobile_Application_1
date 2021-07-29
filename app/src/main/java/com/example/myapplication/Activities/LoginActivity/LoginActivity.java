@@ -35,6 +35,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     LoginPresenter loginPresenter;
 
+    /**
+     * initial method to execute for activity
+     * @param savedInstanceState instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +53,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         hideKeyboard();
     }
 
+    /**
+     * validation for email field
+     * @return boolean
+     */
     @Override
     public boolean validateEmailTextChanged() {
         EditText loginEmail = (EditText) this.findViewById(R.id.loginEmail);
@@ -69,6 +77,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         return true;
     }
 
+    /**
+     * validation for password field
+     * @return boolean
+     */
     @Override
     public boolean validatePasswordTextChanged() {
         EditText loginPassword = (EditText) this.findViewById(R.id.loginPassword);
@@ -85,6 +97,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         return true;
     }
 
+    /**
+     * validation for email - once user clicks off edit text
+     */
     @Override
     public void validateEmailFocusChanged() {
         EditText loginEmail = (EditText) this.findViewById(R.id.loginEmail);
@@ -99,12 +114,13 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     }
 
+    /**
+     * validation for password - once user clicks off edit text
+     */
     @Override
     public void validatePasswordFocusChange() {
         EditText registerPassword = this.findViewById(R.id.loginPassword);
         TextView passwordErrorMessage = this.findViewById(R.id.loginPasswordErrorMessage);
-
-        String password = registerPassword.getText().toString();
 
         if(registerPassword.getText().length() == 0){
             showErrorMessage(registerPassword,  passwordErrorMessage, R.drawable.ic_login_password_icon, R.drawable.ic_login_register_error_icon, "Field must be inputted");
@@ -112,6 +128,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     }
 
+    /**
+     * Handle sign in and ensure password is hashed for DB.
+     * @return
+     */
     @Override
     public boolean submitSignIn(){
         if(validateAllFields()){
@@ -122,6 +142,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         return true;
     }
 
+    /**
+     * Open new activity for registration
+     * @param token Firebase token
+     */
     @Override
     public void startRegisterActivity(BroadcastReceiverToken token) {
         Intent intent = new Intent(getBaseContext(), RegisterActivity.class);
@@ -129,6 +153,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         startActivity(intent);
     }
 
+    /**
+     * Send token to web service or output error for validation
+     * @param valid valid inptus
+     * @param user user object data
+     */
     @Override
     public void handleSignInAttempt(boolean valid, User user) {
         if(valid){
@@ -145,11 +174,18 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         }
     }
 
+    /**
+     * application context for activity - different from main context
+     * @return context
+     */
     @Override
     public Context getContext() {
         return this.getApplicationContext();
     }
 
+    /**
+     * recycle view
+     */
     @Override
     public void onRestart() {
         super.onRestart();
@@ -157,17 +193,26 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         startActivity(getIntent());
     }
 
+    /**
+     * register broadcast receiver
+     */
     @Override
     public void onResume() {
         super.onResume();
         this.registerReceiver(receiver, new IntentFilter(LoginActivity.class.toString()));
     }
 
+    /**
+     * lifecycle
+     */
     @Override
     public void onStart() {
         super.onStart();
     }
 
+    /**
+     * unregister broadcast receiver
+     */
     @Override
     public void onStop() {
         super.onStop();
@@ -178,14 +223,23 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         }
     }
 
+    /**
+     * allow user to enter into the main application - main activity to render google map
+     */
     void enterApplication(){
         FragmentTransition.StartActivity(this, MainActivity.class);
     }
 
+    /**
+     * update presenter with users unique FB token
+     */
     void configureFirebaseToken(){
         loginPresenter.updateBroadcastReceiverToken(FirebaseInstanceId.getInstance().getToken());
     }
 
+    /**
+     * configure XML
+     */
     void configureLoginSubmitButton(){
         Button loginSubmitButton = (Button) this.findViewById(R.id.loginSubmitButton);
 
@@ -197,6 +251,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         });
     }
 
+    /**
+     * configure XML
+     */
     void configureRegisterButton(){
         Button loginRegisterButton = this.findViewById(R.id.loginRegisterButton);
 
@@ -208,6 +265,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         });
     }
 
+    /**
+     * configure XML
+     */
     void configureEmail(){
         EditText loginEmail = (EditText) this.findViewById(R.id.loginEmail);
 
@@ -239,6 +299,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         });
     }
 
+    /**
+     * configure XML
+     */
     void configurePassword(){
         EditText loginPassword = (EditText) this.findViewById(R.id.loginPassword);
 
@@ -270,6 +333,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         });
     }
 
+    /**
+     * fields validation
+     * @return boolean
+     */
     boolean validateAllFields(){
         boolean validEmail = loginPresenter.validateEmailTextChanged();
         boolean validPassword = loginPresenter.validatePasswordTextChanged();
@@ -277,17 +344,34 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         return validEmail && validPassword;
     }
 
+    /**
+     * error messaging
+     * @param field edit text
+     * @param errorMessage messaging
+     * @param iconLeft icons
+     * @param iconRight icons
+     * @param message custom message from string.xml
+     */
     void showErrorMessage(EditText field, TextView errorMessage, int iconLeft, int iconRight, String message){
         field.setCompoundDrawablesWithIntrinsicBounds(iconLeft, 0, iconRight, 0);
         errorMessage.setVisibility(View.VISIBLE);
         errorMessage.setText(message);
     }
 
+    /**
+     * hide error message - does not remove from XML
+     * @param field edit text xml
+     * @param errorMessage custom message
+     * @param iconLeft icons
+     */
     void hideErrorMessages(EditText field, TextView errorMessage, int iconLeft){
         errorMessage.setVisibility(View.INVISIBLE);
         field.setCompoundDrawablesWithIntrinsicBounds(iconLeft, 0, 0, 0);
     }
 
+    /**
+     * Execute to prevent keyboard remaining open from other views.
+     */
     void hideKeyboard(){
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN

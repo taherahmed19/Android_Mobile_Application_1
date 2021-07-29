@@ -30,12 +30,23 @@ public class HttpFirebaseToken extends AsyncTask<String , Void ,String> {
     int userId;
     String firebaseToken;
 
+    /**
+     * Constructor to init new firebase token for user
+     * @param context application context
+     * @param userId user id - db
+     * @param firebaseToken unique fb token
+     */
     public HttpFirebaseToken(Context context, int userId, String firebaseToken){
         this.context = context;
         this.userId = userId;
         this.firebaseToken = firebaseToken;
     }
 
+    /**
+     * Background method for async class - not working off main thread
+     * @param strings
+     * @return
+     */
     @Override
     protected String doInBackground(String... strings) {
         SSL.AllowSSLCertificates();
@@ -55,10 +66,15 @@ public class HttpFirebaseToken extends AsyncTask<String , Void ,String> {
         return "";
     }
 
-    String handleRequest(String apiRequest){
+    /**
+     * make request to the web service
+     * @param request
+     * @return
+     */
+    String handleRequest(String request){
         String response = null;
         try {
-            url = new URL(apiRequest);
+            url = new URL(request);
             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
@@ -86,6 +102,10 @@ public class HttpFirebaseToken extends AsyncTask<String , Void ,String> {
         return response;
     }
 
+    /**
+     * code to handle response from the web service
+     * @return
+     */
     String handleResponse(){
         try {
             responseCode = urlConnection.getResponseCode();
@@ -100,9 +120,14 @@ public class HttpFirebaseToken extends AsyncTask<String , Void ,String> {
         return null;
     }
 
+    /**
+     * handle response data
+     * Toast to UI no fragment handling made
+     * No 401 handling needed at this stage - user not logged in during this request
+     * @param response
+     */
     @Override
     protected void onPostExecute(String response) {
-        Log.d("Print", "response = " + response);
         if(response != null && response.length() > 0){
             boolean valid = Boolean.parseBoolean(response);
 

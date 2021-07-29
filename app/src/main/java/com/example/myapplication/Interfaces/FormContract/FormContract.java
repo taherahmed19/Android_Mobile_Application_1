@@ -8,7 +8,6 @@ public interface FormContract {
 
     interface View{
         void handleTokenExpiration();
-        void openGallery();
         void openCamera();
         void handleCameraDialog();
         void handleCloseButtonClick();

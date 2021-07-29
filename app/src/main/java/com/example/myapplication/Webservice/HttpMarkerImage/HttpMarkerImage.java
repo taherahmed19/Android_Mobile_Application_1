@@ -30,13 +30,27 @@ public class HttpMarkerImage extends AsyncTask<String , Void ,String> {
     MarkerImageListener markerImageListener;
     TokenExpirationListener tokenExpirationListener;
 
-    public HttpMarkerImage(Context context, int markerId, MarkerImageListener markerImageListener, TokenExpirationListener tokenExpirationListener) {
+    /**
+     * Constructor to make request to web service for marker image
+     * Request made once marker loaded after notification
+     * @param context application context
+     * @param markerId marker id in db
+     * @param markerImageListener listener for marker updates
+     * @param tokenExpirationListener listener to exipre token
+     */
+    public HttpMarkerImage(Context context, int markerId,
+                           MarkerImageListener markerImageListener, TokenExpirationListener tokenExpirationListener) {
         this.context = context;
         this.markerId = markerId;
         this.markerImageListener = markerImageListener;
         this.tokenExpirationListener = tokenExpirationListener;
     }
 
+    /**
+     * Background method for async class - not working off main thread
+     * @param strings
+     * @return
+     */
     @Override
     protected String doInBackground(String... strings) {
         SSL.AllowSSLCertificates();
@@ -56,10 +70,15 @@ public class HttpMarkerImage extends AsyncTask<String , Void ,String> {
         return "";
     }
 
-    String handleRequest(String apiRequest){
+    /**
+     * make request to the web service
+     * @param request
+     * @return
+     */
+    String handleRequest(String request){
         String response = null;
         try {
-            url = new URL(apiRequest);
+            url = new URL(request);
             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
 
@@ -75,6 +94,11 @@ public class HttpMarkerImage extends AsyncTask<String , Void ,String> {
         return response;
     }
 
+    /**
+     * code to handle response from the web service
+     * handle 401 response
+     * @return
+     */
     String handleResponse() {
         try {
             responseCode = urlConnection.getResponseCode();
@@ -91,6 +115,11 @@ public class HttpMarkerImage extends AsyncTask<String , Void ,String> {
         return null;
     }
 
+    /**
+     * Handle response data
+     * remove local token if 401
+     * @param response
+     */
     @Override
     protected void onPostExecute(String response) {
         if (response != null && response.length() > 0) {

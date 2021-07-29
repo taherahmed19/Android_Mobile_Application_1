@@ -37,20 +37,6 @@
             android:textColor="#777777">
         </Button>
 
-        <Button
-            android:id="@+id/openGalleryBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="0dp"
-            android:minWidth="0dp"
-            android:text="Gallery"
-            android:background="@color/transparent"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:textSize="18sp"
-            android:textColor="#777777">
-        </Button>
-
     </LinearLayout>
 
 

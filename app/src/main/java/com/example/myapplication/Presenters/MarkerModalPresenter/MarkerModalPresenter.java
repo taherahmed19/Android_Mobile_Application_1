@@ -6,12 +6,11 @@ import android.graphics.Bitmap;
 import com.example.myapplication.Interfaces.MarkerImageListener.MarkerImageListener;
 import com.example.myapplication.Interfaces.MarkerListener.MarkerListener;
 import com.example.myapplication.Interfaces.MarkerModalContract.MarkerModalContract;
-import com.example.myapplication.Interfaces.RatingsListener.RatingsListener;
 import com.example.myapplication.Interfaces.TokenExpirationListener.TokenExpirationListener;
 import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Models.Modal.Modal;
 
-public class MarkerModalPresenter implements MarkerListener, RatingsListener, MarkerImageListener, TokenExpirationListener {
+public class MarkerModalPresenter implements MarkerListener, MarkerImageListener, TokenExpirationListener {
 
     MarkerModalContract.View view;
     Marker marker;
@@ -34,16 +33,6 @@ public class MarkerModalPresenter implements MarkerListener, RatingsListener, Ma
     }
 
     @Override
-    public void updateModalRating(boolean response) {
-        this.view.updateModalRating(response);
-    }
-
-    @Override
-    public void saveModalRatingState(int rating) {
-        this.view.saveModalRatingState(rating);
-    }
-
-    @Override
     public void handleTokenExpiration() {
         this.view.handleTokenExpiration();
     }
@@ -59,15 +48,6 @@ public class MarkerModalPresenter implements MarkerListener, RatingsListener, Ma
     public void handleImageClick(Dialog dialog) {
         this.view.handleImageClick(dialog);
     }
-
-    public void handleUpVoteButtonClick() {
-        this.modal.handleUpVoteButtonClick();
-    }
-
-    public void handleDownVoteButtonClick() {
-        this.modal.handleDownVoteButtonClick();
-    }
-
     public void createMarkerDeletionDialog() {
         this.view.createMarkerDeletionDialog();
     }
@@ -93,34 +73,6 @@ public class MarkerModalPresenter implements MarkerListener, RatingsListener, Ma
         this.modal.handleModalName();
     }
 
-    public void submitMarkerRating() {
-        this.modal.makeApiCall(this.view.getApplicationContext(), marker);
-    }
-
-    public void updateRating() {
-        this.modal.updateRating();
-    }
-
-    public void configureUserRatingState() {
-        this.modal.configureUserRatingState(this.view.getApplicationContext(), this.marker);
-    }
-
-    public void saveSettingsSharedPreference() {
-        this.modal.saveSettingsSharedPreference(this.view.getApplicationContext(), marker);
-    }
-
-    public void setUpVote() {
-        this.view.setUpVote();
-    }
-
-    public void setDownVote() {
-        this.view.setDownVote();
-    }
-
-    public void removeVote() {
-        this.view.removeVote();
-    }
-
     public String getAltName() {
         return this.modal.getAltName();
     }
@@ -135,14 +87,6 @@ public class MarkerModalPresenter implements MarkerListener, RatingsListener, Ma
 
     public Marker getMarker() {
         return marker;
-    }
-
-    public int getRating() {
-        return this.modal.getRating();
-    }
-
-    public String getEncodedImage() {
-        return this.modal.getEncodedImage();
     }
 
 }

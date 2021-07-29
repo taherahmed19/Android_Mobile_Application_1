@@ -13,13 +13,6 @@ public interface MarkerModalContract {
        void createMarkerDeletionDialog();
        void closeUserPost(boolean response);
        void addImageToModal(String encodedString);
-       void handleUpVoteButtonClick();
-       void handleDownVoteButtonClick();
-       void updateModalRating(boolean response);
-       void saveModalRatingState(int rating);
-       void setUpVote();
-       void setDownVote();
-       void removeVote();
        Context getApplicationContext();
     }
 

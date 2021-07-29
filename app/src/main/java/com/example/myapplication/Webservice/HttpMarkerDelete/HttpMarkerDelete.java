@@ -30,13 +30,26 @@ public class HttpMarkerDelete extends AsyncTask<Void , Void ,String> {
     MarkerListener markerListener;
     TokenExpirationListener tokenExpirationListener;
 
-    public HttpMarkerDelete(Context context, int markerId, MarkerListener markerListener, TokenExpirationListener tokenExpirationListener){
+    /**
+     * Constructor to remove marker from db
+     * @param context application context
+     * @param markerId marker id correlates to id in db
+     * @param markerListener listener to handle marker after response
+     * @param tokenExpirationListener listener to remove token
+     */
+    public HttpMarkerDelete(Context context, int markerId,
+                            MarkerListener markerListener, TokenExpirationListener tokenExpirationListener){
         this.context = context;
         this.markerId = String.valueOf(markerId);
         this.markerListener = markerListener;
         this.tokenExpirationListener = tokenExpirationListener;
     }
 
+    /**
+     * Background method for async class - not working off main thread
+     * @param voids
+     * @return
+     */
     @Override
     protected String doInBackground(Void... voids) {
         SSL.AllowSSLCertificates();
@@ -56,10 +69,16 @@ public class HttpMarkerDelete extends AsyncTask<Void , Void ,String> {
         return "";
     }
 
-    String handleRequest(String apiRequest){
+    /**
+     * make request to the web service
+     * POST data to web service
+     * @param request
+     * @return
+     */
+    String handleRequest(String request){
         String response = null;
         try {
-            url = new URL(apiRequest);
+            url = new URL(request);
             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
 
@@ -74,6 +93,11 @@ public class HttpMarkerDelete extends AsyncTask<Void , Void ,String> {
         return response;
     }
 
+    /**
+     * code to handle response from the web service
+     * Also handle 401 status code
+     * @return
+     */
     String handleResponse(){
         try {
             responseCode = urlConnection.getResponseCode();
@@ -91,6 +115,11 @@ public class HttpMarkerDelete extends AsyncTask<Void , Void ,String> {
         return null;
     }
 
+    /**
+     * Handle response data
+     * remove local token if 401
+     * @param response
+     */
     @Override
     protected void onPostExecute(String response) {
         if(response != null && response.length() > 0){

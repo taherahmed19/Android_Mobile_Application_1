@@ -28,25 +28,40 @@ public class FirebaseService extends FirebaseMessagingService {
     String lng;
     String firstName;
     String lastName;
-    String rating;
 
+    /**
+     * new token generated when application is installed
+     * @param token
+     */
     @Override
     public void onNewToken(@NonNull String token) {
         passTokenToActivity(token);
         Log.d("Print", "New token " + token);
     }
 
+    /**
+     * message received from Firebase for notification
+     * @param remoteMessage
+     */
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         passMessageToActivity(remoteMessage);
     }
 
+    /**
+     * token needed once logging in - send to web service from activity's model
+     * @param token
+     */
     private void passTokenToActivity(@NonNull String token){
         Intent intent = new Intent(LoginActivity.class.toString());
         intent.putExtra("token", token);
         sendBroadcast(intent);
     }
 
+    /**
+     * need to pass data to fragment to enable usage - render notifiation
+     * @param remoteMessage
+     */
     private void passMessageToActivity(RemoteMessage remoteMessage){
         userId = remoteMessage.getData().get("userId");
         markerId = remoteMessage.getData().get("markerId");
@@ -56,11 +71,10 @@ public class FirebaseService extends FirebaseMessagingService {
         lng = remoteMessage.getData().get("lng");
         firstName = remoteMessage.getData().get("firstName");
         lastName = remoteMessage.getData().get("lastName");
-        rating = remoteMessage.getData().get("rating");
-
 
         Log.d("Print", "Received " + remoteMessage.getData().toString());
 
+        //if app not visible custom notifiations not necessary - generate regular notification
         if(!App.APP_VISIBLE){
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
@@ -88,6 +102,12 @@ public class FirebaseService extends FirebaseMessagingService {
         }
     }
 
+    /**
+     * add data to be passed to fragment
+     * @param intent instance
+     * @param openNotification notification setting
+     * @param voiceEnabled notification setting
+     */
     private void addIntentExtras(Intent intent, int openNotification, boolean voiceEnabled){
         intent.putExtra("openNotification", openNotification);
         intent.putExtra("voiceEnabled", voiceEnabled);
@@ -99,9 +119,13 @@ public class FirebaseService extends FirebaseMessagingService {
         intent.putExtra("lng", lng);
         intent.putExtra("firstName", firstName);
         intent.putExtra("lastName", lastName);
-        intent.putExtra("rating", rating);
     }
 
+    /**
+     * detect notification settings from local storage
+     * if false in app setting = true
+     * @return setting boolean
+     */
     boolean isVoiceNotificationEnabled(){
         SharedPreferences settingsPreference = this.getSharedPreferences("Radius_Marker_Settings", 0);
         return settingsPreference.getBoolean("voiceNotifications", false);

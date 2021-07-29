@@ -39,6 +39,12 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
     User user;
     LoginUser loginUser;
 
+    /**
+     * Async constructor for user to login
+     * @param context
+     * @param loginListener
+     * @param loginUser
+     */
     public HttpLoginUser(Context context, LoginListener loginListener, LoginUser loginUser) {
         this.context = context;
         this.loginListener = loginListener;
@@ -46,6 +52,12 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
         this.loginUser = loginUser;
         this.user = new User();
     }
+
+    /**
+     * Background method for async class - not working off main thread
+     * @param strings
+     * @return
+     */
     @Override
     protected String doInBackground(String... strings) {
         SSL.AllowSSLCertificates();
@@ -64,21 +76,32 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
         return null;
     }
 
+    /**
+     * Handle response data
+     * Have user enter application if successful otherwise Toast to user
+     * @param response
+     */
     @Override
     protected void onPostExecute(String response) {
         if(response != null && response.length() > 0){
             handleJSONResponse(response);
-            Log.d("Print", "Response  " + response);
             loginListener.handleSignInAttempt(validCredentials, user);
         }else{
             Toast.makeText(context, context.getString(R.string.login_error_body), Toast.LENGTH_LONG).show();
         }
     }
 
-    String handleRequest(String apiRequest){
+    /**
+     * make request to the web service
+     * POST data to web service
+     * No token needed at this stage
+     * @param request
+     * @return
+     */
+    String handleRequest(String request){
         String response = null;
         try {
-            url = new URL(apiRequest);
+            url = new URL(request);
             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
@@ -105,6 +128,10 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
         return response;
     }
 
+    /**
+     * code to handle response from the web service
+     * @return
+     */
     String handleResponse(){
         try {
             responseCode = urlConnection.getResponseCode();
@@ -119,6 +146,11 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
         return null;
     }
 
+    /**
+     * Handle JSON data
+     * Save JWTToken to local storage
+     * @param jsonString
+     */
     void handleJSONResponse(String jsonString){
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
@@ -130,7 +162,6 @@ public class HttpLoginUser extends AsyncTask<String , Void ,String> {
             user.setToken(jsonObject.getString("token"));
 
             JWTToken.saveToken(context, user.getToken());
-
 
         } catch (JSONException e) {
             e.printStackTrace();

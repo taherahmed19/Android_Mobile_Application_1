@@ -22,6 +22,6 @@
     <string name="registration_confirm_body"></string>
 
     <string name="registration_error_title">Registration Error</string>
-    <string name="registration_error_body">This Email address is already associated with an account.</string>
+    <string name="registration_error_body">Invalid registration. Try again.</string>
 
 </resources>

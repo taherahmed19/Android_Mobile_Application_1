@@ -10,11 +10,20 @@ public class TTSService implements TextToSpeech.OnInitListener {
     private TextToSpeech mTTS;
     private String[] messages;
 
+    /**
+     * Constructor for Service
+     * @param context application context from activity
+     * @param messages notification message to be voiced
+     */
     public TTSService(Context context, String[] messages) {
         this.mTTS = new TextToSpeech(context, this);
         this.messages = messages;
     }
 
+    /**
+     * initialise TTS
+     * @param status initialisation success
+     */
     @Override
     public void onInit(int status) {
         if (status == TextToSpeech.SUCCESS) {
@@ -27,6 +36,9 @@ public class TTSService implements TextToSpeech.OnInitListener {
         }
     }
 
+    /**
+     * render voice notification
+     */
     void speak(){
         mTTS.setPitch(1);
         mTTS.setSpeechRate(1);

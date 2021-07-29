@@ -41,7 +41,7 @@
                     android:text="Delete"
                     android:textSize="18sp"
                     android:textAllCaps="false"
-                    android:textColor="#F44336"
+                    android:textColor="#CA1003"
                     android:background="@color/transparent"
                     android:visibility="invisible">
 
@@ -86,7 +86,7 @@
                             android:layout_gravity="center"
                             android:layout_marginLeft="5dp"
                             android:text="Name Name"
-                            android:textColor="#8C8C8C"
+                            android:textColor="#535353"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                             android:textSize="16sp" />
 
@@ -122,6 +122,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="10sp"
                         android:text="You can now view this by returning to the Feed. Other users will also be able to view this data on their devices.
 You can now view this by returning to the Feed. Other users will also be able to view this data on their devices.
 You can now view this by returning to the Feed. Other users will also be able to view this data on their devices.
@@ -130,7 +131,7 @@ You can now view this by returning to the Feed. Other users will also be able to
 You can now view this by returning to the Feed. Other users will also be able to view this data on their devices.
 You can now view this by returning to the Feed. Other users will also be able to view this data on their devices."
                         android:textSize="16sp"
-                        android:layout_marginBottom="10sp"/>
+                        android:textColor="#535353"/>
                 </LinearLayout>
             </ScrollView>
 
@@ -138,64 +139,4 @@ You can now view this by returning to the Feed. Other users will also be able to
         </LinearLayout>
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="45sp"
-        android:padding="10sp"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:background="@drawable/modal_top_border">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginRight="15dp"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical">
-
-            <ImageButton
-                android:id="@+id/upVoteButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_upvote_arrow"
-                android:background="@android:color/transparent"
-                android:layout_gravity="center"
-                android:layout_marginRight="10sp">
-            </ImageButton>
-
-            <TextView
-                android:id="@+id/markerRating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textSize="20sp"
-                android:layout_gravity="center"
-                android:gravity="center">
-            </TextView>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginRight="15dp"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical">
-
-            <ImageButton
-                android:id="@+id/downVoteButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_downvote_arrow"
-                android:background="@android:color/transparent"
-                android:layout_marginRight="10sp"
-                android:layout_marginTop="1sp"
-                >
-            </ImageButton>
-
-        </LinearLayout>
-
-    </LinearLayout>
 </RelativeLayout>

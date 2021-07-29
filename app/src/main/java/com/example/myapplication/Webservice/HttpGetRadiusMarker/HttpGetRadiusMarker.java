@@ -34,13 +34,26 @@ public class HttpGetRadiusMarker extends AsyncTask<String , Void ,String> {
     CustomMarkerListener customMarkerListener;
     TokenExpirationListener tokenExpirationListener;
 
-    public HttpGetRadiusMarker(Context context, int userId, CustomMarkerListener customMarkerListener, TokenExpirationListener tokenExpirationListener) {
+    /**
+     * Constructor to make aysnc request to web service to get notification area
+     * @param context application context
+     * @param userId links to db user id
+     * @param customMarkerListener listener to load data after response
+     * @param tokenExpirationListener listener to remove token
+     */
+    public HttpGetRadiusMarker(Context context, int userId, CustomMarkerListener customMarkerListener,
+                               TokenExpirationListener tokenExpirationListener) {
         this.context = context;
         this.userId = String.valueOf(userId);
         this.customMarkerListener = customMarkerListener;
         this.tokenExpirationListener = tokenExpirationListener;
     }
 
+    /**
+     * Background method for async class - not working off main thread
+     * @param strings
+     * @return
+     */
     @Override
     protected String doInBackground(String... strings) {
         SSL.AllowSSLCertificates();
@@ -60,10 +73,15 @@ public class HttpGetRadiusMarker extends AsyncTask<String , Void ,String> {
         return "";
     }
 
-    String handleRequest(String apiRequest){
+    /**
+     * make request to the web service
+     * @param request
+     * @return
+     */
+    String handleRequest(String request){
         String response = null;
         try {
-            url = new URL(apiRequest);
+            url = new URL(request);
             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
 
@@ -78,6 +96,10 @@ public class HttpGetRadiusMarker extends AsyncTask<String , Void ,String> {
         return response;
     }
 
+    /**
+     * code to handle response from the web service
+     * @return
+     */
     String handleResponse(){
         try {
             responseCode = urlConnection.getResponseCode();
@@ -94,6 +116,11 @@ public class HttpGetRadiusMarker extends AsyncTask<String , Void ,String> {
         return null;
     }
 
+    /**
+     * Handle response data from web service
+     * Handle 401 for expired tokens
+     * @param response
+     */
     @Override
     protected void onPostExecute(String response) {
         try {

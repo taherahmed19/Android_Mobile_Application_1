@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -57,7 +58,6 @@ import static android.app.Activity.RESULT_OK;
 
 public class FormFragment extends Fragment implements FeedSubmitListener, CurrentLocationListener, FormContract.View {
 
-    public static final int GALLERY_REQUEST = 1000;
     public static final int CAMERA_REQUEST = 1888;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
 
@@ -72,6 +72,10 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         this.viewPager = viewPager;
     }
 
+    /**
+     * initial  method to execute for activity
+     * @param savedInstanceState instance
+     */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -79,11 +83,19 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         formPresenter = new FormPresenter(this);
     }
 
+    /**
+     * second method to execute for activity
+     * @param savedInstanceState instance
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_user_feed_form, container, false);
     }
 
+    /**
+     * once view elements are rendered
+     * @param savedInstanceState instance
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -97,6 +109,9 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         configureSubmitButton();
     }
 
+    /**
+     * once returning from image handler
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
@@ -109,12 +124,14 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         if(requestCode == CAMERA_REQUEST){
             this.onActivityResultCamera(requestCode, resultCode, data);
         }
-
-        if(requestCode == GALLERY_REQUEST){
-            this.onActivityResultGallery(requestCode, resultCode, data);
-        }
     }
 
+    /**
+     * camera permissions
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {
@@ -214,6 +231,9 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         openCameraDialog();
     }
 
+    /**
+     * open camera - render perms
+     */
     @Override
     public void openCamera(){
         if (getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
@@ -228,24 +248,22 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
     }
 
     @Override
-    public void openGallery(){
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        this.startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_REQUEST);
-    }
-
-    @Override
     public Context getApplicationContext(){
         return this.getContext();
     }
 
+    /**
+     * once returning from camera code exectued
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     public void onActivityResultCamera(int requestCode, int resultCode, Intent data){
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK)
         {
             if(data != null) {
                 try {
-                    dialog.dismiss();
+//                    dialog.dismiss();
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
 
                     ImageView postImageView = (ImageView) this.getView().findViewById(R.id.postImageView);
@@ -263,69 +281,76 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         }
     }
 
-    public void onActivityResultGallery(int requestCode, int resultCode, Intent data){
-        if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK)
-        {
-            if(data != null){
-                try {
-                    dialog.dismiss();
-                    Bitmap photo = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), data.getData());
 
-                    ImageView postImageView = (ImageView) this.getView().findViewById(R.id.postImageView);
-                    postImageView.setImageBitmap(photo);
-
-                    if(photo != null){
-                        encodeImage(photo);
-                    }
-
-                    removeImageErrorMessage();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
+    /**
+     * executed after return from location activity
+     * @param lat coord
+     * @param lng coord
+     */
     public void onActivityResultConfigure(double lat, double lng){
         formPresenter.updateChosenLocation(lat, lng);
         this.removeLocationErrorMessage();
     }
 
+    /**
+     * UI error handling
+     */
     public void showDescriptionErrorMessage(){
         TextView descriptionError = (TextView) getView().findViewById(R.id.descriptionError);
         descriptionError.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * UI error handling
+     */
     public void showSpinnerErrorMessage(){
         TextView spinnerError = (TextView) getView().findViewById(R.id.spinnerError);
         spinnerError.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * UI error handling
+     */
     public void showImageErrorMessage(){
         TextView imageError = (TextView) getView().findViewById(R.id.imageError);
         imageError.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * UI error handling
+     */
     public void showLocationErrorMessage(){
         TextView imageError = (TextView) getView().findViewById(R.id.locationError);
         imageError.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * UI error handling
+     */
     public void removeLocationErrorMessage(){
         TextView descriptionError = (TextView) getView().findViewById(R.id.locationError);
         descriptionError.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * UI error handling
+     */
     public void removeDescriptionErrorMessage(){
         TextView descriptionError = (TextView) getView().findViewById(R.id.descriptionError);
         descriptionError.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * UI error handling
+     */
     public void removeSpinnerErrorMessage(){
         TextView spinnerError = (TextView) getView().findViewById(R.id.spinnerError);
         spinnerError.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * UI error handling
+     */
     public void removeImageErrorMessage(){
         TextView imageError = (TextView) getView().findViewById(R.id.imageError);
         imageError.setVisibility(View.INVISIBLE);
@@ -335,6 +360,9 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         return isConfiguredStaticMap;
     }
 
+    /**
+     * form submission
+     */
     void submitForm(){
         Spinner spinner = (Spinner) getView().findViewById(R.id.formSpinner);
         SpinnerItem item = (SpinnerItem) spinner.getSelectedItem();
@@ -346,10 +374,17 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         formPresenter.makeApiCall(userID, category, description, this);
     }
 
+    /**
+     * base 64 encoding for bitmpa image
+     * @param photo
+     */
     void encodeImage(Bitmap photo){
         formPresenter.updateEncodedImage(photo);
     }
 
+    /**
+     * Configure Xml
+     */
     void configureSpinner(){
         Spinner spinner = getView().findViewById(R.id.formSpinner);
         int initialPosition = spinner.getSelectedItemPosition();
@@ -368,6 +403,9 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         });
     }
 
+    /**
+     * Configure Xml
+     */
     @SuppressLint("ClickableViewAccessibility")
     void configureDescriptionText(){
         EditText mapFeedDescription = (EditText) getView().findViewById(R.id.mapFeedDescription);
@@ -397,6 +435,10 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         });
     }
 
+    /**
+     * Configure Xml
+     * @param view
+     */
     void removeErrorDrawable(View view){
         if(view instanceof Spinner){
             view.setBackgroundResource(R.drawable.ic_custom_spinner);
@@ -405,6 +447,10 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         }
     }
 
+    /**
+     * Configure Xml
+     * @param view
+     */
     void addErrorDrawable(View view){
         if(view instanceof Spinner){
             view.setBackgroundResource(R.drawable.ic_custom_spinner_error);
@@ -413,6 +459,11 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         }
     }
 
+    /**
+     * dropdown - set error if no item selected - value 0 = select a category
+     * @param spinner
+     * @return
+     */
     boolean spinnerFocusChange(Spinner spinner){
         if(spinner.getSelectedItemPosition() == 0){
             addErrorDrawable(spinner);
@@ -427,6 +478,11 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         return true;
     }
 
+    /**
+     * validation for field
+     * @param mapFeedDescription XML
+     * @return
+     */
     boolean descriptionFocusChange(EditText mapFeedDescription){
         String description = mapFeedDescription.getText().toString();
 
@@ -442,6 +498,11 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         return true;
     }
 
+    /**
+     * validation for field
+     * @param mapFeedDescription XML
+     * @return
+     */
     boolean descriptionTextChange(EditText mapFeedDescription){
         String description = mapFeedDescription.getText().toString();
 
@@ -457,6 +518,12 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         return false;
     }
 
+    /**
+     * image handling
+     * @param imageButton XML
+     * @param encodedImage base64 string for image
+     * @return image set
+     */
     boolean imageSelected(ImageButton imageButton, String encodedImage){
         if(encodedImage == null){
             addErrorDrawable(imageButton);
@@ -471,6 +538,11 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         }
     }
 
+    /**
+     * logic for error messaging for location field
+     * @param chosenLocation location from {LocationSelectorActivity.java}
+     * @return variable set
+     */
     boolean locationSelected(LatLng chosenLocation){
         if(chosenLocation != null){
             removeLocationErrorMessage();
@@ -481,6 +553,9 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         return chosenLocation != null;
     }
 
+    /**
+     * configure XML
+     */
     void configureLocationButton(){
         final Button locationButton = (Button) getView().findViewById(R.id.locationButton);
 
@@ -492,17 +567,25 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         });
     }
 
+    /**
+     * configure XML
+     */
     void configureMedia(){
         ImageButton imageButton = (ImageButton) this.getView().findViewById(R.id.imageButton);
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                formPresenter.handleCameraDialog();
+                //formPresenter.handleCameraDialog();
+                formPresenter.openCamera();
+
             }
         });
     }
 
+    /**
+     * configure XML
+     */
     void configureFormCloseButton(){
         final ImageButton formClose = (ImageButton) getView().findViewById(R.id.formClose);
         formClose.setOnClickListener(new View.OnClickListener() {
@@ -513,6 +596,9 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         });
     }
 
+    /**
+     * configure XML
+     */
     void configureSubmitButton(){
         ImageButton mapFeedSubmit = (ImageButton) getView().findViewById(R.id.mapFeedSubmit);
         mapFeedSubmit.setOnClickListener(new View.OnClickListener() {
@@ -523,6 +609,9 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         });
     }
 
+    /**
+     * to exectue once user presses image field
+     */
     void openCameraDialog(){
         try{
             dialog = new Dialog(Objects.requireNonNull(this.getContext()));
@@ -537,7 +626,6 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
             window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
             Button openCameraBtn = (Button) dialog.findViewById(R.id.openCameraBtn);
-            Button openGalleryBtn = (Button) dialog.findViewById(R.id.openGalleryBtn);
 
             openCameraBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -546,15 +634,13 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
                 }
             });
 
-            openGalleryBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    formPresenter.openGallery();
-                }
-            });
         }
     }
 
+    /**
+     * dropdown code - uses custom adapter
+     * @return dropdown list
+     */
     ArrayList<SpinnerItem> configureMarkerSpinner(){
         Spinner spinner = getView().findViewById(R.id.formSpinner);
         ArrayList<SpinnerItem> customList = CustomSpinnerAdapter.CreateMarkerSpinnerItems(getContext());
@@ -570,6 +656,10 @@ public class FormFragment extends Fragment implements FeedSubmitListener, Curren
         return customList;
     }
 
+    /**
+     * validation for form
+     * @return
+     */
     boolean validate(){
         EditText mapFeedDescription = (EditText) getView().findViewById(R.id.mapFeedDescription);
         Spinner spinner = getView().findViewById(R.id.formSpinner);

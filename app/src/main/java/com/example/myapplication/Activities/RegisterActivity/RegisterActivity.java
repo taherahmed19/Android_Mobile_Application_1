@@ -29,6 +29,10 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
     BroadcastReceiverToken token;
     RegisterPresenter registerPresenter;
 
+    /**
+     * initial method to execute for activity
+     * @param savedInstanceState instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +53,9 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         hideKeyboard();
     }
 
+    /**
+     * validate all registration fields. Submit shouldn't work if not valid
+     */
     @Override
     public void validateAllFields() {
         boolean validFirstName = registerPresenter.validateFirstNameTextChanged();
@@ -63,6 +70,11 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         }
     }
 
+    /**
+     * Web service communication - outputs to user accordignly
+     * @param valid validation boolean
+     * @param user user data
+     */
     @Override
     public void handleRegistrationAttempt(boolean valid, User user) {
         if(valid){
@@ -78,12 +90,18 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         }
     }
 
+    /**
+     * lifecylce
+     */
     @Override
     protected void onRestart() {
         super.onRestart();
         finish();
     }
 
+    /**
+     * Configure XML
+     */
     void configureFirstName(){
         EditText registerFirstName = this.findViewById(R.id.registerFirstName);
 
@@ -111,6 +129,9 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         });
     }
 
+    /**
+     * Configure XML
+     */
     void configureLastName(){
         EditText registerLastName = this.findViewById(R.id.registerLastName);
 
@@ -139,6 +160,9 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
 
     }
 
+    /**
+     * Configure XML
+     */
     void configureEmail(){
         EditText registerEmail = this.findViewById(R.id.registerEmail);
 
@@ -166,6 +190,9 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         });
     }
 
+    /**
+     * Configure XML
+     */
     void configurePassword(){
         EditText registerPassword = this.findViewById(R.id.registerPassword);
 
@@ -193,6 +220,9 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         });
     }
 
+    /**
+     * Configure XML
+     */
     void configureConfirmPassword(){
         EditText registerConfirmPassword = this.findViewById(R.id.registerConfirmPassword);
 
@@ -220,6 +250,9 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         });
     }
 
+    /**
+     * Configure XML
+     */
     void configureRegisterButton(){
         Button registerButton = this.findViewById(R.id.registerButton);
 
@@ -231,6 +264,9 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         });
     }
 
+    /**
+     * Configure XML
+     */
     void configureReturnButton(){
         ImageButton registerReturnButton = this.findViewById(R.id.registerReturnButton);
 
@@ -242,27 +278,51 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         });
     }
 
+    /**
+     * load main activity - user should have map rendered
+     */
     void enterApplication(){
         FragmentTransition.StartActivity(this, MainActivity.class);
     }
 
+    /**
+     * hide keyboard from previous activity
+     */
     void hideKeyboard(){
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
     }
 
+    /**
+     * user messaging for input fields
+     * @param field edit text xml
+     * @param errorMessage unique message field
+     * @param iconLeft icons
+     * @param iconRight icons
+     * @param message custom message from strings.xml
+     */
     void showErrorMessage(EditText field, TextView errorMessage, int iconLeft, int iconRight, String message){
         field.setCompoundDrawablesWithIntrinsicBounds(iconLeft, 0, iconRight, 0);
         errorMessage.setVisibility(View.VISIBLE);
         errorMessage.setText(message);
     }
 
+    /**
+     * remove messaging from view
+     * @param field editext
+     * @param errorMessage field
+     * @param iconLeft icons
+     */
     void hideErrorMessages(EditText field, TextView errorMessage, int iconLeft){
         errorMessage.setVisibility(View.INVISIBLE);
         field.setCompoundDrawablesWithIntrinsicBounds(iconLeft, 0, 0, 0);
     }
 
+    /**
+     * on user typing whilst focused to view - valid field
+     * @return boolean
+     */
     @Override
     public boolean validateFirstNameTextChanged() {
         EditText registerFirstName = this.findViewById(R.id.registerFirstName);
@@ -279,6 +339,10 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         return true;
     }
 
+    /**
+     * on user typing whilst focused lost to view - valid field
+     * @return boolean
+     */
     @Override
     public boolean validateFirstNameFocusChange() {
         EditText registerFirstName = this.findViewById(R.id.registerFirstName);
@@ -292,6 +356,10 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         return true;
     }
 
+    /**
+     * on user typing whilst focused to view - valid field
+     * @return boolean
+     */
     @Override
     public boolean validateLastNameTextChanged() {
         EditText registerLastName = this.findViewById(R.id.registerLastName);
@@ -308,6 +376,10 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         return true;
     }
 
+    /**
+     * on user typing whilst focused lost to view - valid field
+     * @return boolean
+     */
     @Override
     public boolean validateLastNameFocusChange() {
         EditText registerLastName = this.findViewById(R.id.registerLastName);
@@ -321,6 +393,10 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         return true;
     }
 
+    /**
+     * unique email validation whilst user in focus
+     * @return boolean
+     */
     @Override
     public boolean validateEmailTextChanged() {
         EditText registerEmail = this.findViewById(R.id.registerEmail);
@@ -329,7 +405,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
 
         if(email.length() > 0 ){
             hideErrorMessages(registerEmail, emailErrorMessage, R.drawable.ic_login_email_icon);
-
+            //regex cover email types
             if(email.matches("[a-zA-Z0-9._-]+@[a-zA-Z]+\\.+[a-zA-Z]+")){
                 hideErrorMessages(registerEmail, emailErrorMessage, R.drawable.ic_login_email_icon);
             }
@@ -341,6 +417,10 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         return true;
     }
 
+    /**
+     * unique email validation whilst user removes focus from field
+     * @return boolean
+     */
     @Override
     public boolean validateEmailFocusChange() {
         EditText registerEmail = this.findViewById(R.id.registerEmail);
@@ -358,6 +438,10 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         return true;
     }
 
+    /**
+     * password validation whilst user in focus of field
+     * @return boolean
+     */
     @Override
     public boolean validatePasswordTextChanged() {
         EditText registerPassword = this.findViewById(R.id.registerPassword);
@@ -388,6 +472,10 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         return true;
     }
 
+    /**
+     * password validation whilst user out of focus of field
+     * @return boolean
+     */
     @Override
     public boolean validatePasswordFocusChange() {
         EditText registerPassword = this.findViewById(R.id.registerPassword);
@@ -410,6 +498,10 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         return true;
     }
 
+    /**
+     * password validation whilst user in focus of field
+     * @return boolean
+     */
     @Override
     public boolean validateConfirmPasswordTextChanged() {
         EditText registerPassword = this.findViewById(R.id.registerPassword);
@@ -440,6 +532,10 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         return true;
     }
 
+    /**
+     * password validation whilst user out of focus of field
+     * @return boolean
+     */
     @Override
     public boolean validateConfirmPasswordFocusChange() {
         EditText registerPassword = this.findViewById(R.id.registerPassword);

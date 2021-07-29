@@ -29,6 +29,13 @@ public class HttpDeleteRadiusMarker extends AsyncTask<String , Void ,String> {
 
     String userId;
 
+    /**
+     * Async constructor to delete notification area
+     * @param context application context
+     * @param userId user id - matches id for user in DB
+     * @param deleteRadiusMarkerListener listener for to execute after response
+     * @param tokenExpirationListener listener to remove token if token exipred
+     */
     public HttpDeleteRadiusMarker(Context context, int userId, DeleteRadiusMarkerListener deleteRadiusMarkerListener, TokenExpirationListener tokenExpirationListener) {
         this.context = context;
         this.userId = String.valueOf(userId);
@@ -36,6 +43,11 @@ public class HttpDeleteRadiusMarker extends AsyncTask<String , Void ,String> {
         this.tokenExpirationListener = tokenExpirationListener;
     }
 
+    /**
+     * Background method for async class - not working off main thread
+     * @param strings
+     * @return
+     */
     @Override
     protected String doInBackground(String... strings) {
         SSL.AllowSSLCertificates();
@@ -55,10 +67,15 @@ public class HttpDeleteRadiusMarker extends AsyncTask<String , Void ,String> {
         return "";
     }
 
-    String handleRequest(String apiRequest){
+    /**
+     * make request to the web service
+     * @param request
+     * @return
+     */
+    String handleRequest(String request){
         String response = null;
         try {
-            url = new URL(apiRequest);
+            url = new URL(request);
             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setHostnameVerifier(SSL.DUMMY_VERIFIER);
 
@@ -73,6 +90,10 @@ public class HttpDeleteRadiusMarker extends AsyncTask<String , Void ,String> {
         return response;
     }
 
+    /**
+     * code to handle response from the web service
+     * @return
+     */
     String handleResponse(){
         try {
             responseCode = urlConnection.getResponseCode();
@@ -89,6 +110,11 @@ public class HttpDeleteRadiusMarker extends AsyncTask<String , Void ,String> {
         return null;
     }
 
+    /**
+     * parse response data
+     * status code to detect 401 unauthorised = token expired
+     * @param response from web service Action method
+     */
     @Override
     protected void onPostExecute(String response) {
         if (response != null && response.length() > 0) {

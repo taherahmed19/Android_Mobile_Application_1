@@ -41,7 +41,7 @@
                 android:textAlignment="textStart"
                 android:layout_marginRight="20sp"
                 android:textSize="18sp"
-                android:textColor="#33DDFF"
+                android:textColor="#308179"
                 android:textAllCaps="false">
             </Button>
 
@@ -55,7 +55,7 @@
                 android:background="@color/transparent"
                 android:textAlignment="textStart"
                 android:textSize="18sp"
-                android:textColor="#F44336"
+                android:textColor="#CA1003"
                 android:textAllCaps="false">
             </Button>
         </LinearLayout>

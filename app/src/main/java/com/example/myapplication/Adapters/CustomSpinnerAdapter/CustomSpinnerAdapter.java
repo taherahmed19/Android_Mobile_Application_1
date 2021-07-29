@@ -18,10 +18,24 @@ import java.util.ArrayList;
 
 public class CustomSpinnerAdapter extends ArrayAdapter<SpinnerItem> {
 
+    /**
+     * Custom spinner adapter - default android not customisable
+     * @param context application context
+     * @param customList dropdown list
+     */
     public CustomSpinnerAdapter(@NonNull Context context, ArrayList<SpinnerItem> customList) {
         super(context, 0, customList);
     }
 
+    /**
+     * Handle spinner xml
+     * inflate data from object into XML
+     * Set dropdown spinner items from string to XML text
+     * @param position item index
+     * @param convertView Xml item
+     * @param parent parent xml view
+     * @return
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -39,6 +53,13 @@ public class CustomSpinnerAdapter extends ArrayAdapter<SpinnerItem> {
         return convertView;
     }
 
+    /**
+     * Get spinner data - required for validation
+     * @param position item index
+     * @param convertView xml
+     * @param parent xml
+     * @return
+     */
     @Override
     public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if(convertView == null){
@@ -57,6 +78,11 @@ public class CustomSpinnerAdapter extends ArrayAdapter<SpinnerItem> {
         return convertView;
     }
 
+    /**
+     * Spinner items defined in strings.xml
+     * @param context application context
+     * @return dropdown list
+     */
     public static ArrayList<SpinnerItem> CreateMarkerSpinnerItems(Context context){
         ArrayList<SpinnerItem> list = new ArrayList<>();
 

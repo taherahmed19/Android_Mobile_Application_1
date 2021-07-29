@@ -1,7 +1,6 @@
 package com.example.myapplication.JsonBuilders.MapJsonBuilder;
 
 import android.location.Location;
-import android.util.Log;
 
 import com.example.myapplication.Models.Marker.Marker;
 import com.example.myapplication.Utils.JsonUtil.JsonUtil;
@@ -51,11 +50,8 @@ public class MapJsonBuilder {
             String lat = JsonUtil.getString(data.getJSONObject(i), "Lat");
             String lng = JsonUtil.getString(data.getJSONObject(i), "Lng");
             String encodedImage = JsonUtil.getString(data.getJSONObject(i), "Image");
-            int rating = JsonUtil.getInt(data.getJSONObject(i), "Rating");
 
-            Log.d("Print", "Image " + encodedImage);
-
-            markers.add(new Marker(userId, firstName, lastName, category, description, lat, lng, encodedImage, id, rating));
+            markers.add(new Marker(userId, firstName, lastName, category, description, lat, lng, encodedImage, id));
 
             Location location = new Location("");
             location.setLatitude(Double.parseDouble(data.getJSONObject(i).getString("Lat")));

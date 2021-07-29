@@ -75,11 +75,6 @@ public class FormFragmentTest {
         onView(withId(R.id.locationError)).check(matches(withText("Please select the location a specific location")));
     }
 
-    @Test
-    public void testInvalidImageError(){
-        onView(withId(R.id.mapFeedSubmit)).perform(click());
-        onView(withId(R.id.imageError)).check(matches(withText("Please take a picture or select one from your Gallery")));
-    }
 
     @Test
     public void testClosingFragment(){

@@ -31,6 +31,10 @@ public class LocationSelectorActivity extends AppCompatActivity implements Curre
     SupportMapFragment supportMapFragment;
     LocationSelectorPresenter locationSelectorPresenter;
 
+    /**
+     * initial method to execute for activity
+     * @param savedInstanceState instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,38 +49,63 @@ public class LocationSelectorActivity extends AppCompatActivity implements Curre
         locationSelectorPresenter.makeApiRequestForFormMap(getSupportFragmentManager(), supportMapFragment);
     }
 
+    /**
+     * Executed once token is expired after user makes request to web service.
+     */
     @Override
     public void handleTokenExpiration(){
         JWTToken.removeTokenSharedPref(this);
     }
 
+    /**
+     * Start location updates for users current location once application loads.
+     */
     @Override
     public void onStart() {
         super.onStart();
         currentLocation.startLocationUpdates();
     }
 
+    /**
+     * Stop location monitoring for performance benefit
+     */
     @Override
     public void onStop() {
         super.onStop();
         currentLocation.stopLocationUpdates();
     }
 
+    /**
+     * Update user marker on map
+     * @param location current location
+     */
     @Override
     public void updateUserLocation(Location location) {
         locationSelectorPresenter.setUserLocationGoogleMarker(location);
     }
 
+    /**
+     * generate marker on map click
+     * @param googleMap map instance
+     */
     @Override
     public void handleMapClick(GoogleMap googleMap) {
         this.setGoogleMapClickable(googleMap);
     }
 
+    /**
+     * add marker click listener
+     * @param googleMap map instance
+     */
     @Override
     public void handleMarkersListener(GoogleMap googleMap) {
         this.addMarkersListener(googleMap);
     }
 
+    /**
+     * listener code
+     * @param mMap map instance
+     */
     public void addMarkersListener(GoogleMap mMap){
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -86,6 +115,10 @@ public class LocationSelectorActivity extends AppCompatActivity implements Curre
         });
     }
 
+    /**
+     * Allow google map to be clicked - custom code for onClick
+     * @param mMap map instance
+     */
     public void setGoogleMapClickable(GoogleMap mMap){
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -96,10 +129,16 @@ public class LocationSelectorActivity extends AppCompatActivity implements Curre
         });
     }
 
+    /**
+     * Support fragment required by Google API
+     */
     void configureSupportMapFragment(){
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
     }
 
+    /**
+     * configure XML
+     */
     void configureSubmitButton(){
         final ImageButton locationSubmit = (ImageButton) findViewById(R.id.locationSubmit);
 
@@ -111,6 +150,9 @@ public class LocationSelectorActivity extends AppCompatActivity implements Curre
         });
     }
 
+    /**
+     * configure XML
+     */
     void configureReturnButton(){
         final ImageButton returnButton = (ImageButton) findViewById(R.id.returnButton);
 
@@ -122,6 +164,11 @@ public class LocationSelectorActivity extends AppCompatActivity implements Curre
         });
     }
 
+    /**
+     * Add marker to map rendering
+     * @param mMap map instance
+     * @param latLng marker coords
+     */
     @Override
     public void handleOnGoogleMapClick(GoogleMap mMap, LatLng latLng) {
         mMap.clear();
@@ -130,6 +177,9 @@ public class LocationSelectorActivity extends AppCompatActivity implements Curre
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
     }
 
+    /**
+     * activity submit button to finish activity and return to main
+     */
     @SuppressLint("ShowToast")
     @Override
     public void handleOnSubmitButtonClick() {
@@ -145,11 +195,18 @@ public class LocationSelectorActivity extends AppCompatActivity implements Curre
         }
     }
 
+    /**
+     * customer back press
+     */
     @Override
     public void handleOnReturnButtonClick() {
         onBackPressed();
     }
 
+    /**
+     * application context for activity - different from main context
+     * @return context
+     */
     @Override
     public Context getContext() {
         return this.getApplicationContext();

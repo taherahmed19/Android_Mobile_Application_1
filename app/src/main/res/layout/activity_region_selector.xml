@@ -31,7 +31,7 @@
                 android:layout_centerVertical="true"
                 android:text="Cancel"
                 android:textSize="20sp"
-                android:textColor="#33DDFF"
+                android:textColor="#308179"
                 >
             </TextView>
 

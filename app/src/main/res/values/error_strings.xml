@@ -4,7 +4,6 @@
     <!-- Map Feed Form Error Messages -->
     <string name="form_category_error">Please select a valid category</string>
     <string name="form_description_error">Please enter a valid description</string>
-    <string name="form_image_error">Please take a picture or select one from your Gallery</string>
     <string name="form_location_error">Please select the location a specific location</string>
 
     <string name="form_error_title">Post invalid</string>
@@ -12,9 +11,6 @@
 
     <string name="post_delete_title">Unavailable</string>
     <string name="post_delete_body">Unable to delete post. Please try again.</string>
-
-    <string name="post_rating_title">Unavailable</string>
-    <string name="post_rating_body">Unable to add rating. Please try again.</string>
 
     <string name="radius_marker_delete_title">Error</string>
     <string name="radius_marker_delete_body">Unable to delete radius marker. Please try again.</string>
